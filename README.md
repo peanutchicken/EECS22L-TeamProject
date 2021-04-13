@@ -2,6 +2,6 @@
 
 Updated file with a comment. -Ryan Shum
 
-Edited Comment with more stuuf -Rayi Lam
+Comment  -Rayi Lam
 
 Added comment- Jacob Bokor
