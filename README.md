@@ -2,6 +2,11 @@
 
 Updated file with a comment. -Ryan Shum
 
-Added comment -Rayi Lam
+Comment  -Rayi Lam
 
 Added comment- Jacob Bokor
+
+Added comment- Nghi Nguyen
+
+Added comment -Lichen Wang
+
