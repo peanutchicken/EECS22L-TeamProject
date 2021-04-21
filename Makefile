@@ -51,6 +51,8 @@ chessGame: main.o board.o movelist.o ai.o legalityCheck.o fileio.o
 testChessGame: DEBUG_main.o board.o movelist.o ai.o legalityCheck.o fileio.o
 	$(CC) $(LFLAGS) $(DEBUG) DEBUG_main.o board.o movelist.o ai.o legalityCheck.o fileio.o -o testChessGame
 
+#MAKE TARGET TO TAR PACKAGE
+#tar:
 
 #target to clean directory
 clean:

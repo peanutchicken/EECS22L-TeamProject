@@ -14,6 +14,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "constants.h"
+#include "board.h"
+#include "movelist.h"
+#include "ai.h"
+#include "legalityCheck.h"
+
+int printBoard() {
+
+
+
+    return 0;
+}
+
+
 int main()
 {
     printf("testprint");
