@@ -1,6 +1,11 @@
 # Prerequisites
 *.d
 
+# Executables
+chessGame
+testChessGame
+
+
 # Object files
 *.o
 *.ko
