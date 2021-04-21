@@ -54,3 +54,6 @@ dkms.conf
 #other
 #vim swap files
 *.swp
+
+##working files that don't need to be committed
+*.bruh
