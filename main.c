@@ -14,5 +14,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int main()
+{
+    printf("testprint");
+
+    return 0;
+}
 
 /* EOF */

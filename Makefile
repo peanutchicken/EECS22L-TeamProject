@@ -37,7 +37,7 @@ main.o: main.c board.c board.h movelist.c movelist.h ai.c ai.h legalityCheck.c l
 
 #just because a main debug target exists DOES NOT mean that debug is enabled on all other object files
 DEBUG_main.o: main.c board.c board.h movelist.c movelist.h ai.c ai.h legalityCheck.c legalityCheck.h fileio.c fileio.h
-	$(CC) $(CFLAGS) $(DEBUG) main.c -o main.o
+	$(CC) $(CFLAGS) $(DEBUG) main.c -o DEBUG_main.o
 
 
 ########################################
@@ -47,7 +47,7 @@ DEBUG_main.o: main.c board.c board.h movelist.c movelist.h ai.c ai.h legalityChe
 chessGame: main.o board.o movelist.o ai.o legalityCheck.o fileio.o
 	$(CC) $(LFLAGS) -DNDEBUG main.o board.o movelist.o ai.o legalityCheck.o fileio.o -o chessGame
 
-testChessGame:  DEBUG_main.o board.o movelist.o ai.o legalityCheck.o fileio.o
+testChessGame: DEBUG_main.o board.o movelist.o ai.o legalityCheck.o fileio.o
 	$(CC) $(LFLAGS) $(DEBUG) DEBUG_main.o board.o movelist.o ai.o legalityCheck.o fileio.o -o debugChessGame
 
 
