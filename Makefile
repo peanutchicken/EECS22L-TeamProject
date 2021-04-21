@@ -1,6 +1,7 @@
 #Makefile for EECS22L Team03 Chess Project
 
 #this is where library name will go
+DESIGN = chessGame testChessGame
 LIBS = 
 
 #makefile var defs
@@ -48,7 +49,7 @@ chessGame: main.o board.o movelist.o ai.o legalityCheck.o fileio.o
 	$(CC) $(LFLAGS) -DNDEBUG main.o board.o movelist.o ai.o legalityCheck.o fileio.o -o chessGame
 
 testChessGame: DEBUG_main.o board.o movelist.o ai.o legalityCheck.o fileio.o
-	$(CC) $(LFLAGS) $(DEBUG) DEBUG_main.o board.o movelist.o ai.o legalityCheck.o fileio.o -o debugChessGame
+	$(CC) $(LFLAGS) $(DEBUG) DEBUG_main.o board.o movelist.o ai.o legalityCheck.o fileio.o -o testChessGame
 
 
 #target to clean directory
