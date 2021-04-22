@@ -16,4 +16,55 @@
 
 #include "movelist.h"
 
+//Generate new game board
+BOARD *NewBoard(char gameBoard[8][8][2], unsigned int player)
+{
+
+}
+
+//generate new Blank game board
+BOARD *NewBlankBoard(char gameBoard[8][8][2])
+{
+
+}
+
+//delete gameboard
+void DeleteBoard(BOARD *b)
+{
+
+
+}
+
+//print game board to stdout
+void PrintBoard(BOARD *b)
+{
+
+}
+
+//allocate new board list
+BLIST *NewBoardList()
+{
+
+
+}
+
+//delete board list
+void DeleteBoardList(BLIST *l) 
+{
+
+}
+
+//append board at end of the list
+void AppendBoard(BLIST *l, BOARD *b)
+{
+
+}
+
+//print board list
+void PrintBoardList(BLIST *b)
+{
+
+}
+
+
 /* EOF */
