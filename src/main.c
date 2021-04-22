@@ -30,7 +30,7 @@ int printBoard() {
 
 int main()
 {
-    printf("testprint");
+    printf("testprint\n");
 
     return 0;
 }
