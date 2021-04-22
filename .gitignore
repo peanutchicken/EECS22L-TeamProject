@@ -1,6 +1,11 @@
 # Prerequisites
 *.d
 
+# Executables
+chessGame
+testChessGame
+
+
 # Object files
 *.o
 *.ko
@@ -50,3 +55,10 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+#other
+#vim swap files
+*.swp
+
+##working files that don't need to be committed
+*.bruh
