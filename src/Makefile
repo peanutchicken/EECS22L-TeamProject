@@ -18,7 +18,7 @@ all: chessGame testChessGame
 #Generate object files
 ########################################
 
-board.o: board.c board.h
+board.o: board.c board.h legalityCheck.h
 	$(CC) $(CFLAGS) board.c -o board.o
 
 movelist.o: movelist.c movelist.h
