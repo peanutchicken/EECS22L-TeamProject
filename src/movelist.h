@@ -4,55 +4,40 @@
 #define MOVELIST_h
 
 
-typedef struct Board BOARD;
-typedef struct BoardList BLIST;
-typedef struct BoardEntry BENTRY;
 
-//individual board struct
-struct Board
-{
-    //actual gameboard itself
-    char gameBoard[8][8][2];
+typedef struct moveEntry {
+	struct moveList* list;
+	char gameBoard[8][8][2];
+	entry *next;
+	entry *last;
+} entry;
 
-    unsigned int player;
-};
+typedef struct moveList{
+	entry* first;
+	entry* last;
+} moveList;
 
-//list of boardentries structure
-struct BoardList
-{
-    int Length;
-    BENTRY *First;
-    BENTRY *Last;
-};
 
-//struct for board entry, allows navigation between boards, contained inside boardlist
-struct BoardEntry
-{
-    BLIST *List;
-    BENTRY *Next;
-    BENTRY *Prev;
-    BOARD *Board;
-}; 
+//creates a new entry and returns it
+entry *newMoveEntry(char gameBoard[8][8][2]);
 
-BOARD *NewBoard(char gameBoard[8][8][2], unsigned int player);
+//deletes an entry and correctly reassigns the next and last entry's pointers
+void deleteMoveEntry(entry *e);
 
-BOARD *NewBlankBoard(char gameBoard[8][8][2]);
+//allocates memory for new moveList
+moveList* createList();
 
-void DeleteBoard(BOARD *b);
+//creates new entry and adds it to the end of the movelist
+void append(moveList *m,char gameBoard[8][8][2]);
 
-void PrintBoard(BOARD *b);
+//deletes list and frees it
+void deleteList(moveList *m);
 
-//allocate new board list
-BLIST *NewBoardList();
+//deletes n entries from the end of the list
+void deleteNFromEnd(moveList *m, entry *e, int n);
 
-//delete board list
-void DeleteBoardList(BLIST *l);
-
-//append board at end of the list
-void AppendBoard(BLIST *l, BOARD *b);
-
-//print board list
-void PrintBoardList(BLIST *b);
+//returns the move made between board 1 and 2
+char[5] moveDifference(char gameBoard1[8][8][2], char gameBoard2[8][8][2]);
 
 
 
