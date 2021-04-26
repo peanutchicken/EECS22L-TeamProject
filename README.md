@@ -1,12 +1,13 @@
-Authors: Jacob Bokor
+Authors: 
+	Jacob Bokor
+	
+        Rayi Lam
 
-	 Rayi Lam
+	Nghi Nguyen
 
-	 Nghi Nguyen
+	Ryan Shum
 
-	 Ryan Shum
-
-	 Lichen Wang
+	Lichen Wang
 
 This is the Alpha Version of the Chess Program
 
