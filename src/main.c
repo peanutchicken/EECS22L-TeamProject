@@ -20,15 +20,6 @@
 #include "ai.h"
 #include "legalityCheck.h"
 
-/*
-int printBoard() {
-
-
-
-    return 0;
-}
-*/
-
 int main()
 {
 	char gameBoard[8][8][2] = {
@@ -41,6 +32,10 @@ int main()
 				{"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
 				{"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};
 
+	// put this function in the player vs player menu option
+	playerVsPlayer(gameBoard);
+
+	// put this function in the player vs AI menu option
 	playerVsAI(gameBoard);
 
 	return 0;
