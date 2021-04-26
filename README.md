@@ -1,12 +1,20 @@
-# Team03
+Authors: Jacob Bokor
+	 Rayi Lam
+	 Nghi Nguyen
+	 Ryan Shum
+	 Lichen Wang
 
-Updated file with a comment. -Ryan Shum
+Version 0.2
 
-Comment  -Rayi Lam
+Date: 4/26/2021
 
-Added comment- Jacob Bokor
+General Instructions:
+For copyright information, please refer to COPYRIGHT.
+For installation instruction, please refer to INSTALL.
+For more information about the game, please refer to the ChessUserManual.
+	 
 
-Added comment- Nghi Nguyen
 
-Added comment -Lichen Wang
+
+
 
