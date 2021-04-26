@@ -36,21 +36,41 @@ entry *newMoveEntry(moveList *m, char gb[8][8][2]){
 }
 
 //deletes an entry and correctly reassigns the next and last entry's pointers
-void deleteMoveEntry(entry *e){
-    if(e){
-        free(e);
+void deleteMoveEntry(moveList *m,entry *a){
+    if(a->next==NULL&&a->last==NULL){ //next and last are null (only entry in list)
+        free(a);
+        a=NULL;
+        m->first = NULL;
+        m->last = NULL;
     }
-    else{
-        printf("Null Pointer passed! Nothing freed with deleteMoveEntry()");
-        return;
+    else if(a->next==NULL&&a->last!=NULL){ //next is null and last is valid pointer (last entry in list)
+        m->last = a->last;
+        (a->last)->next=NULL;
+        free(a);
+        a=NULL;
     }
+    else if(a->next!=NULL&&a->last==NULL){ //next is valid pointer and last is null (first entry in list)
+        m->first = a->next;
+        (a->next)->last=NULL;
+        free(a);
+        a=NULL;
+    }
+    else if(a->next!=NULL&&a->last!=NULL){ //next and last are both valid pointers (entry in the middle of the list)
+        (a->last)->next=a->next;
+        (a->next)->last=a->last;
+        a->next=NULL;
+        a->last=NULL;
+        free(a);
+        a=NULL;
+    }
+
 
 }
 
 //creates new entry and adds it to the end of the movelist
 void append(moveList *m,char gameBoard[8][8][2]){
     entry* newEntry = newMoveEntry(m,gameBoard);
-    m->last->next = newEntry;
+    (m->last)->next = newEntry;
     m->last = newEntry;
 }
 
@@ -72,25 +92,25 @@ void deleteNFromEnd(moveList *m, int n){
     entry* last;
     for(int i=0;i<n;i++){
         last = current->last;
-        deleteMoveEntry(current);
+        deleteMoveEntry(m,current);
         current = last;
     }
     m->last = current;
 }
 
 //returns the move made between board 1 and 2, can't use string functions since the board char arrays don't end in null characters
-char[5] moveDifference(char gameBoard1[8][8][2], char gameBoard2[8][8][2]){
-    char retVal[5];
+char* moveDifference(char gameBoard1[8][8][2], char gameBoard2[8][8][2]){
+    char* retVal=malloc(sizeof(char)*5);
     char from[2];
     char to[2];
     for(int i=0;i<8;i++){
         for(int j=0;j<8;j++){
             
             if((gameBoard1[i][j][0]!=gameBoard2[i][j][0])&&(gameBoard1[i][j][1]!=gameBoard2[i][j][1])){ //finds where the two boards are different, should be 2 positions
-                if(gameBoard1[i][j][0]=='')){
+                if(gameBoard1[i][j][0]=='\0'){
                     sprintf(to,"%d%c", i+1 , (char)(104-j));
                 }
-                if(gameBoard2[i][j][0]==''){
+                if(gameBoard2[i][j][0]=='\0'){
                     sprintf(from,"%d%c", i+1, (char)(104-j));
                 }
             }
@@ -98,7 +118,7 @@ char[5] moveDifference(char gameBoard1[8][8][2], char gameBoard2[8][8][2]){
         }
     }
     strcat(retVal,from);
-    strcat(retval,",");
+    strcat(retVal,",");
     strcat(retVal,to);
     return retVal;
 }
