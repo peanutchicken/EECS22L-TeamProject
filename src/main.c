@@ -38,7 +38,7 @@ int main()
 				{"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};
 
 	PrintMenu();
-	scanf("%d", n);
+	scanf("%d", &n);
 	switch (n) {
                     case 1:
                         printf("player Vs Player is loading...\n");
