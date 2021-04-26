@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 // validates whether a passed move is legal or not
-bool legalMove(char from[2], char to[2], char gameBoard[8][8][2]);
+bool legalMove(char from[2], char to[2], char board[8][8][2]);
 
 
 
