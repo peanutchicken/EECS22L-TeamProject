@@ -20,8 +20,13 @@
 #include "ai.h"
 #include "legalityCheck.h"
 
+/* print a menu */
+void PrintMenu();
+
 int main()
-{
+{       
+	int n;
+	
 	char gameBoard[8][8][2] = {
 				{"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
 				{"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
@@ -32,13 +37,33 @@ int main()
 				{"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
 				{"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};
 
-	// put this function in the player vs player menu option
-	playerVsPlayer(gameBoard);
-
-	// put this function in the player vs AI menu option
-	playerVsAI(gameBoard);
-
+	PrintMenu();
+	scanf("%d", n);
+	switch (n) {
+                    case 1:
+                        printf("player Vs Player is loading...\n");
+                        playerVsPlayer(gameBoard);
+                        break;
+                    case 2:
+                        Aging(R, G, B);
+                        printf("player Vs AI is loading...\n");
+                        playerVsAI(gameBoard);
+			break;
+                    
+		    default :
+                        printf("Invalid option!\n" );
+	            }
+		
 	return 0;
 }
+/* Menu */
+void PrintMenu()
+{
 
+    printf("\n-------------------------\n");
+    printf(" 1: player vs player\n");
+    printf(" 2: player vs AI\n");
+    printf("\n-------------------------\n");
+    printf("Please make your choice: ");
+}
 /* EOF */
