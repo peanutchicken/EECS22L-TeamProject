@@ -20,19 +20,25 @@
 #include "ai.h"
 #include "legalityCheck.h"
 
-int printBoard() {
-
-
-
-    return 0;
-}
-
-
 int main()
 {
-    printf("testprint\n");
+	char gameBoard[8][8][2] = {
+				{"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
+				{"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
+				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+				{"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
+				{"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};
 
-    return 0;
+	// put this function in the player vs player menu option
+	playerVsPlayer(gameBoard);
+
+	// put this function in the player vs AI menu option
+	playerVsAI(gameBoard);
+
+	return 0;
 }
 
 /* EOF */
