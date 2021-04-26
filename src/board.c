@@ -27,8 +27,10 @@ void playerVsPlayer(char gameBoard[8][8][2]) {
 	while (true) { // replace with winCheck()
 		playerInput(gameBoard, 'w');
 		printBoard(gameBoard);
+		// append the move list here
 		playerInput(gameBoard, 'b');
 		printBoard(gameBoard);
+		// append the move list here
 	}
 }
 
@@ -50,11 +52,13 @@ void playerVsAI(char gameBoard[8][8][2]) {
 		if (playerColor == 'w') {
 			playerInput(gameBoard, 'w');
 			printBoard(gameBoard);
+			// append the move list here
 			// here is where AI makes its move
 		} else if (playerColor == 'b') {
 			// here is where AI makes its move
 			playerInput(gameBoard, 'b');
 			printBoard(gameBoard);
+			// append the move list here
 		}
 	}
 }
