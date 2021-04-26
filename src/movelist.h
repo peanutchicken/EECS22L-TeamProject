@@ -8,8 +8,8 @@
 typedef struct moveEntry {
 	struct moveList* list;
 	char gameBoard[8][8][2];
-	entry *next;
-	entry *last;
+	struct moveEntry *next;
+	struct moveEntry *last;
 } entry;
 
 typedef struct moveList{
@@ -19,10 +19,10 @@ typedef struct moveList{
 
 
 //creates a new entry and returns it
-entry *newMoveEntry(char gameBoard[8][8][2]);
+entry *newMoveEntry(moveList *m, char gb[8][8][2]);
 
 //deletes an entry and correctly reassigns the next and last entry's pointers
-void deleteMoveEntry(entry *e);
+void deleteMoveEntry(moveList *m,entry *a);
 
 //allocates memory for new moveList
 moveList* createList();
@@ -34,10 +34,10 @@ void append(moveList *m,char gameBoard[8][8][2]);
 void deleteList(moveList *m);
 
 //deletes n entries from the end of the list
-void deleteNFromEnd(moveList *m, entry *e, int n);
+void deleteNFromEnd(moveList *m, int n);
 
 //returns the move made between board 1 and 2
-char[5] moveDifference(char gameBoard1[8][8][2], char gameBoard2[8][8][2]);
+char* moveDifference(char gameBoard1[8][8][2], char gameBoard2[8][8][2]);
 
 
 
