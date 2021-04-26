@@ -45,7 +45,6 @@ int main()
                         playerVsPlayer(gameBoard);
                         break;
                     case 2:
-                        Aging(R, G, B);
                         printf("player Vs AI is loading...\n");
                         playerVsAI(gameBoard);
 			break;
