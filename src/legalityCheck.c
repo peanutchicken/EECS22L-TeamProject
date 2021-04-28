@@ -18,7 +18,53 @@
 
 /*validates whether a passed move is legal or not*/
 bool legalMove(char from[2], char to[2],char board[8][8][2])
- {
+{
+     bool result;
+
+     switch(from[1])
+     {
+         //pawn
+         case 'P':
+             result = checkPawn(from, to, board);
+             break;
+
+         //rook
+         case 'R': 
+             result = checkRook(from, to, board);
+             break;
+
+         //kNight
+         case 'N': 
+             result = checkKnight(from, to, board);
+             break;
+
+         //bishop
+         case 'B': 
+             result = checkBishop(from, to, board);
+             break;
+
+        //Queen
+         case 'Q': 
+             result = checkQueen(from, to, board);
+             break;
+
+        //King
+         case 'K': 
+             result = checkKing(from, to, board);
+             break;
+
+         default:
+             printf("INVALID PIECE PASSED TO LEGALMOVE\n");
+             break;
+
+    }
+    return result;
+}
+
+
+bool checkPawn(char from[2], char to[2], char board[8][8][2])
+{
+    printf("checkingpawn\n");
      /*check for valid piece unit*/
      if ((from[0] < 65 || from[0] > 72) || (from[1] < 49 || from[1] > 56))
      {
@@ -84,7 +130,32 @@ bool legalMove(char from[2], char to[2],char board[8][8][2])
          
          
      }
-     
- }
+     //default case
+     return false;
+}
+ 
+bool checkRook(char from[2], char to[2], char board[8][8][2])
+{
+    return true;
+}
 
+bool checkKnight(char from[2], char to[2], char board[8][8][2])
+{
+    return true;
+}
+
+bool checkBishop(char from[2], char to[2], char board[8][8][2])
+{
+    return true;
+}
+
+bool checkQueen(char from[2], char to[2], char board[8][8][2])
+{
+    return true;
+}
+
+bool checkKing(char from[2], char to[2], char board[8][8][2])
+{
+    return true;
+}
 /* EOF */
