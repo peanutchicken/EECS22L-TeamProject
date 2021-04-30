@@ -19,10 +19,11 @@
 /*validates whether a passed move is legal or not*/
 bool legalMove(char from[2], char to[2],char board[8][8][2])
 {
+     //format of from[row][col], to[row][col]
      bool result;
 
-     //wR,bP is elements in board, must pull them out using from index
-     switch(from[1])
+     char piece = board[from[0]][from[1]][1];
+     switch(piece)
      {
          //pawn
          case 'P':
@@ -55,7 +56,7 @@ bool legalMove(char from[2], char to[2],char board[8][8][2])
              break;
 
          default:
-             printf("INVALID PIECE PASSED TO LEGALMOVE\n");
+             printf("ERR: INVALID PIECE PASSED TO LEGALMOVE\n");
              break;
 
     }
@@ -132,6 +133,7 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
         {
 		   return true;
 		}
+
 		else
 		{
 		   return false;
@@ -171,7 +173,7 @@ bool checkKnight(char from[2], char to[2], char board[8][8][2])
          int rowTo = (int)56-to[1];
   
          /*Check for Knight*/
-         if (board[rowFrom][columnFrom][1] == 'K')
+         if (board[rowFrom][columnFrom][1] == 'N')
          {
             if (((columnTo == columnFrom + 1) && (rowTo == rowFrom - 2)) || \
                 ((columnTo == columnFrom + 1) && (rowTo == rowFrom + 2)) || \
