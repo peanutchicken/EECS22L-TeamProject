@@ -22,7 +22,9 @@ bool legalMove(char from[2], char to[2],char board[8][8][2])
      //format of from[row][col], to[row][col]
      bool result;
 
-     char piece = board[from[0]][from[1]][1];
+     //get the piece char (P, R, N, B) from board using the index provided by from
+     //int casting is done to prevent complaints about passing char types as array indicies
+     char piece = board[(int)from[0]][(int)from[1]][1];
      switch(piece)
      {
          //pawn
@@ -66,7 +68,10 @@ bool legalMove(char from[2], char to[2],char board[8][8][2])
 
 bool checkPawn(char from[2], char to[2], char board[8][8][2])
 {
-    printf("checkingpawn\n");
+     #ifndef DEBUG
+     printf("checkingpawn\n");
+     #endif
+
      /*check for valid piece unit*/
      if ((from[0] < 65 || from[0] > 72) || (from[1] < 49 || from[1] > 56))
      {
@@ -153,7 +158,9 @@ bool checkRook(char from[2], char to[2], char board[8][8][2])
 
 bool checkKnight(char from[2], char to[2], char board[8][8][2])
 {
-    printf("checkingKnight\n");
+     #ifndef DEBUG
+     printf("checking Knight\n");
+     #endif
      /*check for valid piece unit*/
      if ((from[0] < 65 || from[0] > 72) || (from[1] < 49 || from[1] > 56))
      {
