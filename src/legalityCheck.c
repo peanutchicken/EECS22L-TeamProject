@@ -136,13 +136,45 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
  
 bool checkRook(char from[2], char to[2], char board[8][8][2])
 {
-    return true;
+   return true;   
 }
 
 bool checkKnight(char from[2], char to[2], char board[8][8][2])
 {
-    return true;
-}
+    printf("checkingKnight\n");
+     /*check for valid piece unit*/
+     if ((from[0] < 65 || from[0] > 72) || (from[1] < 49 || from[1] > 56))
+     {
+        return false;
+     }
+     /*check for valid move*/
+     else if ((to[0] < 65 || to[0] > 72) || (to[1] < 49 || to[1] > 56))
+     {
+         return false;
+     }
+     else 
+     {
+         /*convert to number*/
+         int columnFrom = (int)from[0]-65;
+         int rowFrom = (int)56-from[1];
+         int columnTo = (int)to[0]-65;
+         int rowTo = (int)56-to[1];
+  
+         /*Check for Knight*/
+         if (board[rowFrom][columnFrom][1] == 'K')
+         {
+            if ((columnTo == columnFrom + 1) && (rowTo == rowFrom - 2) || (columnTo == columnFrom + 1) && (rowTo == rowFrom + 2)||(columnTo == columnFrom-1)&& (rowTo == rowFrom + 2)||(columnTo == columnFrom - 1) && (rowTo == rowFrom - 2)||(columnTo == columnFrom + 2) && (rowTo == rowFrom - 1) || (columnTo == columnFrom + 2) && (rowTo == rowFrom + 1)||(columnTo == columnFrom-2)&& (rowTo == rowFrom + 1)||(columnTo == columnFrom - 2) && (rowTo == rowFrom - 1))
+                {
+		   return true;
+		}
+		else
+		{
+		   return false;
+		}    
+	   
+	      //default case
+              return false;
+	    }
 
 bool checkBishop(char from[2], char to[2], char board[8][8][2])
 {
