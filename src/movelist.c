@@ -108,10 +108,12 @@ char* moveDifference(char gameBoard1[8][8][2], char gameBoard2[8][8][2]){
             
             if((gameBoard1[i][j][0]!=gameBoard2[i][j][0])&&(gameBoard1[i][j][1]!=gameBoard2[i][j][1])){ //finds where the two boards are different, should be 2 positions
                 if(gameBoard1[i][j][0]=='\0'){
-                    sprintf(to,"%d%c", i+1 , (char)(104-j));
+                    to[0] = i+1;
+                    to[1] = (char)(104-j);
                 }
                 if(gameBoard2[i][j][0]=='\0'){
-                    sprintf(from,"%d%c", i+1, (char)(104-j));
+                    from[0] = i+1;
+                    from[1] = (char)(104-j);
                 }
             }
 
