@@ -21,6 +21,7 @@ bool legalMove(char from[2], char to[2],char board[8][8][2])
 {
      bool result;
 
+     //wR,bP is elements in board, must pull them out using from index
      switch(from[1])
      {
          //pawn
@@ -89,20 +90,22 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
             /*Check for white pawn*/
             if(board[rowFrom][columnFrom][0] == 'w')
             {
-		if ((columnTo == columnFrom) && ((rowTo == rowFrom - 1) || (rowTo == rowFrom - 2)))
-		{
-			return true;
-		}
+
+                if ((columnTo == columnFrom) && ((rowTo == rowFrom - 1) || (rowTo == rowFrom - 2)))
+                {
+                    return true;
+                }
                 else
                 {
                        return false;
                 }
             }
 
-	    /*Check for black pawn*/	
+            /*Check for black pawn*/	
             else 
             {
-                if (((rowTo == rowFrom + 1) && (columnTo == columnFrom)) || ((rowTo == rowFrom+2) && (columnTo == columnFrom)))
+                if (((rowTo == rowFrom + 1) && (columnTo == columnFrom)) || \
+                    ((rowTo == rowFrom+2) && (columnTo == columnFrom)))
                 {
                     return true;
                 }
@@ -118,8 +121,15 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
 	/*Check for king*/
 	else if (board[rowFrom][columnFrom][1] == 'K')
 	{
-		if(((rowTo == rowFrom + 1) && (columnTo == columnFrom - 1))||((rowTo == rowFrom + 1) && (columnTo == columnFrom))||((rowTo == rowFrom + 1) && (columnTo == columnFrom + 1))||((rowTo == rowFrom) && (columnTo == columnFrom - 1))|| ((rowTo == rowFrom) && (columnTo == columnFrom + 1)) || ((rowTo == rowFrom - 1) && (columnTo == columnFrom - 1)) || ((rowTo == rowFrom - 1) && (columnTo == columnFrom)) || ((rowTo == rowFrom - 1) && (columnTo == columnFrom + 1)))
-		{
+		if(((rowTo == rowFrom + 1) && (columnTo == columnFrom - 1)) || \
+           ((rowTo == rowFrom + 1) && (columnTo == columnFrom)) || \
+           ((rowTo == rowFrom + 1) && (columnTo == columnFrom + 1)) || \
+           ((rowTo == rowFrom) && (columnTo == columnFrom - 1)) || \
+           ((rowTo == rowFrom) && (columnTo == columnFrom + 1)) || \
+           ((rowTo == rowFrom - 1) && (columnTo == columnFrom - 1)) || \
+           ((rowTo == rowFrom - 1) && (columnTo == columnFrom)) || \
+           ((rowTo == rowFrom - 1) && (columnTo == columnFrom + 1)))
+        {
 		   return true;
 		}
 		else
@@ -163,9 +173,16 @@ bool checkKnight(char from[2], char to[2], char board[8][8][2])
          /*Check for Knight*/
          if (board[rowFrom][columnFrom][1] == 'K')
          {
-            if ((columnTo == columnFrom + 1) && (rowTo == rowFrom - 2) || (columnTo == columnFrom + 1) && (rowTo == rowFrom + 2)||(columnTo == columnFrom-1)&& (rowTo == rowFrom + 2)||(columnTo == columnFrom - 1) && (rowTo == rowFrom - 2)||(columnTo == columnFrom + 2) && (rowTo == rowFrom - 1) || (columnTo == columnFrom + 2) && (rowTo == rowFrom + 1)||(columnTo == columnFrom-2)&& (rowTo == rowFrom + 1)||(columnTo == columnFrom - 2) && (rowTo == rowFrom - 1))
+            if (((columnTo == columnFrom + 1) && (rowTo == rowFrom - 2)) || \
+                ((columnTo == columnFrom + 1) && (rowTo == rowFrom + 2)) || \
+                ((columnTo == columnFrom - 1) && (rowTo == rowFrom + 2)) || \
+                ((columnTo == columnFrom - 1) && (rowTo == rowFrom - 2)) || \
+                ((columnTo == columnFrom + 2) && (rowTo == rowFrom - 1)) || \
+                ((columnTo == columnFrom + 2) && (rowTo == rowFrom + 1)) || \
+                ((columnTo == columnFrom - 2) && (rowTo == rowFrom + 1)) || \
+                ((columnTo == columnFrom - 2) && (rowTo == rowFrom - 1)))
                 {
-		   return true;
+                   return true;
 		}
 		else
 		{
@@ -175,6 +192,11 @@ bool checkKnight(char from[2], char to[2], char board[8][8][2])
 	      //default case
               return false;
 	    }
+     }
+
+     //end default condition, in case none of the above conditions worked
+     return false;
+}
 
 bool checkBishop(char from[2], char to[2], char board[8][8][2])
 {
@@ -190,4 +212,5 @@ bool checkKing(char from[2], char to[2], char board[8][8][2])
 {
     return true;
 }
+
 /* EOF */
