@@ -67,23 +67,27 @@ void playerVsAI(char gameBoard[8][8][2]) {
 void printBoard(char gameBoard[8][8][2]) {
 
 	for (int i = 0; i< 8; i++) 
-    {
+    	{
 		if (i == 0) 
-        {
-			printf("\n    ----+----+----+----+----+----+----+----+\n");
+        	{
+			printf("\n   +----+----+----+----+----+----+----+----+\n");
 		}
-		printf("%d   ", 8 - i);
+		printf("%d  |", 8 - i);
 		for (int j = 0; j < 8; j++)
-        {
+        	{
 			printf(" %c%c |", gameBoard[i][j][0], gameBoard[i][j][1]);
 		}
-		printf("\n    ----+----+----+----+----+----+----+----+\n");
+		printf("\n   +----+----+----+----+----+----+----+----+\n");
 		if (i == 7) 
-        {
+        	{
 			for (int k = 0; k < 8; k++) 
-            {
+            		{
+				if (k == 0)
+				{
+					printf("    ");
+				}
 				char letter = 'A' + k;
-				printf("    %c", letter);
+				printf("  %c  ", letter);
 			}
 		}
 	}
