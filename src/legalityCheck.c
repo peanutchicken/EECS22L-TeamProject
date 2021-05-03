@@ -65,90 +65,82 @@ bool legalMove(char from[2], char to[2],char board[8][8][2])
     return result;
 }
 
-
+/*This function checks for valid pawn's move*/
 bool checkPawn(char from[2], char to[2], char board[8][8][2])
 {
      #ifndef DEBUG
      printf("checkingpawn\n");
      #endif
 
-     /*check for valid piece unit*/
-     if ((from[0] < 65 || from[0] > 72) || (from[1] < 49 || from[1] > 56))
-     {
-        return false;
-     }
-     /*check for valid move*/
-     else if ((to[0] < 65 || to[0] > 72) || (to[1] < 49 || to[1] > 56))
-     {
-         return false;
-     }
-     else 
-     {
          /*convert to number*/
-         int columnFrom = (int)from[0]-65;
-         int rowFrom = (int)56-from[1];
-         int columnTo = (int)to[0]-65;
-         int rowTo = (int)56-to[1];
-  
-         /*Check for pawn*/
-         if (board[rowFrom][columnFrom][1] == 'P')
+         int columnFrom = (int)from[1];
+         int rowFrom = (int)from[0];
+         int columnTo = (int)to[1];
+         int rowTo = (int)to[0];
+  	
+         /*Check for white pawn*/
+         if(board[rowFrom][columnFrom][0] == 'w')
          {
-            /*Check for white pawn*/
-            if(board[rowFrom][columnFrom][0] == 'w')
-            {
-
-                if ((columnTo == columnFrom) && ((rowTo == rowFrom - 1) || (rowTo == rowFrom - 2)))
-                {
-                    return true;
-                }
-                else
-                {
-                       return false;
-                }
-            }
-
-            /*Check for black pawn*/	
-            else 
-            {
-                if (((rowTo == rowFrom + 1) && (columnTo == columnFrom)) || \
-                    ((rowTo == rowFrom+2) && (columnTo == columnFrom)))
-                {
-                    return true;
-                }
-                else
-                {
-		    printf("Invalid Pawn's move.");
-                    return false;
-                }
-            }
-            
-        }
-	
-	/*Check for king*/
-	else if (board[rowFrom][columnFrom][1] == 'K')
-	{
-		if(((rowTo == rowFrom + 1) && (columnTo == columnFrom - 1)) || \
-           ((rowTo == rowFrom + 1) && (columnTo == columnFrom)) || \
-           ((rowTo == rowFrom + 1) && (columnTo == columnFrom + 1)) || \
-           ((rowTo == rowFrom) && (columnTo == columnFrom - 1)) || \
-           ((rowTo == rowFrom) && (columnTo == columnFrom + 1)) || \
-           ((rowTo == rowFrom - 1) && (columnTo == columnFrom - 1)) || \
-           ((rowTo == rowFrom - 1) && (columnTo == columnFrom)) || \
-           ((rowTo == rowFrom - 1) && (columnTo == columnFrom + 1)))
-        {
-		   return true;
+		/*The first pawn's move has the option of advancing 2 squares*/
+		if (rowFrom == 6)
+		{
+                	if ((columnTo == columnFrom) &&  \
+			   ((rowTo == rowFrom - 1) || (rowTo == rowFrom - 2)))
+			{
+				 /*check if there is any blocking piece*/
+				if(board[rowTo][columnTo][0] != ' ')
+                			return false;
+		  		return true;
+			}
 		}
-
+		
+		/*Pawn can only move 1 square after the first move*/
 		else
 		{
-		   return false;
+			
+                	if ((columnTo == columnFrom) && (rowTo == rowFrom - 1))
+			{
+				 /*check if there is any blocking piece*/
+				if(board[rowTo][columnTo][0] != ' ')
+                			return false;
+		  		return true;
+			}
 		}
-	}
-         
-         
-     }
-     //default case
-     return false;
+
+          }
+
+          /*Check for black pawn*/	
+          else 
+          {                   
+		/*The first pawn's move has the option of advancing 2 squares*/
+		if (rowFrom == 1)
+		{
+                	if ((columnTo == columnFrom) && \
+			   ((rowTo == rowFrom + 1) || (rowTo == rowFrom + 2)))
+			{
+				 /*check if there is any blocking piece*/
+				if(board[rowTo][columnTo][0] != ' ')
+                			return false;
+		  		return true;
+			}
+		}
+		
+		/*Pawn can only move 1 square after the first move*/
+		else
+		{
+			
+                	if ((columnTo == columnFrom) && (rowTo == rowFrom + 1))
+			{
+				 /*check if there is any blocking piece*/
+				if(board[rowTo][columnTo][0] != ' ')
+                			return false;
+		  		return true;
+			}
+		}
+
+          }
+	  /*default case*/
+	  return false;
 }
  
 bool checkRook(char from[2], char to[2], char board[8][8][2])
@@ -161,24 +153,13 @@ bool checkKnight(char from[2], char to[2], char board[8][8][2])
      #ifndef DEBUG
      printf("checking Knight\n");
      #endif
-     /*check for valid piece unit*/
-     if ((from[0] < 65 || from[0] > 72) || (from[1] < 49 || from[1] > 56))
-     {
-        return false;
-     }
-     /*check for valid move*/
-     else if ((to[0] < 65 || to[0] > 72) || (to[1] < 49 || to[1] > 56))
-     {
-         return false;
-     }
-     else 
-     {
-         /*convert to number*/
-         int columnFrom = (int)from[0]-65;
-         int rowFrom = (int)56-from[1];
-         int columnTo = (int)to[0]-65;
-         int rowTo = (int)56-to[1];
   
+         /*convert to number*/
+         int columnFrom = (int)from[1];
+         int rowFrom = (int)from[0];
+         int columnTo = (int)to[1];
+         int rowTo = (int)to[0];
+
          /*Check for Knight*/
          if (board[rowFrom][columnFrom][1] == 'N')
          {
@@ -209,7 +190,146 @@ bool checkKnight(char from[2], char to[2], char board[8][8][2])
 
 bool checkBishop(char from[2], char to[2], char board[8][8][2])
 {
-    return true;
+    
+     #ifndef DEBUG
+     printf("checkingbishop\n");
+     #endif
+
+     /*convert to number*/
+     int columnFrom = (int)from[1];
+     int rowFrom = (int)from[0];
+     int columnTo = (int)to[1];
+     int rowTo = (int)to[0];
+
+     /*Check variables*/
+     int checkRow = rowFrom;
+     int checkColumn = columnFrom;
+     int rowCheck = rowFrom;
+     int columnCheck = columnFrom;
+
+    /*check for the diagonal path to top-left*/
+    if ((rowTo < rowFrom) && (columnTo < columnFrom))
+    {
+	while (checkRow >= 0 && checkColumn >= 0)
+	{
+		checkRow -= 1;
+		checkColumn -= 1;    
+		if ((rowTo == checkRow) && (columnTo == checkColumn))
+		{
+			/*check if there is any blocking piece on the path*/
+			rowCheck -= 1;
+			columnCheck -= 1;
+			while(rowCheck > rowTo && columnCheck > columnTo)
+			{
+				if (board[rowCheck][columnCheck][0] != ' ')
+					return false;
+				rowCheck -= 1;
+				columnCheck -= 1;
+			}
+			
+			/*return false if the destination has the same unit piece color*/
+			if (board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+				return false;
+			return true;
+		}
+	}
+     }
+
+    /*check for the diagonal path to top-right*/
+    else if ((rowTo < rowFrom) && (columnTo > columnFrom))
+    {
+	while (checkRow >= 0 && checkColumn <= 7)
+	{
+		checkRow -= 1;
+		checkColumn += 1;    
+		if ((rowTo == checkRow) && (columnTo == checkColumn))
+		{
+			/*check if there is any blocking piece on the path*/
+			rowCheck -= 1;
+			columnCheck += 1;
+			while(rowCheck > rowTo && columnCheck < columnTo)
+			{	
+				if (board[rowCheck][columnCheck][0] != ' ')
+					return false;
+				rowCheck -= 1;
+				columnCheck += 1;
+			}
+			
+			/*return false if the destination has the same unit piece color*/
+			if (board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+				return false;
+			return true;
+		}
+	}
+     }
+
+     
+    /*check for the diagonal path to bottom-left*/
+    else if ((rowTo > rowFrom) && (columnTo < columnFrom))
+    {
+	while (checkRow <= 7 && checkColumn >= 0)
+	{
+		checkRow += 1;
+		checkColumn -= 1;    
+		if ((rowTo == checkRow) && (columnTo == checkColumn))
+		{
+		
+			/*check if there is any blocking piece on the path*/
+			rowCheck += 1;
+			columnCheck -= 1;
+			while(rowCheck < rowTo && columnCheck > columnTo)
+			{
+				if (board[rowCheck][columnCheck][0] != ' ')
+					return false;
+				rowCheck += 1;
+				columnCheck -= 1;
+			}
+			
+			/*return false if the destination has the same unit piece color*/
+			if (board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+				return false;
+			return true;
+		}
+	}
+     }
+
+    /*check for the diagonal path to bottom-right*/
+    else if ((rowTo > rowFrom) && (columnTo > columnFrom))
+    {
+	while (checkRow >= 0 && checkColumn <= 7)
+	{
+		checkRow += 1;
+		checkColumn += 1;    
+		if ((rowTo == checkRow) && (columnTo == checkColumn))
+		{
+		
+			/*check if there is any blocking piece on the path*/
+			rowCheck += 1;
+			columnCheck += 1;
+			while(rowCheck < rowTo && columnCheck < columnTo)
+			{
+				if (board[rowCheck][columnCheck][0] != ' ')
+					return false;
+				rowCheck += 1;
+				columnCheck += 1;
+			}
+			
+			/*return false if the destination has the same unit piece color*/
+			if (board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+				return false;
+			return true;
+		}
+	}
+     }
+
+   /*return false for other cases*/
+   else
+   {
+   	return false;
+   }
+
+   /*dafult case*/
+   return false;
 }
 
 bool checkQueen(char from[2], char to[2], char board[8][8][2])
@@ -219,7 +339,33 @@ bool checkQueen(char from[2], char to[2], char board[8][8][2])
 
 bool checkKing(char from[2], char to[2], char board[8][8][2])
 {
-    return true;
+	
+     #ifndef DEBUG
+     printf("checkingking\n");
+     #endif
+
+     /*convert to number*/
+     int columnFrom = (int)from[1];
+     int rowFrom = (int)from[0];
+     int columnTo = (int)to[1];
+     int rowTo = (int)to[0];
+
+	if(((rowTo == rowFrom + 1) && (columnTo == columnFrom - 1)) || \
+          ((rowTo == rowFrom + 1) && (columnTo == columnFrom)) || \
+          ((rowTo == rowFrom + 1) && (columnTo == columnFrom + 1)) || \
+          ((rowTo == rowFrom) && (columnTo == columnFrom - 1)) || \
+          ((rowTo == rowFrom) && (columnTo == columnFrom + 1)) || \
+          ((rowTo == rowFrom - 1) && (columnTo == columnFrom - 1)) || \
+          ((rowTo == rowFrom - 1) && (columnTo == columnFrom)) || \
+          ((rowTo == rowFrom - 1) && (columnTo == columnFrom + 1)))
+	{
+		if (board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+			return false;
+		return true;
+	}
+		     
+     //default case
+     return false;
 }
 
 /* EOF */
