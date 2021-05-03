@@ -67,24 +67,20 @@ void playerVsAI(char gameBoard[8][8][2]) {
 void printBoard(char gameBoard[8][8][2]) {
 
 	for (int i = 0; i< 8; i++) 
-    {
+        {
 		if (i == 0) 
-        {
-			printf("\n    ----+----+----+----+----+----+----+----+\n");
+        	{
+			printf("\n    +----+----+----+----+----+----+----+----+\n");
 		}
-		printf("%d   ", 8 - i);
+		printf("%d   |", 8 - i);
 		for (int j = 0; j < 8; j++)
-        {
+        	{
 			printf(" %c%c |", gameBoard[i][j][0], gameBoard[i][j][1]);
 		}
-		printf("\n    ----+----+----+----+----+----+----+----+\n");
+		printf("\n    +----+----+----+----+----+----+----+----+\n");
 		if (i == 7) 
-        {
-			for (int k = 0; k < 8; k++) 
-            {
-				char letter = 'A' + k;
-				printf("    %c", letter);
-			}
+        	{
+				printf("      A    B    C    D    E    F    G    H");
 		}
 	}
 	printf("\n");
@@ -118,11 +114,11 @@ void playerInput(char gameBoard[8][8][2], char player) {
 		toRow = 8 - (move[3] - 48);
 		toCol = move[2] - 65;
 
-        //assign converted ascii values back to from and to
-        from[0] = fromRow;
-        from[1] = fromCol;
-        to[0] = toRow;
-        to[1] = toCol;
+        	//assign converted ascii values back to from and to
+        	from[0] = fromRow;
+        	from[1] = fromCol;
+        	to[0] = toRow;
+        	to[1] = toCol;
 
 		while(!legalMove(from, to, gameBoard) || \
               gameBoard[fromRow][fromCol][0] == 'b' || \
@@ -142,7 +138,14 @@ void playerInput(char gameBoard[8][8][2], char player) {
 			fromCol = move[0] - 65;
 			toRow = 8 - (move[3] - 48);
 			toCol = move[2] - 65;
-		}
+	
+			
+        		//assign converted ascii values back to from and to
+        		from[0] = fromRow;
+        		from[1] = fromCol;
+        		to[0] = toRow;
+        		to[1] = toCol;
+	}
 		
 	// choosing black piece
 	} 
@@ -163,6 +166,13 @@ void playerInput(char gameBoard[8][8][2], char player) {
 		fromCol = move[0] - 65;
 		toRow = 8 - (move[3] - 48);
 		toCol = move[2] - 65;
+		
+		
+               //assign converted ascii values back to from and to
+               from[0] = fromRow;
+               from[1] = fromCol;
+               to[0] = toRow;
+               to[1] = toCol;
 
 		while(!legalMove(from, to, gameBoard) || gameBoard[fromRow][fromCol][0] == 'w' || gameBoard[fromRow][fromCol][0] == ' ') 
         {
@@ -180,6 +190,13 @@ void playerInput(char gameBoard[8][8][2], char player) {
 			fromCol = move[0] - 65;
 			toRow = 8- (move[3] - 48);
 			toCol = move[2] - 65;
+			
+			
+        		//assign converted ascii values back to from and to
+        		from[0] = fromRow;
+        		from[1] = fromCol;
+        		to[0] = toRow;
+        		to[1] = toCol;
 		}
 	}
 	
