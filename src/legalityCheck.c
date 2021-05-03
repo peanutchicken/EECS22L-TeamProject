@@ -226,8 +226,10 @@ bool checkKing(char from[2], char to[2], char board[8][8][2])
 bool winCheck(char board[8][8][2])
 {
 	bool result = false;
-	//bool whiteCheck = false;
-	//bool blackCheck = false;
+	bool whiteCheck = false;
+	bool blackCheck = false;
+	bool whiteMate = false; // check if there is a check surrounding king
+	bool blackMate = false; // check if there is a check surrounding king
 	int wKpos[2]; // position of white king ([0] - row, [1] - column)
 	int bKpos[2]; // position of black king ([0] - row, [1] - column)
 
@@ -255,10 +257,172 @@ bool winCheck(char board[8][8][2])
 	if (check(bKpos[0], bKpos[1], board, 'w'))
 	{
 		printf("White - check\n");
+		whiteCheck = true;
 	}
 	if (check(wKpos[0], wKpos[1], board, 'b'))
 	{
 		printf("Black - check\n");
+		blackCheck = true;
+	}
+
+	int whiteCounter = 0; // counting number of false checks around black king
+	int blackCounter = 0; // counting number of false checks around white king
+
+	// white checkmate or stalemate
+	if (board[bKpos[0] - 1][bKpos[1] - 1][0]  == ' ' || board[bKpos[0] - 1][bKpos[1] - 1][0] == 'w')
+	{
+		if (!check(bKpos[0] - 1, bKpos[1] - 1, board, 'w'))
+		{
+			whiteCounter++;
+		}
+	}
+	if (board[bKpos[0] - 1][bKpos[1]][0] == ' ' || board[bKpos[0] - 1][bKpos[1]][0] == 'w')
+	{
+		if (!check(bKpos[0] - 1, bKpos[1], board, 'w'))
+		{
+			whiteCounter++;
+		}
+	}
+	if (board[bKpos[0] - 1][bKpos[1] + 1][0] == ' ' || board[bKpos[0] - 1][bKpos[1] + 1][0] == 'w')
+	{
+		if (!check(bKpos[0] - 1, bKpos[1] + 1, board, 'w'))
+		{
+			whiteCounter++;
+		}
+	}
+	if (board[bKpos[0]][bKpos[1] + 1][0] == ' ' || board[bKpos[0]][bKpos[1] + 1][0] == 'w')
+	{
+		if (!check(bKpos[0], bKpos[1] + 1, board, 'w'))
+		{
+			whiteCounter++;
+		}
+	}
+	if (board[bKpos[0] + 1][bKpos[1] + 1][0] == ' ' || board[bKpos[0] + 1][bKpos[1] + 1][0] == 'w')
+	{
+		if (!check(bKpos[0] + 1, bKpos[1] + 1, board, 'w'))
+		{
+			whiteCounter++;
+		}
+	}
+	if (board[bKpos[0] + 1][bKpos[1]][0] == ' ' || board[bKpos[0] + 1][bKpos[1]][0] == 'w')
+	{
+		if (!check(bKpos[0] + 1, bKpos[1], board, 'w'))
+		{
+			whiteCounter++;
+		}
+	}
+	if (board[bKpos[0] + 1][bKpos[1] - 1][0] == ' ' || board[bKpos[0] + 1][bKpos[1] - 1][0] == 'w')
+	{
+		if (!check(bKpos[0] + 1, bKpos[1] - 1, board, 'w'))
+		{
+			whiteCounter++;
+		}
+	}
+	if (board[bKpos[0]][bKpos[1] - 1][0] == ' ' || board[bKpos[0]][bKpos[1] - 1][0] == 'w')
+	{
+		if (!check(bKpos[0], bKpos[1] - 1, board, 'w'))
+		{
+			whiteCounter++;
+		}
+	}
+
+	// black checkmate or stalemate
+	if (board[wKpos[0] - 1][wKpos[1] - 1][0]  == ' ' || board[wKpos[0] - 1][wKpos[1] - 1][0] == 'b')
+	{
+		if (!check(wKpos[0] - 1, wKpos[1] - 1, board, 'b'))
+		{
+			blackCounter++;
+		}
+	}
+	if (board[wKpos[0] - 1][wKpos[1]][0] == ' ' || board[wKpos[0] - 1][wKpos[1]][0] == 'b')
+	{
+		if (!check(wKpos[0] - 1, wKpos[1], board, 'b'))
+		{
+			blackCounter++;
+		}
+	}
+	if (board[wKpos[0] - 1][wKpos[1] + 1][0] == ' ' || board[wKpos[0] - 1][wKpos[1] + 1][0] == 'b')
+	{
+		if (!check(wKpos[0] - 1, wKpos[1] + 1, board, 'b'))
+		{
+			blackCounter++;
+		}
+	}
+	if (board[wKpos[0]][wKpos[1] + 1][0] == ' ' || board[wKpos[0]][wKpos[1] + 1][0] == 'b')
+	{
+		if (!check(wKpos[0], wKpos[1] + 1, board, 'b'))
+		{
+			blackCounter++;
+		}
+	}
+	if (board[wKpos[0] + 1][wKpos[1] + 1][0] == ' ' || board[wKpos[0] + 1][wKpos[1] + 1][0] == 'b')
+	{
+		if (!check(wKpos[0] + 1, wKpos[1] + 1, board, 'b'))
+		{
+			blackCounter++;
+		}
+	}
+	if (board[wKpos[0] + 1][wKpos[1]][0] == ' ' || board[wKpos[0] + 1][wKpos[1]][0] == 'b')
+	{
+		if (!check(wKpos[0] + 1, wKpos[1], board, 'b'))
+		{
+			blackCounter++;
+		}
+	}
+	if (board[wKpos[0] + 1][wKpos[1] - 1][0] == ' ' || board[wKpos[0] + 1][wKpos[1] - 1][0] == 'b')
+	{
+		if (!check(wKpos[0] + 1, wKpos[1] - 1, board, 'b'))
+		{
+			blackCounter++;
+		}
+	}
+	if (board[wKpos[0]][wKpos[1] - 1][0] == ' ' || board[wKpos[0]][wKpos[1] - 1][0] == 'b')
+	{
+		if (!check(wKpos[0], wKpos[1] - 1, board, 'b'))
+		{
+			blackCounter++;
+		}
+	}
+
+	if (whiteCounter == 0)
+	{
+		whiteMate = true;
+	}
+	else
+	{
+		whiteMate = false;
+	}
+	if (blackCounter == 0)
+	{
+		blackMate = true;
+	}
+	else
+	{
+		blackMate = false;
+	}
+
+	// checkmates or stalemates
+	if (whiteCheck && whiteMate)
+	{
+		printf("White - Checkmate!\n");
+		result = true;
+	}
+	else if (blackCheck && blackMate)
+	{
+		printf("Black - Checkmate!\n");
+		result = true;
+	}
+	else if ((!whiteCheck && !blackCheck) && whiteMate)
+	{
+		// black's king stalemate
+	}
+	else if ((!whiteCheck && !blackCheck) && blackMate)
+	{
+		// white's king stalemate
+	}
+	else
+	{
+		result = false;
 	}
 
 	return result;
