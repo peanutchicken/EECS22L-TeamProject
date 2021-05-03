@@ -16,28 +16,35 @@
 
 #include "board.h"
 #include "legalityCheck.h"
+#include "movelist.h"
 
 // game runner that loops through human vs human chess game
-void playerVsPlayer(char gameBoard[8][8][2]) {
-
+void playerVsPlayer(char gameBoard[8][8][2]) 
+{
+	moveList* list = createList();
 	printf("\nWelcome to Player vs Player Chess Game!\n");
 	printBoard(gameBoard);
-
+	append(list,gameBoard); // adds the starting board state
 	// main loop
 	while (true) { // replace with winCheck()
+		
 		playerInput(gameBoard, 'w');
 		printBoard(gameBoard);
 		// append the move list here
+		append(list,gameBoard);
 		playerInput(gameBoard, 'b');
 		printBoard(gameBoard);
-		// append the move list here
+		append(list,gameBoard);
 	}
+	deleteList(list);
+	list = NULL;
 }
 
 // game runner that loops through human vs AI chess game
 void playerVsAI(char gameBoard[8][8][2]) {
+	moveList* list = createList();
 	char playerColor;
-
+	int i = 0;
 	printf("\nWelcome to Player vs AI chess game!\n");
 	printf("Choose White('w') or Black('b'): ");
 	scanf(" %c", &playerColor);
@@ -46,21 +53,27 @@ void playerVsAI(char gameBoard[8][8][2]) {
 		scanf(" %c", &playerColor);
 	}
 	printBoard(gameBoard);
-
+	append(list,gameBoard);
 	// main loop
-	while (true) {
+	while (i<5) {
 		if (playerColor == 'w') {
 			playerInput(gameBoard, 'w');
 			printBoard(gameBoard);
 			// append the move list here
+			append(list,gameBoard);
 			// here is where AI makes its move
+			append(list,gameBoard);
 		} else if (playerColor == 'b') {
 			// here is where AI makes its move
+			append(list,gameBoard);
 			playerInput(gameBoard, 'b');
 			printBoard(gameBoard);
 			// append the move list here
+			append(list,gameBoard);
 		}
 	}
+	deleteList(list);
+	list = NULL;
 }
 
 // print current state of the chess board and its pieces
