@@ -16,6 +16,7 @@
 #include <string.h>
 
 #include "movelist.h"
+#include "board.h"
 
 
 
@@ -36,26 +37,31 @@ entry *newMoveEntry(moveList *m, char gb[8][8][2]){
 }
 
 //deletes an entry and correctly reassigns the next and last entry's pointers
-void deleteMoveEntry(moveList *m,entry *a){
-    if(a->next==NULL&&a->last==NULL){ //next and last are null (only entry in list)
+void deleteMoveEntry(moveList *m,entry *a)
+{
+    if(a->next==NULL&&a->last==NULL)
+    { //next and last are null (only entry in list)
         free(a);
         a=NULL;
         m->first = NULL;
         m->last = NULL;
     }
-    else if(a->next==NULL&&a->last!=NULL){ //next is null and last is valid pointer (last entry in list)
+    else if(a->next==NULL&&a->last!=NULL)
+    { //next is null and last is valid pointer (last entry in list)
         m->last = a->last;
         (a->last)->next=NULL;
         free(a);
         a=NULL;
     }
-    else if(a->next!=NULL&&a->last==NULL){ //next is valid pointer and last is null (first entry in list)
+    else if(a->next!=NULL&&a->last==NULL)
+    { //next is valid pointer and last is null (first entry in list)
         m->first = a->next;
         (a->next)->last=NULL;
         free(a);
         a=NULL;
     }
-    else if(a->next!=NULL&&a->last!=NULL){ //next and last are both valid pointers (entry in the middle of the list)
+    else if(a->next!=NULL&&a->last!=NULL)
+    { //next and last are both valid pointers (entry in the middle of the list)
         (a->last)->next=a->next;
         (a->next)->last=a->last;
         a->next=NULL;
@@ -68,29 +74,55 @@ void deleteMoveEntry(moveList *m,entry *a){
 }
 
 //creates new entry and adds it to the end of the movelist
-void append(moveList *m,char gameBoard[8][8][2]){
+void append(moveList *m,char gameBoard[8][8][2])
+{
     entry* newEntry = newMoveEntry(m,gameBoard);
-    (m->last)->next = newEntry;
-    m->last = newEntry;
+    if(m->first == NULL&&m->last==NULL) //if the list is empty
+    {
+        m->first = newEntry;
+        m->last = newEntry;
+    }
+    else
+    {
+        newEntry->last = m->last; //assign old last to last of the newEntry
+        (m->last)->next = newEntry; //reassign the old last's next to newEntry
+        m->last = newEntry; //reassign last of the list to newEntry
+        
+    }
+}
+
+//creates new moveList and returns it
+moveList *createList()
+{
+    moveList *temp = malloc(sizeof(moveList));
+    temp->first = NULL;
+    temp->last = NULL;
+    return temp;
 }
 
 //deletes list and frees it
-void deleteList(moveList *m){
+void deleteList(moveList *m)
+{
     entry* current = m->first;
     entry* next;
-    while(current!=NULL){
+    while(current!=NULL)
+    {
         next = current->next;
         free(current);
         current = next;
     }
+    m->first = NULL;
+    m->last = NULL;
     free(m);
 }
 
 //deletes n entries from the end of the list
-void deleteNFromEnd(moveList *m, int n){
+void deleteNFromEnd(moveList *m, int n)
+{
     entry* current = m->last;
     entry* last;
-    for(int i=0;i<n;i++){
+    for(int i=0;i<n;i++)
+    {
         last = current->last;
         deleteMoveEntry(m,current);
         current = last;
@@ -98,22 +130,31 @@ void deleteNFromEnd(moveList *m, int n){
     m->last = current;
 }
 
-//returns the move made between board 1 and 2, can't use string functions since the board char arrays don't end in null characters
-char* moveDifference(char gameBoard1[8][8][2], char gameBoard2[8][8][2]){
-    char* retVal=malloc(sizeof(char)*5);
+//stores the move made between board 1 and 2 in out[5]
+//can't use string functions since the board char arrays don't end in null characters
+//output is formatted as "A2,A3"
+void moveDifference(char out[5],char gameBoard1[8][8][2], char gameBoard2[8][8][2])
+{
+    char retVal[5];
     char from[2];
     char to[2];
     for(int i=0;i<8;i++){
-        for(int j=0;j<8;j++){
+        for(int j=0;j<8;j++)
+        {
             
-            if((gameBoard1[i][j][0]!=gameBoard2[i][j][0])&&(gameBoard1[i][j][1]!=gameBoard2[i][j][1])){ //finds where the two boards are different, should be 2 positions
-                if(gameBoard1[i][j][0]=='\0'){
+            if((gameBoard1[i][j][0]!=gameBoard2[i][j][0])&&(gameBoard1[i][j][1]!=gameBoard2[i][j][1])) //finds where the two boards are different, should be 2 positions
+            { 
+                if(gameBoard1[i][j][0]=='\0')
+                {
                     to[0] = i+1;
                     to[1] = (char)(104-j);
+                    to[2] = '\0';
                 }
-                if(gameBoard2[i][j][0]=='\0'){
+                if(gameBoard2[i][j][0]=='\0')
+                {
                     from[0] = i+1;
                     from[1] = (char)(104-j);
+                    from[2] = '\0';
                 }
             }
 
@@ -122,7 +163,22 @@ char* moveDifference(char gameBoard1[8][8][2], char gameBoard2[8][8][2]){
     strcat(retVal,from);
     strcat(retVal,",");
     strcat(retVal,to);
-    return retVal;
+    strcpy(out,retVal);
+}
+
+//prints every board state in the list
+//used for debugging
+void printList(moveList *m)
+{
+    entry* current=m->first;
+    do
+    {
+        printBoard(current->gameBoard);
+        current=current->next;
+    }
+    while(current->next!=NULL);
+    printBoard((m->last)->gameBoard);
+    
 }
 
 /* EOF */

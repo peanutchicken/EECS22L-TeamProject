@@ -16,13 +16,15 @@
 
 #include "board.h"
 #include "legalityCheck.h"
+#include "movelist.h"
 
 // game runner that loops through human vs human chess game
-void playerVsPlayer(char gameBoard[8][8][2]) {
-
+void playerVsPlayer(char gameBoard[8][8][2]) 
+{
+	moveList* list = createList();
 	printf("\nWelcome to Player vs Player Chess Game!\n");
 	printBoard(gameBoard);
-
+	append(list,gameBoard); // adds the starting board state
 	// main loop
 	while (!winCheck(gameBoard)) {
 		playerInput(gameBoard, 'w');
@@ -31,16 +33,19 @@ void playerVsPlayer(char gameBoard[8][8][2]) {
 			break;
 		}
 		// append the move list here
+		append(list,gameBoard);
 		playerInput(gameBoard, 'b');
 		printBoard(gameBoard);
-		// append the move list here
+		append(list,gameBoard);
 	}
+	deleteList(list);
+	list = NULL;
 }
 
 // game runner that loops through human vs AI chess game
 void playerVsAI(char gameBoard[8][8][2]) {
+	moveList* list = createList();
 	char playerColor;
-
 	printf("\nWelcome to Player vs AI chess game!\n");
 	printf("Choose White('w') or Black('b'): ");
 	scanf(" %c", &playerColor);
@@ -49,7 +54,7 @@ void playerVsAI(char gameBoard[8][8][2]) {
 		scanf(" %c", &playerColor);
 	}
 	printBoard(gameBoard);
-
+	append(list,gameBoard);
 	// main loop
 	while (!winCheck(gameBoard)) {
 		if (playerColor == 'w') {
@@ -59,45 +64,43 @@ void playerVsAI(char gameBoard[8][8][2]) {
 				break;
 			}
 			// append the move list here
+			append(list,gameBoard);
 			// here is where AI makes its move
+			append(list,gameBoard);
 		} else if (playerColor == 'b') {
 			// here is where AI makes its move
 			if (winCheck(gameBoard)) {
 				break;
 			}
+			append(list,gameBoard);
 			playerInput(gameBoard, 'b');
 			printBoard(gameBoard);
 			// append the move list here
+			append(list,gameBoard);
 		}
 	}
+	deleteList(list);
+	list = NULL;
 }
 
 // print current state of the chess board and its pieces
 void printBoard(char gameBoard[8][8][2]) {
 
 	for (int i = 0; i< 8; i++) 
-    	{
+        {
 		if (i == 0) 
         	{
-			printf("\n   +----+----+----+----+----+----+----+----+\n");
+			printf("\n    +----+----+----+----+----+----+----+----+\n");
 		}
-		printf("%d  |", 8 - i);
+		printf("%d   |", 8 - i);
 		for (int j = 0; j < 8; j++)
         	{
 			printf(" %c%c |", gameBoard[i][j][0], gameBoard[i][j][1]);
 		}
-		printf("\n   +----+----+----+----+----+----+----+----+\n");
+		printf("\n    +----+----+----+----+----+----+----+----+\n");
 		if (i == 7) 
         	{
-			for (int k = 0; k < 8; k++) 
-            		{
-				if (k == 0)
-				{
-					printf("    ");
-				}
-				char letter = 'A' + k;
-				printf("  %c  ", letter);
-			}
+				printf("      A    B    C    D    E    F    G    H");
 		}
 	}
 	printf("\n");
@@ -162,9 +165,10 @@ void playerInput(char gameBoard[8][8][2], char player) {
 		        to[0] = toRow;
 		        to[1] = toCol;
 		}
+			
+	}
 		
 	// choosing black piece
-	} 
 
     else if (player == 'b') 
     {
@@ -182,6 +186,13 @@ void playerInput(char gameBoard[8][8][2], char player) {
 		fromCol = move[0] - 65;
 		toRow = 8 - (move[3] - 48);
 		toCol = move[2] - 65;
+		
+		
+               //assign converted ascii values back to from and to
+               from[0] = fromRow;
+               from[1] = fromCol;
+               to[0] = toRow;
+               to[1] = toCol;
 
         	//assign converted ascii values back to from and to
 	        from[0] = fromRow;
@@ -205,12 +216,12 @@ void playerInput(char gameBoard[8][8][2], char player) {
 			fromCol = move[0] - 65;
 			toRow = 8- (move[3] - 48);
 			toCol = move[2] - 65;
-        		
-			//assign converted ascii values back to from and to
-		        from[0] = fromRow;
-		        from[1] = fromCol;
-		        to[0] = toRow;
-		        to[1] = toCol;
+			
+        		//assign converted ascii values back to from and to
+        		from[0] = fromRow;
+        		from[1] = fromCol;
+        		to[0] = toRow;
+        		to[1] = toCol;
 		}
 	}
 	
