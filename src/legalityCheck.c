@@ -145,7 +145,36 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
  
 bool checkRook(char from[2], char to[2], char board[8][8][2])
 {
-   return true;   
+        #ifndef DEBUG
+     printf("checking Rock\n");
+     #endif
+  
+         /*convert to number*/
+         int columnFrom = (int)from[1];
+         int rowFrom = (int)from[0];
+         int columnTo = (int)to[1];
+         int rowTo = (int)to[0];
+
+         /*Check for Rock*/
+         if (board[rowFrom][columnFrom][1] == 'N')
+         {
+            if ((rowTo == rowFrom) || (columnTo == columnFrom))
+                {
+                   return true;
+		}
+		else
+		{
+		   return false;
+		}    
+	   
+	      //default case
+              return false;
+	    }
+     }
+
+     //end default condition, in case none of the above conditions worked
+     return false;
+}
 }
 
 bool checkKnight(char from[2], char to[2], char board[8][8][2])
