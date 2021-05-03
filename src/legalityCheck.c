@@ -334,8 +334,31 @@ bool checkBishop(char from[2], char to[2], char board[8][8][2])
 
 bool checkQueen(char from[2], char to[2], char board[8][8][2])
 {
-    return true;
-}
+     #ifndef DEBUG
+     printf("checking Queen\n");
+     #endif
+  
+         /*convert to number*/
+         int columnFrom = (int)from[1];
+         int rowFrom = (int)from[0];
+         int columnTo = (int)to[1];
+         int rowTo = (int)to[0];
+         /*Check for Knight*/
+         if (board[rowFrom][columnFrom][1] == 'N')
+         {
+            if ((rowTo == columnnTo) && ( rowFrom == columnnFrom))
+                {
+                   return true;
+		}
+		else
+		{
+		   return false;
+		}    
+	   
+	      //default case
+              return false;
+	    }
+     }
 
 bool checkKing(char from[2], char to[2], char board[8][8][2])
 {
