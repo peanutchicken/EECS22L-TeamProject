@@ -24,9 +24,12 @@ void playerVsPlayer(char gameBoard[8][8][2]) {
 	printBoard(gameBoard);
 
 	// main loop
-	while (true) { // replace with winCheck()
+	while (!winCheck(gameBoard)) { // replace with winCheck()
 		playerInput(gameBoard, 'w');
 		printBoard(gameBoard);
+		if (winCheck(gameBoard)) {
+			break;
+		}
 		// append the move list here
 		playerInput(gameBoard, 'b');
 		printBoard(gameBoard);
@@ -127,7 +130,7 @@ void playerInput(char gameBoard[8][8][2], char player) {
 	        from[1] = fromCol;
 	        to[0] = toRow;
 	        to[1] = toCol;
-
+/*
 		while(!legalMove(from, to, gameBoard) || \
               gameBoard[fromRow][fromCol][0] == 'b' || \
               gameBoard[fromRow][fromCol][0] == ' ') 
@@ -153,7 +156,7 @@ void playerInput(char gameBoard[8][8][2], char player) {
 		        to[0] = toRow;
 		        to[1] = toCol;
 		}
-		
+*/		
 	// choosing black piece
 	} 
 
@@ -179,7 +182,7 @@ void playerInput(char gameBoard[8][8][2], char player) {
 	        from[1] = fromCol;
 	        to[0] = toRow;
 	        to[1] = toCol;
-
+/*
 		while(!legalMove(from, to, gameBoard) || gameBoard[fromRow][fromCol][0] == 'w' || gameBoard[fromRow][fromCol][0] == ' ') 
         {
 			printf("Invalid move. Please enter again: ");
@@ -202,7 +205,7 @@ void playerInput(char gameBoard[8][8][2], char player) {
 		        from[1] = fromCol;
 		        to[0] = toRow;
 		        to[1] = toCol;
-		}
+		}*/
 	}
 	
 	gameBoard[toRow][toCol][0] = gameBoard[fromRow][fromCol][0];
