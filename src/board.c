@@ -26,10 +26,12 @@ void playerVsPlayer(char gameBoard[8][8][2])
 	printBoard(gameBoard);
 	append(list,gameBoard); // adds the starting board state
 	// main loop
-	while (true) { // replace with winCheck()
-		
+	while (!winCheck(gameBoard)) {
 		playerInput(gameBoard, 'w');
 		printBoard(gameBoard);
+		if (winCheck(gameBoard)) {
+			break;
+		}
 		// append the move list here
 		append(list,gameBoard);
 		playerInput(gameBoard, 'b');
@@ -44,7 +46,6 @@ void playerVsPlayer(char gameBoard[8][8][2])
 void playerVsAI(char gameBoard[8][8][2]) {
 	moveList* list = createList();
 	char playerColor;
-	int i = 0;
 	printf("\nWelcome to Player vs AI chess game!\n");
 	printf("Choose White('w') or Black('b'): ");
 	scanf(" %c", &playerColor);
@@ -55,16 +56,22 @@ void playerVsAI(char gameBoard[8][8][2]) {
 	printBoard(gameBoard);
 	append(list,gameBoard);
 	// main loop
-	while (i<5) {
+	while (!winCheck(gameBoard)) {
 		if (playerColor == 'w') {
 			playerInput(gameBoard, 'w');
 			printBoard(gameBoard);
+			if (winCheck(gameBoard)) {
+				break;
+			}
 			// append the move list here
 			append(list,gameBoard);
 			// here is where AI makes its move
 			append(list,gameBoard);
 		} else if (playerColor == 'b') {
 			// here is where AI makes its move
+			if (winCheck(gameBoard)) {
+				break;
+			}
 			append(list,gameBoard);
 			playerInput(gameBoard, 'b');
 			printBoard(gameBoard);
@@ -128,10 +135,10 @@ void playerInput(char gameBoard[8][8][2], char player) {
 		toCol = move[2] - 65;
 
         	//assign converted ascii values back to from and to
-        	from[0] = fromRow;
-        	from[1] = fromCol;
-        	to[0] = toRow;
-        	to[1] = toCol;
+	        from[0] = fromRow;
+	        from[1] = fromCol;
+	        to[0] = toRow;
+	        to[1] = toCol;
 
 		while(!legalMove(from, to, gameBoard) || \
               gameBoard[fromRow][fromCol][0] == 'b' || \
@@ -151,17 +158,17 @@ void playerInput(char gameBoard[8][8][2], char player) {
 			fromCol = move[0] - 65;
 			toRow = 8 - (move[3] - 48);
 			toCol = move[2] - 65;
-	
+
+	        	//assign converted ascii values back to from and to
+		        from[0] = fromRow;
+	        	from[1] = fromCol;
+		        to[0] = toRow;
+		        to[1] = toCol;
+		}
 			
-        		//assign converted ascii values back to from and to
-        		from[0] = fromRow;
-        		from[1] = fromCol;
-        		to[0] = toRow;
-        		to[1] = toCol;
 	}
 		
 	// choosing black piece
-	} 
 
     else if (player == 'b') 
     {
@@ -187,6 +194,12 @@ void playerInput(char gameBoard[8][8][2], char player) {
                to[0] = toRow;
                to[1] = toCol;
 
+        	//assign converted ascii values back to from and to
+	        from[0] = fromRow;
+	        from[1] = fromCol;
+	        to[0] = toRow;
+	        to[1] = toCol;
+
 		while(!legalMove(from, to, gameBoard) || gameBoard[fromRow][fromCol][0] == 'w' || gameBoard[fromRow][fromCol][0] == ' ') 
         {
 			printf("Invalid move. Please enter again: ");
@@ -203,7 +216,6 @@ void playerInput(char gameBoard[8][8][2], char player) {
 			fromCol = move[0] - 65;
 			toRow = 8- (move[3] - 48);
 			toCol = move[2] - 65;
-			
 			
         		//assign converted ascii values back to from and to
         		from[0] = fromRow;

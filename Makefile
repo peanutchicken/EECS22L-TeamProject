@@ -3,11 +3,29 @@
 # in ./src/
 
 # subdirectories (obviously)
-SUBDIRS = src
+CC = gcc
+CFLAGS = -c -ansi -std=c99 -Wall
+LFLAGS = -ansi -std=c99 -Wall
+#SUBDIRS = src
+OBJECTS = $(addprefix bin/, ai.o board.o fileio.o  legalityCheck.o main.o movelist.o)
 
-.PHONY: subdirs $(SUBDIRS)
+all: bin/chessGame
 
-subdirs: $(SUBDIRS)
+#up arrow (^) reduces amount of code in makefile, fills all dependencies with $(OBJECTS)
+#$@ declares what I want object to be generated to, placeholder filled by name of makefile item
+bin/chessGame: $(OBJECTS)
+	$(CC) $(LFLAGS) -DNDEBUG $^ -o $@
 
-$(SUBDIRS):
-	$(MAKE) -C $@
+
+# compiles all files ending in .c in src/ 
+# $< is used when you only have one field that you want to fill in (in this case test.c), only fills 
+# 	one file name in that placeholder
+bin/%.o: src/%.c
+	$(CC) $(CFLAGS) $< -o $@
+	
+
+clean:
+	rm -f bin/*.o bin/chessGame
+
+
+
