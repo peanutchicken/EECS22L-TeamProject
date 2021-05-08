@@ -24,11 +24,11 @@ entry *newMoveEntry(moveList *m, char gb[8][8][2]);
 //deletes an entry and correctly reassigns the next and last entry's pointers
 void deleteMoveEntry(moveList *m,entry *a);
 
-//allocates memory for new moveList
-moveList* createList();
-
 //creates new entry and adds it to the end of the movelist
 void append(moveList *m,char gameBoard[8][8][2]);
+
+//creates a list and returns it
+moveList *createList();
 
 //deletes list and frees it
 void deleteList(moveList *m);
@@ -37,7 +37,11 @@ void deleteList(moveList *m);
 void deleteNFromEnd(moveList *m, int n);
 
 //returns the move made between board 1 and 2
-char* moveDifference(char gameBoard1[8][8][2], char gameBoard2[8][8][2]);
+void moveDifference(char out[5],char gameBoard1[8][8][2], char gameBoard2[8][8][2]);
+
+//prints out every board state in the list
+//for debugging
+void printList(moveList *m);
 
 
 

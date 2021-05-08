@@ -2,9 +2,11 @@
 *.d
 
 # Executables
-chessGame
-testChessGame
+src/chessGame
+src/testChessGame
 
+# client spec
+ProjectSpecFromClient.pdf
 
 # Object files
 *.o
