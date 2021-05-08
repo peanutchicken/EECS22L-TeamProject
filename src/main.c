@@ -27,7 +27,7 @@ int main()
 {       
 	int n;
 	
-	char gameBoard[8][8][2] = {
+/*	char gameBoard[8][8][2] = {
 				{"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
 				{"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
 				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
@@ -36,10 +36,19 @@ int main()
 				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
 				{"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
 				{"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};
-
+*/
 	PrintMenu();
 	scanf("%d", &n);
 	while(n != 3) {
+		char gameBoard[8][8][2] = {
+				{"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
+				{"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
+				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+				{"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
+				{"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};
 		switch (n) {
 	                    case 1:
 	                        printf("player Vs Player is loading...\n");
@@ -51,7 +60,7 @@ int main()
 				break;
 			    default :
 	                        printf("Invalid option!\n" );
-		            }
+		}
 		PrintMenu();
 		scanf("%d", &n);
 	}	

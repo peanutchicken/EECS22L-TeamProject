@@ -20,7 +20,7 @@
 bool legalMove(char from[2], char to[2],char board[8][8][2])
 {
      //format of from[row][col], to[row][col]
-     bool result;
+     bool result = false;
 
      //get the piece char (P, R, N, B) from board using the index provided by from
      //int casting is done to prevent complaints about passing char types as array indicies
