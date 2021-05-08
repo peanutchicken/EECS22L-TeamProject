@@ -145,7 +145,7 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
  
 bool checkRook(char from[2], char to[2], char board[8][8][2])
 {
-        #ifndef DEBUG
+     #ifndef DEBUG
      printf("checking Rock\n");
      #endif
   
@@ -166,15 +166,9 @@ bool checkRook(char from[2], char to[2], char board[8][8][2])
 		{
 		   return false;
 		}    
-	   
-	      //default case
-              return false;
-	    }
-     }
-
-     //end default condition, in case none of the above conditions worked
-     return false;
-}
+         	    }
+           //default case
+           return false;
 }
 
 bool checkKnight(char from[2], char to[2], char board[8][8][2])
@@ -362,7 +356,7 @@ bool checkBishop(char from[2], char to[2], char board[8][8][2])
 
 bool checkQueen(char from[2], char to[2], char board[8][8][2])
 {
-     #ifndef DEBUG
+ #ifndef DEBUG
      printf("checking Queen\n");
      #endif
   
@@ -371,10 +365,10 @@ bool checkQueen(char from[2], char to[2], char board[8][8][2])
          int rowFrom = (int)from[0];
          int columnTo = (int)to[1];
          int rowTo = (int)to[0];
-         /*Check for Knight*/
+         /*Check for Queen*/
          if (board[rowFrom][columnFrom][1] == 'N')
          {
-            if ((rowTo == columnnTo) && ( rowFrom == columnnFrom))
+            if ((rowTo == columnTo) && ( rowFrom == columnFrom))
                 {
                    return true;
 		}
@@ -382,11 +376,10 @@ bool checkQueen(char from[2], char to[2], char board[8][8][2])
 		{
 		   return false;
 		}    
-	   
+	  } 
 	      //default case
-              return false;
-	    }
-     }
+	         return false;
+}
 
 bool checkKing(char from[2], char to[2], char board[8][8][2])
 {
