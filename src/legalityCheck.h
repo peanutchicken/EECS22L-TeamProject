@@ -33,6 +33,6 @@ bool checkBlock(char board[8][8][2], char color, int array[8][2]);
 bool check(int kPosRow, int kPosCol, char board[8][8][2], char color);
 
 // check if there are any moves left on one side to determine stalemate
-bool anyAvailableMoves(char board[8][8][2], char color);
+bool anyAvailableMoves(char board[8][8][2], char color, char enemyColor);
 
 #endif
