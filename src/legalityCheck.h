@@ -26,4 +26,6 @@ bool winCheck(char board[8][8][2]);
 // check if there is a check from one color side
 bool check(int kPosRow, int kPosCol, char board[8][8][2], char color);
 
+//special moves 
+void pawnPromotion(int rowFrom, int columnFrom, char board[8][8][2]);
 #endif
