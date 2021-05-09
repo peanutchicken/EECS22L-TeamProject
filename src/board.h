@@ -17,4 +17,7 @@ void printBoard(char gameBoard[8][8][2]);
 // update the chess board accordingly from player user input
 void playerInput(char gameBoard[8][8][2], char player);
 
+//prints a suggested move for the respective player
+void suggestedMove(char gameBoard[8][8][2], char player);
+
 /* EOF */ 

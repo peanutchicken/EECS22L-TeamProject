@@ -59,6 +59,7 @@ void playerVsAI(char gameBoard[8][8][2]) {
 	// main loop
 	while (!winCheck(gameBoard)) {
 		if (playerColor == 'w') {
+			suggestedMove(gameBoard, 'w');
 			playerInput(gameBoard, 'w');
 			printBoard(gameBoard);
 			if (winCheck(gameBoard)) {
@@ -78,6 +79,7 @@ void playerVsAI(char gameBoard[8][8][2]) {
 			}
 			append(list,gameBoard);
 			printBoard(gameBoard);
+			suggestedMove(gameBoard, 'b');
 			playerInput(gameBoard, 'b');
 			printBoard(gameBoard);
 			// append the move list here
@@ -123,6 +125,8 @@ void playerInput(char gameBoard[8][8][2], char player) {
 	int toRow; // row number in board array of the new location
 	int toCol; // column number in board array of the new location
 
+    //move suggestion
+	suggestedMove(gameBoard,player);
 
 	// choosing white piece
 	if (player == 'w') {
@@ -237,6 +241,43 @@ void playerInput(char gameBoard[8][8][2], char player) {
 	gameBoard[fromRow][fromCol][0] = ' ';
 	gameBoard[fromRow][fromCol][1] = ' ';
 
+}
+
+//prints a suggested move for the respective player
+void suggestedMove(char gameBoard[8][8][2], char player)
+{
+	printf("suggestedMove");
+	/*
+		variable declarations
+	*/
+
+	//temporary gameboard
+	char tempGameBoard[8][8][2];
+	//printf("declare temp board in suggestedMove");
+	//suggested move output
+	char suggestedOut[5];
+	//printf("declare output in suggestedMove");
+	//copys the existing gameboard into a temporary gameboard
+	//printf("begin copy in suggestedMove");
+
+	for(int i=0;i<8;i++)
+	{
+		for(int j=0;j<8;j++)
+		{
+			tempGameBoard[i][j][0]=gameBoard[i][j][0];
+			tempGameBoard[i][j][1]=gameBoard[i][j][1];
+		}
+	}
+
+	//printf("finished copy in suggestedMove");
+
+	makeMove(tempGameBoard,player);
+
+	//printf("made Move in suggestedMove");
+
+	moveDifference(suggestedOut,gameBoard,tempGameBoard);
+	//printf("found move difference in suggestedMove");
+	printf("\nPsssst... try %s.\n", suggestedOut);
 }
 
 /* EOF */
