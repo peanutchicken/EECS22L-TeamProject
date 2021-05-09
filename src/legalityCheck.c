@@ -366,7 +366,7 @@ bool checkQueen(char from[2], char to[2], char board[8][8][2])
          int columnTo = (int)to[1];
          int rowTo = (int)to[0];
          /*Check for Queen*/
-         if (board[rowFrom][columnFrom][1] == 'N')
+         if (board[rowFrom][columnFrom][1] == 'Q')
          {
             if ((rowTo == columnTo) && ( rowFrom == columnFrom))
                 {

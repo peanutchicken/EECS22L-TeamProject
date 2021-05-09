@@ -84,8 +84,10 @@ void playerVsAI(char gameBoard[8][8][2]) {
 			append(list,gameBoard);
 		}
 	}
+
 	deleteList(list);
 	list = NULL;
+	
 }
 
 // print current state of the chess board and its pieces
