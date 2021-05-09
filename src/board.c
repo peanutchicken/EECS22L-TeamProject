@@ -15,9 +15,6 @@
 #include <stdlib.h>
 
 #include "board.h"
-#include "legalityCheck.h"
-#include "movelist.h"
-#include "ai.h"
 
 // game runner that loops through human vs human chess game
 void playerVsPlayer(char gameBoard[8][8][2]) 
@@ -280,4 +277,16 @@ void suggestedMove(char gameBoard[8][8][2], char player)
 	printf("\nPsssst... try %s.\n", suggestedOut);
 }
 
+void takeBackMove(char gameBoard[8][8][2], moveList* list)
+{
+	deleteNFromEnd(list,2);
+	for(int i=0;i<8;i++)
+	{
+		for(int j=0;j<8;j++)
+		{
+			gameBoard[i][j][0]=((list->last)->gameBoard)[i][j][0];
+			gameBoard[i][j][1]=((list->last)->gameBoard)[i][j][0];
+		}
+	}
+}
 /* EOF */
