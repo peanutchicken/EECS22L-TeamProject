@@ -68,7 +68,7 @@ bool legalMove(char from[2], char to[2],char board[8][8][2])
 /*This function checks for valid pawn's move*/
 bool checkPawn(char from[2], char to[2], char board[8][8][2])
 {
-     #ifndef DEBUG
+     #ifdef DEBUG
      printf("checkingpawn\n");
      #endif
 
@@ -145,8 +145,8 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
  
 bool checkRook(char from[2], char to[2], char board[8][8][2])
 {
-     #ifndef DEBUG
-     printf("checking Rock\n");
+     #ifdef DEBUG
+     printf("checking Rook\n");
      #endif
   
          /*convert to number*/
@@ -156,7 +156,7 @@ bool checkRook(char from[2], char to[2], char board[8][8][2])
          int rowTo = (int)to[0];
 
          /*Check for Rock*/
-         if (board[rowFrom][columnFrom][1] == 'N')
+         if (board[rowFrom][columnFrom][1] == 'R')
          {
             if ((rowTo == rowFrom) || (columnTo == columnFrom))
                 {
@@ -173,7 +173,7 @@ bool checkRook(char from[2], char to[2], char board[8][8][2])
 
 bool checkKnight(char from[2], char to[2], char board[8][8][2])
 {
-     #ifndef DEBUG
+     #ifdef DEBUG
      printf("checking Knight\n");
      #endif
   
@@ -213,7 +213,7 @@ bool checkKnight(char from[2], char to[2], char board[8][8][2])
 bool checkBishop(char from[2], char to[2], char board[8][8][2])
 {
     
-     #ifndef DEBUG
+     #ifdef DEBUG
      printf("checkingbishop\n");
      #endif
 
@@ -356,7 +356,7 @@ bool checkBishop(char from[2], char to[2], char board[8][8][2])
 
 bool checkQueen(char from[2], char to[2], char board[8][8][2])
 {
- #ifndef DEBUG
+ #ifdef DEBUG
      printf("checking Queen\n");
      #endif
   
@@ -384,7 +384,7 @@ bool checkQueen(char from[2], char to[2], char board[8][8][2])
 bool checkKing(char from[2], char to[2], char board[8][8][2])
 {
 	
-     #ifndef DEBUG
+     #ifdef DEBUG
      printf("checkingking\n");
      #endif
 
