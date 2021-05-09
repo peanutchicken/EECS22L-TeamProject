@@ -13,7 +13,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "ai.h"
+
+//makes a legal move for the specified player
+void makeMove(char gameBoard[8][8][2], char player){
+
+    return;
+}
+
 
 /* EOF */
