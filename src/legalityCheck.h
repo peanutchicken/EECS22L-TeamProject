@@ -35,4 +35,7 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color);
 // check if there are any moves left on one side to determine stalemate
 bool anyAvailableMoves(char board[8][8][2], char color, char enemyColor);
 
+//special moves 
+void pawnPromotion(int rowFrom, int columnFrom, char board[8][8][2]);
+
 #endif

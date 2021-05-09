@@ -29,7 +29,7 @@ bool legalMove(char from[2], char to[2],char board[8][8][2])
      {
          //pawn
          case 'P':
-             result = checkPawn(from, to, board);
+ 	     result = checkPawn(from, to, board);
              break;
 
          //rook
@@ -58,7 +58,7 @@ bool legalMove(char from[2], char to[2],char board[8][8][2])
              break;
 
          default:
-             #ifndef DEBUG
+             #ifdef DEBUG
 	         printf("ERR: INVALID PIECE PASSED TO LEGALMOVE\n");
 	     #endif
              break;
@@ -70,7 +70,7 @@ bool legalMove(char from[2], char to[2],char board[8][8][2])
 /*This function checks for valid pawn's move*/
 bool checkPawn(char from[2], char to[2], char board[8][8][2])
 {
-     #ifndef DEBUG
+     #ifdef DEBUG
      printf("checkingpawn\n");
      #endif
 
@@ -79,7 +79,7 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
          int rowFrom = (int)from[0];
          int columnTo = (int)to[1];
          int rowTo = (int)to[0];
-  	
+	
          /*Check for white pawn*/
          if(board[rowFrom][columnFrom][0] == 'w')
          {
@@ -105,11 +105,36 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
 				 /*check if there is any blocking piece*/
 				if(board[rowTo][columnTo][0] != ' ')
                 			return false;
-		  		return true;
-			}
-		}
 
-          }
+				/*Check for pawn promotion*/
+				if (rowTo == 0)
+				{
+					pawnPromotion(rowFrom,columnFrom,board);
+				}
+			return true;
+			}
+
+			/*pawn can capture diagonally*/
+			if((rowTo == rowFrom - 1) && \
+			   ((columnTo == columnFrom - 1) || (columnTo == columnFrom + 1))) 
+			{
+				if(board[rowTo][columnTo][0] == ' ')
+                			return false;
+				else if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+					return false;
+				else
+				{
+					if (rowTo == 0)
+					{
+						pawnPromotion(rowFrom,columnFrom,board);
+					}
+					return true;	
+				}		
+			}
+		}	
+	}
+
+          
 
           /*Check for black pawn*/	
           else 
@@ -136,23 +161,69 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
 				 /*check if there is any blocking piece*/
 				if(board[rowTo][columnTo][0] != ' ')
                 			return false;
+				/*Check for pawn promotion*/
+				if (rowTo == 7)
+				{
+					pawnPromotion(rowFrom,columnFrom,board);	
+				}
 		  		return true;
 			}
+			
+			/*pawn can capture diagonally*/
+			if((rowTo == rowFrom + 1) && \
+			  ((columnTo == columnFrom - 1) || (columnTo == columnFrom + 1))) 
+			{
+				if(board[rowTo][columnTo][0] == ' ')
+                			return false;
+				else if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+					return false;
+				else
+				{
+					if (rowTo == 7)
+					{
+						pawnPromotion(rowFrom,columnFrom,board);
+					}
+					return true;	
+				}		
+			}
 		}
-
-          }
+	}
+	     
 	  /*default case*/
 	  return false;
 }
  
 bool checkRook(char from[2], char to[2], char board[8][8][2])
 {
-   return true;   
+     #ifdef DEBUG
+     printf("checking Rook\n");
+     #endif
+  
+         /*convert to number*/
+         int columnFrom = (int)from[1];
+         int rowFrom = (int)from[0];
+         int columnTo = (int)to[1];
+         int rowTo = (int)to[0];
+
+         /*Check for Rock*/
+         if (board[rowFrom][columnFrom][1] == 'R')
+         {
+            if ((rowTo == rowFrom) || (columnTo == columnFrom))
+                {
+                   return true;
+		}
+		else
+		{
+		   return false;
+		}    
+         	    }
+           //default case
+           return false;
 }
 
 bool checkKnight(char from[2], char to[2], char board[8][8][2])
 {
-     #ifndef DEBUG
+     #ifdef DEBUG
      printf("checking Knight\n");
      #endif
   
@@ -192,7 +263,7 @@ bool checkKnight(char from[2], char to[2], char board[8][8][2])
 bool checkBishop(char from[2], char to[2], char board[8][8][2])
 {
     
-     #ifndef DEBUG
+     #ifdef DEBUG
      printf("checkingbishop\n");
      #endif
 
@@ -335,13 +406,35 @@ bool checkBishop(char from[2], char to[2], char board[8][8][2])
 
 bool checkQueen(char from[2], char to[2], char board[8][8][2])
 {
-    return true;
+ #ifdef DEBUG
+     printf("checking Queen\n");
+     #endif
+  
+         /*convert to number*/
+         int columnFrom = (int)from[1];
+         int rowFrom = (int)from[0];
+         int columnTo = (int)to[1];
+         int rowTo = (int)to[0];
+         /*Check for Queen*/
+         if (board[rowFrom][columnFrom][1] == 'Q')
+         {
+            if ((rowTo == columnTo) && ( rowFrom == columnFrom))
+                {
+                   return true;
+		}
+		else
+		{
+		   return false;
+		}    
+	  } 
+	      //default case
+	         return false;
 }
 
 bool checkKing(char from[2], char to[2], char board[8][8][2])
 {
 	
-     #ifndef DEBUG
+     #ifdef DEBUG
      printf("checkingking\n");
      #endif
 
@@ -574,7 +667,7 @@ bool winCheck(char board[8][8][2])
 		result = false;
 	}
 
-	return false;
+	return result;
 }
 
 // check if there is a check and a possible block from one color side
@@ -1314,7 +1407,48 @@ bool anyAvailableMoves(char board[8][8][2], char color, char enemyColor)
 			}			
 		}
 	}
+
 	return result;
+}
+
+/*pawn promotion*/
+void pawnPromotion(int rowFrom, int columnFrom, char board[8][8][2])
+{
+	int option;
+	printf("Would you like to exchange the pawn for:\n");
+	printf("1.Bishop\n");
+	printf("2.Knight\n");
+	printf("3.Rook\n");
+	printf("4.Queen\n");
+	printf("Please enter 1-4 to make the change: ");
+	scanf("%d",&option);
+					
+	/*errors handling for invalid answer*/
+	while (option < 1 ||  option > 4)
+	{
+		printf("Invalid answer.Please enter 1-4 to make the change: ");
+		scanf("%d",&option);
+	}
+					
+	switch(option)
+	{
+		/*Bishop*/
+		case 1:	
+			board[rowFrom][columnFrom][1] = 'B';
+			break;
+		/*Knight*/
+		case 2:												
+			board[rowFrom][columnFrom][1] = 'N';
+			break;
+		/*Rook*/
+		case 3:						
+			board[rowFrom][columnFrom][1] = 'R';
+			break;
+		/*Queen*/
+		default:
+			board[rowFrom][columnFrom][1] = 'Q';
+			break;
+	}
 }
 
 /* EOF */

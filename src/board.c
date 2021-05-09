@@ -17,6 +17,7 @@
 #include "board.h"
 #include "legalityCheck.h"
 #include "movelist.h"
+#include "ai.h"
 
 // game runner that loops through human vs human chess game
 void playerVsPlayer(char gameBoard[8][8][2]) 
@@ -33,11 +34,10 @@ void playerVsPlayer(char gameBoard[8][8][2])
 		if (!playerExit) {
 			printBoard(gameBoard);
 		}
+		append(list, gameBoard);
 		if (winCheck(gameBoard) || playerExit) {
 			break;
 		}
-		// append the move list here
-		append(list,gameBoard);
 		playerExit = playerInput(gameBoard, 'b');
 		if (!playerExit) {
 			printBoard(gameBoard);
@@ -70,15 +70,18 @@ void playerVsAI(char gameBoard[8][8][2]) {
 			if (!playerExit) {
 				printBoard(gameBoard);
 			}
+			append(list, gameBoard);
 			if (winCheck(gameBoard) || playerExit) {
 				break;
 			}
-			// append the move list here
-			append(list,gameBoard);
 			// here is where AI makes its move
+			makeMove(gameBoard,'b');
+			printBoard(gameBoard);
 			append(list,gameBoard);
 		} else if (playerColor == 'b') {
 			// here is where AI makes its move
+			makeMove(gameBoard,'w');
+			printBoard(gameBoard);
 			if (winCheck(gameBoard)) {
 				break;
 			}
@@ -91,8 +94,10 @@ void playerVsAI(char gameBoard[8][8][2]) {
 			append(list,gameBoard);
 		}
 	}
+
 	deleteList(list);
 	list = NULL;
+	
 }
 
 // print current state of the chess board and its pieces
@@ -158,7 +163,7 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 	        from[1] = fromCol;
 	        to[0] = toRow;
 	        to[1] = toCol;
-/*
+
 		while((!legalMove(from, to, gameBoard) || \
 			gameBoard[fromRow][fromCol][0] == 'b' || \
 			gameBoard[fromRow][fromCol][0] == ' ') && \
@@ -191,7 +196,7 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 		        to[0] = toRow;
 		        to[1] = toCol;
 		}
-*/			
+			
 	}
 		
 	// choosing black piece
@@ -231,7 +236,7 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 	        from[1] = fromCol;
 	        to[0] = toRow;
 	        to[1] = toCol;
-/*
+
 		while((!legalMove(from, to, gameBoard) || gameBoard[fromRow][fromCol][0] == 'w' || gameBoard[fromRow][fromCol][0] == ' ') && \
 			!playerExit) 
         	{
@@ -262,7 +267,7 @@ bool playerInput(char gameBoard[8][8][2], char player) {
         		to[0] = toRow;
         		to[1] = toCol;
 		}
-*/
+
 	}
 	
 	if (!playerExit)
