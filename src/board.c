@@ -158,7 +158,7 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 	        from[1] = fromCol;
 	        to[0] = toRow;
 	        to[1] = toCol;
-
+/*
 		while((!legalMove(from, to, gameBoard) || \
 			gameBoard[fromRow][fromCol][0] == 'b' || \
 			gameBoard[fromRow][fromCol][0] == ' ') && \
@@ -191,7 +191,7 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 		        to[0] = toRow;
 		        to[1] = toCol;
 		}
-			
+*/			
 	}
 		
 	// choosing black piece
@@ -231,7 +231,7 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 	        from[1] = fromCol;
 	        to[0] = toRow;
 	        to[1] = toCol;
-
+/*
 		while((!legalMove(from, to, gameBoard) || gameBoard[fromRow][fromCol][0] == 'w' || gameBoard[fromRow][fromCol][0] == ' ') && \
 			!playerExit) 
         	{
@@ -262,6 +262,7 @@ bool playerInput(char gameBoard[8][8][2], char player) {
         		to[0] = toRow;
         		to[1] = toCol;
 		}
+*/
 	}
 	
 	if (!playerExit)
