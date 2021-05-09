@@ -17,6 +17,7 @@
 #include "board.h"
 #include "legalityCheck.h"
 #include "movelist.h"
+#include "ai.h"
 
 // game runner that loops through human vs human chess game
 void playerVsPlayer(char gameBoard[8][8][2]) 
@@ -66,21 +67,27 @@ void playerVsAI(char gameBoard[8][8][2]) {
 			// append the move list here
 			append(list,gameBoard);
 			// here is where AI makes its move
+			makeMove(gameBoard,'b');
+			printBoard(gameBoard);
 			append(list,gameBoard);
 		} else if (playerColor == 'b') {
 			// here is where AI makes its move
+			makeMove(gameBoard,'w');
 			if (winCheck(gameBoard)) {
 				break;
 			}
 			append(list,gameBoard);
+			printBoard(gameBoard);
 			playerInput(gameBoard, 'b');
 			printBoard(gameBoard);
 			// append the move list here
 			append(list,gameBoard);
 		}
 	}
+
 	deleteList(list);
 	list = NULL;
+	
 }
 
 // print current state of the chess board and its pieces
