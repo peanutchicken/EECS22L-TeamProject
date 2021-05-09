@@ -744,7 +744,8 @@ bool checkAndBlock(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockTopRight = true;
 		}
-		if (!blockTopRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockTopRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance > 0 && kPosCol - distance < 8 && kPosCol - distance > 0))
 		{
 			check = true;
 			for (int i = 1; i <= distance; i++)
@@ -765,7 +766,8 @@ bool checkAndBlock(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockTopLeft = true;
 		}
-		if (!blockTopLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockTopLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance > 0 && kPosCol - distance < 8 && kPosCol - distance > 0))
 		{
 			check = true;
 			for (int i = 1; i <= distance; i++)
@@ -786,7 +788,8 @@ bool checkAndBlock(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockBotRight = true;
 		}
-		if (!blockBotRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockBotRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance > 0 && kPosCol - distance < 8 && kPosCol - distance > 0))
 		{
 			check = true;
 			for (int i = 1; i <= distance; i++)
@@ -807,7 +810,8 @@ bool checkAndBlock(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockBotLeft = true;
 		}
-		if (!blockBotLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockBotLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance > 0 && kPosCol - distance < 8 && kPosCol - distance > 0))
 		{
 			check = true;
 			for (int i = 1; i <= distance; i++)
@@ -1001,7 +1005,6 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 	if (board[kPosRow - 1][kPosCol + 1][0] == color && board[kPosRow - 1][kPosCol + 1][1] == 'P')
 	{
 		result = true;
-		
 	}
 	if (board[kPosRow - 1][kPosCol - 1][0] == color && board[kPosRow - 1][kPosCol - 1][1] == 'P')
 	{
@@ -1080,7 +1083,8 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockTopRight = true;
 		}
-		if (!blockTopRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockTopRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance > 0 && kPosCol - distance < 8 && kPosCol - distance > 0))
 		{
 			result = true;
 		}
@@ -1092,7 +1096,8 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockTopLeft = true;
 		}
-		if (!blockTopLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockTopLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance > 0 && kPosCol - distance < 8 && kPosCol - distance > 0))
 		{
 			result = true;
 		}
@@ -1104,7 +1109,8 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockBotRight = true;
 		}
-		if (!blockBotRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockBotRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance > 0 && kPosCol - distance < 8 && kPosCol - distance > 0))
 		{
 			result = true;
 		}
@@ -1116,7 +1122,8 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockBotLeft = true;
 		}
-		if (!blockBotLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockBotLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance > 0 && kPosCol - distance < 8 && kPosCol - distance > 0))
 		{
 			result = true;
 		}
@@ -1174,6 +1181,12 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 	}
 
 	return result;
+}
+
+// check if there are any moves left on one side to determine stalemate
+bool anyAvailableMoves(char board[8][8][2], char color)
+{
+	
 }
 
 /* EOF */
