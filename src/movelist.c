@@ -127,7 +127,6 @@ void deleteNFromEnd(moveList *m, int n)
         deleteMoveEntry(m,current);
         current = last;
     }
-    m->last = current;
 }
 
 //stores the move made between board 1 and 2 in out[5]

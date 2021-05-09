@@ -1,5 +1,5 @@
 //header file for movelist.c
-
+#pragma once
 #ifndef MOVELIST_H
 #define MOVELIST_h
 
