@@ -135,7 +135,7 @@ void deleteNFromEnd(moveList *m, int n)
 //output is formatted as "A2,A3"
 void moveDifference(char out[5],char gameBoard1[8][8][2], char gameBoard2[8][8][2])
 {
-    char retVal[5];
+    char retVal[5]="     ";
     char from[2];
     char to[2];
     for(int i=0;i<8;i++){
@@ -144,16 +144,16 @@ void moveDifference(char out[5],char gameBoard1[8][8][2], char gameBoard2[8][8][
             
             if((gameBoard1[i][j][0]!=gameBoard2[i][j][0])&&(gameBoard1[i][j][1]!=gameBoard2[i][j][1])) //finds where the two boards are different, should be 2 positions
             { 
-                if(gameBoard1[i][j][0]=='\0')
+                if(gameBoard1[i][j][0]==' ')
                 {
-                    to[0] = i+1;
-                    to[1] = (char)(104-j);
+                    to[0] = 'A'+j;
+                    to[1] = '8'-i;
                     to[2] = '\0';
                 }
-                if(gameBoard2[i][j][0]=='\0')
+                if(gameBoard2[i][j][0]==' ')
                 {
-                    from[0] = i+1;
-                    from[1] = (char)(104-j);
+                    from[0] = 'A'+j;
+                    from[1] = '8'-i;
                     from[2] = '\0';
                 }
             }
