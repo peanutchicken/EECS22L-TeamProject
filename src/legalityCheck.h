@@ -23,9 +23,19 @@ bool checkKing(char from[2], char to[2], char board[8][8][2]);
 // check the game board whether a player has won or not
 bool winCheck(char board[8][8][2]);
 
-// check if there is a check from one color side
+// check if there is a check and a possible block from one color side and check for blockage
+bool checkAndBlock(int kPosRow, int kPosCol, char board[8][8][2], char color);
+
+// check if there is a block that could be made from a check
+bool checkBlock(char board[8][8][2], char color, int array[8][2]);
+
+// check if there is a check around the king
 bool check(int kPosRow, int kPosCol, char board[8][8][2], char color);
+
+// check if there are any moves left on one side to determine stalemate
+bool anyAvailableMoves(char board[8][8][2], char color, char enemyColor);
 
 //special moves 
 void pawnPromotion(int rowFrom, int columnFrom, char board[8][8][2]);
+
 #endif
