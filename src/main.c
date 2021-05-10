@@ -29,8 +29,8 @@ int main()
 	int n;
 
     //set up file to write output to
-    //FILE * file;
-    //file = fopen("chessGameReplay.txt", "w+");
+    FILE * file;
+    file = fopen("chessGameReplay.txt", "w+");
 	
 /*	char gameBoard[8][8][2] = {
 				{"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
@@ -57,11 +57,11 @@ int main()
 		switch (n) {
 	                    case 1:
 	                        printf("player Vs Player is loading...\n");
-	                        playerVsPlayer(gameBoard);
+	                        playerVsPlayer(gameBoard, file);
 	                        break;
 	                    case 2:
 	                        printf("player Vs AI is loading...\n");
-	                        playerVsAI(gameBoard);
+	                        playerVsAI(gameBoard, file);
 				break;
 			    default :
 	                        printf("Invalid option!\n" );

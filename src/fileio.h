@@ -5,7 +5,7 @@
 
 #include "movelist.h"
 
-int replayGame(FILE *file, moveList *m);
+int replayGame(FILE *file, moveList *m, char gameOpponent);
 
 
 

@@ -19,7 +19,6 @@
 #include "board.h"
 
 
-
 //creates a new entry and returns it
 entry *newMoveEntry(moveList *m, char gb[8][8][2]){
     entry* temp = malloc(sizeof(entry));
@@ -80,10 +79,17 @@ void deleteMoveEntry(moveList *m,entry *a)
 }
 
 //creates new entry and adds it to the end of the movelist
-//void append(moveList *m,char gameBoard[8][8][2], int latestMove[4])
-void append(moveList *m,char gameBoard[8][8][2])
+void append(moveList *m,char gameBoard[8][8][2], int latestMove[4])
 {
     entry* newEntry = newMoveEntry(m,gameBoard);
+
+
+    //THIS MIGHT BE BUGGY
+    for(int i = 0; i < 4; i++) 
+    {
+        newEntry->latestMove[i] = latestMove[i];
+    }
+
     if(m->first == NULL&&m->last==NULL) //if the list is empty
     {
         m->first = newEntry;
