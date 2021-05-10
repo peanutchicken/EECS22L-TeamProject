@@ -701,6 +701,43 @@ bool checkKing(char from[2], char to[2], char board[8][8][2])
      int columnTo = (int)to[1];
      int rowTo = (int)to[0];
 
+	// white king's side castle
+	if (rowFrom == 7 && columnFrom == 4 && rowTo == 7 && columnTo == 6 && board[7][7][0] == 'w' && board[7][7][1] == 'R')
+	{
+		board[7][5][0] = 'w';
+		board[7][5][1] = 'R';
+		board[7][7][0] = ' ';
+		board[7][7][1] = ' ';
+		return true;
+	}
+	// white queen's side castle
+	if (rowFrom == 7 && columnFrom == 4 && rowTo == 7 && columnTo == 2 && board[7][0][0] == 'w' && board[7][0][1] == 'R')
+	{
+		board[7][3][0] = 'w';
+		board[7][3][1] = 'R';
+		board[7][0][0] = ' ';
+		board[7][0][1] = ' ';
+		return true;
+	}
+	// black king's side castle
+	if (rowFrom == 0 && columnFrom == 4 && rowTo == 0 && columnTo == 6 && board[0][7][0] == 'b' && board[0][7][1] == 'R')
+	{
+		board[0][5][0] = 'b';
+		board[0][5][1] = 'R';
+		board[0][5][0] = ' ';
+		board[0][5][1] = ' ';
+		return true;
+	}
+	// black queen's side castle
+	if (rowFrom == 0 && columnFrom == 4 && rowTo == 0 && columnTo == 2 && board[0][0][0] == 'b' && board[0][0][1] == 'R')
+	{
+		board[0][3][0] = 'w';
+		board[0][3][1] = 'R';
+		board[0][0][0] = ' ';
+		board[0][0][1] = ' ';
+		return true;
+	}
+
 	if(((rowTo == rowFrom + 1) && (columnTo == columnFrom - 1)) || \
           ((rowTo == rowFrom + 1) && (columnTo == columnFrom)) || \
           ((rowTo == rowFrom + 1) && (columnTo == columnFrom + 1)) || \
@@ -714,7 +751,7 @@ bool checkKing(char from[2], char to[2], char board[8][8][2])
 			return false;
 		return true;
 	}
-		     
+	     
      //default case
      return false;
 }
