@@ -93,30 +93,24 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
 					return false; 
 
 				 /*check if there is any blocking piece*/
-				if(board[rowTo][columnTo][0] != ' ')
+				else if(board[rowTo][columnTo][0] != ' ')
                 			return false;
+				else
+					return true;
 
-				/*pawn can capture diagonally*/
-				if((rowTo == rowFrom - 1) && \
-			   	  ((columnTo == columnFrom - 1) || (columnTo == columnFrom + 1))) 
-				{
-					if(board[rowTo][columnTo][0] == ' ')
-                				return false;
-					else if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
-						return false;
-				}
 			}
 
 			/*pawn can capture diagonally*/
-			if((rowTo == rowFrom - 1) && \
-			  ((columnTo == columnFrom - 1) || (columnTo == columnFrom + 1))) 
+			else if((rowTo == rowFrom - 1) && \
+			       ((columnTo == columnFrom - 1) || (columnTo == columnFrom + 1))) 
 			{
 				if(board[rowTo][columnTo][0] == ' ')
                 			return false;
 				else if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
 					return false;
+				else 
+					return true;
 			}
-			return true;
 		}
 		
 		/*Pawn can only move 1 square after the first move*/
@@ -175,8 +169,10 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
 					return false; 
 
 				/*check if there is any blocking piece*/
-				if(board[rowTo][columnTo][0] != ' ')
+				else if(board[rowTo][columnTo][0] != ' ')
                 			return false;
+				else
+					return true;
 
 			}
 			
@@ -187,9 +183,10 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
 				if(board[rowTo][columnTo][0] == ' ')
                 			return false;
 				else if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
-					return false;	
+					return false;
+				else
+					return true;	
 			}
-			return true;
 		}
 		
 		/*Pawn can only move 1 square after the first move*/
