@@ -21,6 +21,9 @@ void printBoard(char gameBoard[8][8][2]);
 // update the chess board accordingly from player user input and returns if the user has exited the game or not
 bool playerInput(char gameBoard[8][8][2], char player);
 
+//ascii conversion from char input to int values
+int lastMoveConvert(char move[4], char from[2], char to[2], int lastMove[4]);
+
 //prints a suggested move for the respective player
 void suggestedMove(char gameBoard[8][8][2], char player);
 

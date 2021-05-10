@@ -129,11 +129,9 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 	char move[4]; // 2 coordinates that the user wants to move the chess piece to
 	char from[2]; // start coordinate to pass into legalMove
 	char to[2]; // end coordinate to pass into legalMove
-	int fromRow; // row number in board array of the chess piece the user wants to move
-	int fromCol; // column number in board array of the chess piece the user wants to move
-	int toRow; // row number in board array of the new location
-	int toCol; // column number in board array of the new location
+    int lastMove[4];    //last move made in int arr format
 	bool playerExit = false; // if the player chooses to exit the game or not
+
 
     //move suggestion
 	suggestedMove(gameBoard,player);
@@ -149,27 +147,16 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 			return true;
 		}
 
-		// assign from and to variables
-		from[0] = move[0];
-		from[1] = move[1];
-		to[0] = move[2];
-		to[1] = move[3];
+        lastMoveConvert(move, from, to, lastMove);
 
-		// conversion from ASCII
-		fromRow = 8 - (move[1] - 48);
-		fromCol = move[0] - 65;
-		toRow = 8 - (move[3] - 48);
-		toCol = move[2] - 65;
-
-        //assign converted ascii values back to from and to
-        from[0] = fromRow;
-        from[1] = fromCol;
-        to[0] = toRow;
-        to[1] = toCol;
+        ///////DEBUGGGGG//////
+        printf("fromRow: %c , fromCol: %c \n", from[0], from[1]);
+        printf("toRow: %c , toRow: %c \n", to[0], to[1]);
+        printf("gameboard: %c \n", gameBoard[lastMove[0]][lastMove[1]][0]);
 
 		while((!legalMove(from, to, gameBoard) || \
-                gameBoard[fromRow][fromCol][0] == 'b' || \
-                gameBoard[fromRow][fromCol][0] == ' ') && !playerExit) 
+                gameBoard[lastMove[0]][lastMove[1]][0] == 'b' || \
+                gameBoard[lastMove[0]][lastMove[1]][0] == ' ') && !playerExit) 
         {
 			printf("Invalid move. Please enter again(or \"exit\" to exit current game): ");
 			scanf("%s", move);
@@ -180,23 +167,7 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 				return true;
 			}
 
-			// assign from and to variables
-			from[0] = move[0];
-			from[1] = move[1];
-			to[0] = move[2];
-			to[1] = move[3];
-
-			// conversion from ASCII
-			fromRow = 8 - (move[1] - 48);
-			fromCol = move[0] - 65;
-			toRow = 8 - (move[3] - 48);
-			toCol = move[2] - 65;
-
-            //assign converted ascii values back to from and to
-            from[0] = fromRow;
-            from[1] = fromCol;
-            to[0] = toRow;
-            to[1] = toCol;
+        lastMoveConvert(move, from, to, lastMove);
 		}
 			
 	}
@@ -214,28 +185,12 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 			return true;
 		}
 
-		// assign from and to variables
-		from[0] = move[0];
-		from[1] = move[1];
-		to[0] = move[2];
-		to[1] = move[3];
-
-		// conversion from ASCII
-		fromRow = 8 - (move[1] - 48);
-		fromCol = move[0] - 65;
-		toRow = 8 - (move[3] - 48);
-		toCol = move[2] - 65;
-		
-            
-        //assign converted ascii values back to from and to
-        from[0] = fromRow;
-        from[1] = fromCol;
-        to[0] = toRow;
-        to[1] = toCol;
+        //convert char input values to ascii
+        lastMoveConvert(move, from, to, lastMove);
 
 		while((!legalMove(from, to, gameBoard) || \
-                gameBoard[fromRow][fromCol][0] == 'w' || \
-                gameBoard[fromRow][fromCol][0] == ' ') && !playerExit) 
+                gameBoard[lastMove[0]][lastMove[1]][0] == 'w' || \
+                gameBoard[lastMove[0]][lastMove[1]][0] == ' ') && !playerExit) 
         {
 			printf("Invalid move. Please enter again(or \"exit\" to exit current game): ");
 			scanf("%s", move);
@@ -246,43 +201,46 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 				return true;
 			}
 
-			// assign from and to variables
-			from[0] = move[0];
-			from[1] = move[1];
-			to[0] = move[2];
-			to[1] = move[3];
-
-			// conversion from ASCII
-			fromRow = 8 - (move[1] - 48);
-			fromCol = move[0] - 65;
-			toRow = 8- (move[3] - 48);
-			toCol = move[2] - 65;
-			
-            //assign converted ascii values back to from and to
-            from[0] = fromRow;
-            from[1] = fromCol;
-            to[0] = toRow;
-            to[1] = toCol;
+            lastMoveConvert(move, from, to, lastMove);
 		}
 
 	}
 	
 	if (!playerExit)
 	{
-		gameBoard[toRow][toCol][0] = gameBoard[fromRow][fromCol][0];
-		gameBoard[toRow][toCol][1] = gameBoard[fromRow][fromCol][1];
-		gameBoard[fromRow][fromCol][0] = ' ';
-		gameBoard[fromRow][fromCol][1] = ' ';
+		gameBoard[lastMove[2]][lastMove[3]][0] = gameBoard[lastMove[0]][lastMove[1]][0];
+		gameBoard[lastMove[2]][lastMove[3]][1] = gameBoard[lastMove[0]][lastMove[1]][1];
+		gameBoard[lastMove[0]][lastMove[1]][0] = ' ';
+		gameBoard[lastMove[0]][lastMove[1]][1] = ' ';
 	}
 
 	return playerExit;
 }
 
-int lastMoveConvert(char from[2], char to[2])
+int lastMoveConvert(char move[4], char from[2], char to[2], int lastMove[4])
 {
+    //lastMove contains the int board values of the last move made in the format:
+    //lastMove[from_Row, from_Col, to_Row, to_Col];
 
+    // conversion from ASCII
+    // looks backwards because values come in in col, row format but
+    // we want them in row,col
+    lastMove[0] = 8 - (move[1] - 48);
+    lastMove[1] = move[0] - 65;
+    lastMove[2] = 8- (move[3] - 48);
+    lastMove[3] = move[2] - 65;
 
-
+    //this is legacy garbage but it's how values are passed to legality check so i guess it stays
+    from[0] = lastMove[0];
+    from[1] = lastMove[1];
+    to[0] = lastMove[2];
+    to[1] = lastMove[3];
+ 
+    for (int i = 0; i < 4; i++) 
+    {
+        printf("move: %c , lastMove: %d  \n", move[i], lastMove[i]);
+    }
+    
     return 0;
 }
 
