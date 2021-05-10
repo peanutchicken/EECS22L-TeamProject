@@ -20,20 +20,25 @@
 void playerVsPlayer(char gameBoard[8][8][2]) 
 {
 	moveList* list = createList();
+	bool playerExit = false;
+
 	printf("\nWelcome to Player vs Player Chess Game!\n");
 	printBoard(gameBoard);
 	append(list,gameBoard); // adds the starting board state
 	// main loop
-	while (!winCheck(gameBoard)) {
-		playerInput(gameBoard, 'w');
-		printBoard(gameBoard);
-		if (winCheck(gameBoard)) {
+	while (!winCheck(gameBoard) && !playerExit) {
+		playerExit = playerInput(gameBoard, 'w');
+		if (!playerExit) {
+			printBoard(gameBoard);
+		}
+		append(list, gameBoard);
+		if (winCheck(gameBoard) || playerExit) {
 			break;
 		}
-		// append the move list here
-		append(list,gameBoard);
-		playerInput(gameBoard, 'b');
-		printBoard(gameBoard);
+		playerExit = playerInput(gameBoard, 'b');
+		if (!playerExit) {
+			printBoard(gameBoard);
+		}
 		append(list,gameBoard);
 	}
 	deleteList(list);
@@ -43,7 +48,9 @@ void playerVsPlayer(char gameBoard[8][8][2])
 // game runner that loops through human vs AI chess game
 void playerVsAI(char gameBoard[8][8][2]) {
 	moveList* list = createList();
+	bool playerExit = false;
 	char playerColor;
+
 	printf("\nWelcome to Player vs AI chess game!\n");
 	printf("Choose White('w') or Black('b'): ");
 	scanf(" %c", &playerColor);
@@ -54,15 +61,16 @@ void playerVsAI(char gameBoard[8][8][2]) {
 	printBoard(gameBoard);
 	append(list,gameBoard);
 	// main loop
-	while (!winCheck(gameBoard)) {
+	while (!winCheck(gameBoard) && !playerExit) {
 		if (playerColor == 'w') {
-			playerInput(gameBoard, 'w');
-			printBoard(gameBoard);
-			if (winCheck(gameBoard)) {
+			playerExit = playerInput(gameBoard, 'w');
+			if (!playerExit) {
+				printBoard(gameBoard);
+			}
+			append(list, gameBoard);
+			if (winCheck(gameBoard) || playerExit) {
 				break;
 			}
-			// append the move list here
-			append(list,gameBoard);
 			// here is where AI makes its move
 			makeMove(gameBoard,'b');
 			printBoard(gameBoard);
@@ -72,13 +80,15 @@ void playerVsAI(char gameBoard[8][8][2]) {
 		} else if (playerColor == 'b') {
 			// here is where AI makes its move
 			makeMove(gameBoard,'w');
+			printBoard(gameBoard);
 			if (winCheck(gameBoard)) {
 				break;
 			}
 			append(list,gameBoard);
-			printBoard(gameBoard);
-			playerInput(gameBoard, 'b');
-			printBoard(gameBoard);
+			playerExit = playerInput(gameBoard, 'b');
+			if (!playerExit) {
+				printBoard(gameBoard);
+			}
 			// append the move list here
 			append(list,gameBoard);
 
@@ -114,8 +124,8 @@ void printBoard(char gameBoard[8][8][2]) {
 	printf("\n");
 }
 
-// update the chess board accordingly from player user input
-void playerInput(char gameBoard[8][8][2], char player) {
+// update the chess board accordingly from player user input and returns if the user has exited the game or not
+bool playerInput(char gameBoard[8][8][2], char player) {
 	char move[4]; // 2 coordinates that the user wants to move the chess piece to
 	char from[2]; // start coordinate to pass into legalMove
 	char to[2]; // end coordinate to pass into legalMove
@@ -123,14 +133,21 @@ void playerInput(char gameBoard[8][8][2], char player) {
 	int fromCol; // column number in board array of the chess piece the user wants to move
 	int toRow; // row number in board array of the new location
 	int toCol; // column number in board array of the new location
+	bool playerExit = false; // if the player chooses to exit the game or not
 
     //move suggestion
 	suggestedMove(gameBoard,player);
 
 	// choosing white piece
 	if (player == 'w') {
-		printf("White - Please choose your move: ");
+		printf("White - Please choose your move(or \"exit\" to exit current game): ");
 		scanf("%s", move);
+
+		// exit
+		if (move[0] == 'e' && move[1] == 'x' && move[2] == 'i' && move[3] == 't') {
+			playerExit = true;
+			return true;
+		}
 
 		// assign from and to variables
 		from[0] = move[0];
@@ -150,12 +167,19 @@ void playerInput(char gameBoard[8][8][2], char player) {
 	        to[0] = toRow;
 	        to[1] = toCol;
 
-		while(!legalMove(from, to, gameBoard) || \
-              gameBoard[fromRow][fromCol][0] == 'b' || \
-              gameBoard[fromRow][fromCol][0] == ' ') 
+		while((!legalMove(from, to, gameBoard) || \
+			gameBoard[fromRow][fromCol][0] == 'b' || \
+			gameBoard[fromRow][fromCol][0] == ' ') && \
+			!playerExit) 
         {
-			printf("Invalid move. Please enter again: ");
+			printf("Invalid move. Please enter again(or \"exit\" to exit current game): ");
 			scanf("%s", move);
+
+			// exit
+			if (move[0] == 'e' && move[1] == 'x' && move[2] == 'i' && move[3] == 't') {
+				playerExit = true;
+				return true;
+			}
 
 			// assign from and to variables
 			from[0] = move[0];
@@ -182,8 +206,14 @@ void playerInput(char gameBoard[8][8][2], char player) {
 
     else if (player == 'b') 
     {
-		printf("Black - Please choose your move: ");
+		printf("Black - Please choose your move(or \"exit\" to exit current game): ");
 		scanf("%s", move);
+
+		// exit
+		if (move[0] == 'e' && move[1] == 'x' && move[2] == 'i' && move[3] == 't') {
+			playerExit = true;
+			return true;
+		}
 
 		// assign from and to variables
 		from[0] = move[0];
@@ -210,10 +240,17 @@ void playerInput(char gameBoard[8][8][2], char player) {
 	        to[0] = toRow;
 	        to[1] = toCol;
 
-		while(!legalMove(from, to, gameBoard) || gameBoard[fromRow][fromCol][0] == 'w' || gameBoard[fromRow][fromCol][0] == ' ') 
-        {
-			printf("Invalid move. Please enter again: ");
+		while((!legalMove(from, to, gameBoard) || gameBoard[fromRow][fromCol][0] == 'w' || gameBoard[fromRow][fromCol][0] == ' ') && \
+			!playerExit) 
+        	{
+			printf("Invalid move. Please enter again(or \"exit\" to exit current game): ");
 			scanf("%s", move);
+
+			// exit
+			if (move[0] == 'e' && move[1] == 'x' && move[2] == 'i' && move[3] == 't') {
+				playerExit = true;
+				return true;
+			}
 
 			// assign from and to variables
 			from[0] = move[0];
@@ -233,13 +270,18 @@ void playerInput(char gameBoard[8][8][2], char player) {
         		to[0] = toRow;
         		to[1] = toCol;
 		}
+
 	}
 	
-	gameBoard[toRow][toCol][0] = gameBoard[fromRow][fromCol][0];
-	gameBoard[toRow][toCol][1] = gameBoard[fromRow][fromCol][1];
-	gameBoard[fromRow][fromCol][0] = ' ';
-	gameBoard[fromRow][fromCol][1] = ' ';
+	if (!playerExit)
+	{
+		gameBoard[toRow][toCol][0] = gameBoard[fromRow][fromCol][0];
+		gameBoard[toRow][toCol][1] = gameBoard[fromRow][fromCol][1];
+		gameBoard[fromRow][fromCol][0] = ' ';
+		gameBoard[fromRow][fromCol][1] = ' ';
+	}
 
+	return playerExit;
 }
 
 //prints a suggested move for the respective player

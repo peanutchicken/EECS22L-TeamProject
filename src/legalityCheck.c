@@ -20,7 +20,7 @@
 bool legalMove(char from[2], char to[2],char board[8][8][2])
 {
      //format of from[row][col], to[row][col]
-     bool result;
+     bool result = false;
 
      //get the piece char (P, R, N, B) from board using the index provided by from
      //int casting is done to prevent complaints about passing char types as array indicies
@@ -58,7 +58,9 @@ bool legalMove(char from[2], char to[2],char board[8][8][2])
              break;
 
          default:
-             printf("ERR: INVALID PIECE PASSED TO LEGALMOVE\n");
+             #ifdef DEBUG
+	         printf("ERR: INVALID PIECE PASSED TO LEGALMOVE\n");
+	     #endif
              break;
 
     }
@@ -81,17 +83,42 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
          /*Check for white pawn*/
          if(board[rowFrom][columnFrom][0] == 'w')
          {
-		/*The first pawn's move has the option of advancing 2 squares*/
 		if (rowFrom == 6)
 		{
+			/*The first pawn's move has the option of advancing 2 squares*/
                 	if ((columnTo == columnFrom) &&  \
 			   ((rowTo == rowFrom - 1) || (rowTo == rowFrom - 2)))
 			{
+				/*check if there is any blocking  piece on the path*/
+				if ((rowTo == rowFrom - 2) && \
+				   (board[rowFrom - 1][columnFrom][0] != ' '))
+					return false; 
+
 				 /*check if there is any blocking piece*/
 				if(board[rowTo][columnTo][0] != ' ')
                 			return false;
-		  		return true;
+
+				/*pawn can capture diagonally*/
+				if((rowTo == rowFrom - 1) && \
+			   	  ((columnTo == columnFrom - 1) || (columnTo == columnFrom + 1))) 
+				{
+					if(board[rowTo][columnTo][0] == ' ')
+                				return false;
+					else if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+						return false;
+				}
 			}
+
+			/*pawn can capture diagonally*/
+			if((rowTo == rowFrom - 1) && \
+			  ((columnTo == columnFrom - 1) || (columnTo == columnFrom + 1))) 
+			{
+				if(board[rowTo][columnTo][0] == ' ')
+                			return false;
+				else if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+					return false;
+			}
+			return true;
 		}
 		
 		/*Pawn can only move 1 square after the first move*/
@@ -137,17 +164,34 @@ bool checkPawn(char from[2], char to[2], char board[8][8][2])
           /*Check for black pawn*/	
           else 
           {                   
-		/*The first pawn's move has the option of advancing 2 squares*/
 		if (rowFrom == 1)
 		{
+			
+			/*The first pawn's move has the option of advancing 2 squares*/
                 	if ((columnTo == columnFrom) && \
 			   ((rowTo == rowFrom + 1) || (rowTo == rowFrom + 2)))
 			{
-				 /*check if there is any blocking piece*/
+				/*check if there is any blocking  piece on the path*/
+				if ((rowTo == rowFrom + 2) && \
+				   (board[rowFrom + 1][columnFrom][0] != ' '))
+					return false; 
+
+				/*check if there is any blocking piece*/
 				if(board[rowTo][columnTo][0] != ' ')
                 			return false;
-		  		return true;
+
 			}
+			
+			/*pawn can capture diagonally*/
+			if((rowTo == rowFrom + 1) && \
+			  ((columnTo == columnFrom - 1) || (columnTo == columnFrom + 1))) 
+			{
+				if(board[rowTo][columnTo][0] == ' ')
+                			return false;
+				else if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+					return false;	
+			}
+			return true;
 		}
 		
 		/*Pawn can only move 1 square after the first move*/
@@ -202,21 +246,78 @@ bool checkRook(char from[2], char to[2], char board[8][8][2])
          int rowFrom = (int)from[0];
          int columnTo = (int)to[1];
          int rowTo = (int)to[0];
-
-         /*Check for Rock*/
-         if (board[rowFrom][columnFrom][1] == 'R')
-         {
-            if ((rowTo == rowFrom) || (columnTo == columnFrom))
-                {
-                   return true;
-		}
-		else
+ 	
+	/*check variable*/
+	int checkRow = rowFrom;
+	int checkColumn = columnFrom;
+ 
+	/*check horizontally*/
+        if (rowTo == rowFrom)
+        {
+		/*check if there is any blocking piece on the left side*/
+		if (columnTo < columnFrom)
 		{
-		   return false;
-		}    
-         	    }
-           //default case
-           return false;
+			checkColumn -= 1;
+			while ((checkColumn > columnTo) && (checkColumn >= 0))
+			{
+				if (board[rowFrom][checkColumn][0] != ' ')
+					return false;
+				checkColumn -= 1;
+          		}
+		}
+
+		/*check if there is any blocking piece on the right side*/
+		else if (columnTo > columnFrom)
+		{
+			checkColumn += 1;
+			while ((checkColumn < columnTo) && (checkColumn <= 7))
+			{
+				if (board[rowFrom][checkColumn][0] != ' ')
+					return false;
+				checkColumn += 1;	
+          		}
+		}
+
+		/*check if there is any same unit piece's color*/		
+		if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+			return false;
+		return true;
+	}
+
+	/*check vertically*/
+	else if (columnTo == columnFrom)
+	{
+		/*check if there is any blocking piece on the top*/
+		if (rowTo < rowFrom)
+		{
+			checkRow -= 1;
+			while ((checkRow > rowTo) && (checkRow >= 0))
+			{
+				if (board[checkRow][columnFrom][0] != ' ')
+					return false;
+				checkRow -= 1;
+          		}
+		}
+
+		/*check if there is any blocking piece on  the bottom*/	
+		else if (rowTo > rowFrom)
+		{
+			checkRow += 1;
+			while ((checkRow < rowTo) && (checkRow <= 7))
+			{
+				if (board[checkRow][columnFrom][0] != ' ')
+					return false;
+				checkRow += 1;
+          		}
+		}
+
+		if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+			return false;
+		return true;
+	}	
+	//default case
+	return false;	   
+		    
 }
 
 bool checkKnight(char from[2], char to[2], char board[8][8][2])
@@ -232,28 +333,20 @@ bool checkKnight(char from[2], char to[2], char board[8][8][2])
          int rowTo = (int)to[0];
 
          /*Check for Knight*/
-         if (board[rowFrom][columnFrom][1] == 'N')
+         if (((columnTo == columnFrom + 1) && (rowTo == rowFrom - 2)) || \
+            ((columnTo == columnFrom + 1) && (rowTo == rowFrom + 2)) || \
+            ((columnTo == columnFrom - 1) && (rowTo == rowFrom + 2)) || \
+            ((columnTo == columnFrom - 1) && (rowTo == rowFrom - 2)) || \
+            ((columnTo == columnFrom + 2) && (rowTo == rowFrom - 1)) || \
+            ((columnTo == columnFrom + 2) && (rowTo == rowFrom + 1)) || \
+            ((columnTo == columnFrom - 2) && (rowTo == rowFrom + 1)) || \
+            ((columnTo == columnFrom - 2) && (rowTo == rowFrom - 1)))
          {
-            if (((columnTo == columnFrom + 1) && (rowTo == rowFrom - 2)) || \
-                ((columnTo == columnFrom + 1) && (rowTo == rowFrom + 2)) || \
-                ((columnTo == columnFrom - 1) && (rowTo == rowFrom + 2)) || \
-                ((columnTo == columnFrom - 1) && (rowTo == rowFrom - 2)) || \
-                ((columnTo == columnFrom + 2) && (rowTo == rowFrom - 1)) || \
-                ((columnTo == columnFrom + 2) && (rowTo == rowFrom + 1)) || \
-                ((columnTo == columnFrom - 2) && (rowTo == rowFrom + 1)) || \
-                ((columnTo == columnFrom - 2) && (rowTo == rowFrom - 1)))
-                {
-                   return true;
-		}
-		else
-		{
-		   return false;
-		}    
+                   if (board[rowFrom][columnFrom][0] == board[rowTo][columnTo][0])
+			return false;
+		   return true;
+	 }
 	   
-	      //default case
-              return false;
-	    }
-
      //end default condition, in case none of the above conditions worked
      return false;
 }
@@ -392,19 +485,13 @@ bool checkBishop(char from[2], char to[2], char board[8][8][2])
 	}
      }
 
-   /*return false for other cases*/
-   else
-   {
-   	return false;
-   }
-
    /*dafult case*/
    return false;
 }
 
 bool checkQueen(char from[2], char to[2], char board[8][8][2])
 {
- #ifdef DEBUG
+     #ifdef DEBUG
      printf("checking Queen\n");
      #endif
   
@@ -413,20 +500,192 @@ bool checkQueen(char from[2], char to[2], char board[8][8][2])
          int rowFrom = (int)from[0];
          int columnTo = (int)to[1];
          int rowTo = (int)to[0];
-         /*Check for Queen*/
-         if (board[rowFrom][columnFrom][1] == 'Q')
-         {
-            if ((rowTo == columnTo) && ( rowFrom == columnFrom))
-                {
-                   return true;
-		}
-		else
+
+	
+     	/*Check variables*/
+     	int checkRow = rowFrom;
+     	int checkColumn = columnFrom;
+     	int rowCheck = rowFrom;
+     	int columnCheck = columnFrom;
+
+	/*check horizontally*/
+        if (rowTo == rowFrom)
+        {
+		/*check if there is any blocking piece on the left side*/
+		if (columnTo < columnFrom)
 		{
-		   return false;
-		}    
-	  } 
-	      //default case
-	         return false;
+			checkColumn -= 1;
+			while ((checkColumn > columnTo) && (checkColumn >= 0))
+			{
+				if (board[rowFrom][checkColumn][0] != ' ')
+					return false;
+				checkColumn -= 1;
+          		}
+		}
+
+		/*check if there is any blocking piece on the right side*/
+		else if (columnTo > columnFrom)
+		{
+			checkColumn += 1;
+			while ((checkColumn < columnTo) && (checkColumn <= 7))
+			{
+				if (board[rowFrom][checkColumn][0] != ' ')
+					return false;
+				checkColumn += 1;	
+          		}
+		}
+
+		/*check if there is any same unit piece's color*/		
+		if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+			return false;
+		return true;
+	}
+
+	/*check vertically*/
+	else if (columnTo == columnFrom)
+	{
+		/*check if there is any blocking piece on the top*/
+		if (rowTo < rowFrom)
+		{
+			checkRow -= 1;
+			while ((checkRow > rowTo) && (checkRow >= 0))
+			{
+				if (board[checkRow][columnFrom][0] != ' ')
+					return false;
+				checkRow -= 1;
+          		}
+		}
+
+		/*check if there is any blocking piece on  the bottom*/	
+		else if (rowTo > rowFrom)
+		{
+			checkRow += 1;
+			while ((checkRow < rowTo) && (checkRow <= 7))
+			{
+				if (board[checkRow][columnFrom][0] != ' ')
+					return false;
+				checkRow += 1;
+          		}
+		}
+
+		if(board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+			return false;
+		return true;
+	}	
+
+    	/*check for the diagonal path to top-left*/
+    	else if ((rowTo < rowFrom) && (columnTo < columnFrom))
+    	{
+		while (checkRow >= 0 && checkColumn >= 0)
+		{
+			checkRow -= 1;
+			checkColumn -= 1;    
+			if ((rowTo == checkRow) && (columnTo == checkColumn))
+			{
+				/*check if there is any blocking piece on the path*/
+				rowCheck -= 1;
+				columnCheck -= 1;
+				while(rowCheck > rowTo && columnCheck > columnTo)
+				{
+					if (board[rowCheck][columnCheck][0] != ' ')
+						return false;
+					rowCheck -= 1;
+					columnCheck -= 1;
+				}
+			
+				/*return false if the destination has the same unit piece color*/
+				if (board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+					return false;
+				return true;
+			}
+		}
+     	}
+
+    	/*check for the diagonal path to top-right*/
+    	else if ((rowTo < rowFrom) && (columnTo > columnFrom))
+    	{
+		while (checkRow >= 0 && checkColumn <= 7)
+		{
+			checkRow -= 1;
+			checkColumn += 1;    
+			if ((rowTo == checkRow) && (columnTo == checkColumn))
+			{
+				/*check if there is any blocking piece on the path*/
+				rowCheck -= 1;
+				columnCheck += 1;
+				while(rowCheck > rowTo && columnCheck < columnTo)
+				{	
+					if (board[rowCheck][columnCheck][0] != ' ')
+						return false;
+					rowCheck -= 1;
+					columnCheck += 1;
+				}
+			
+				/*return false if the destination has the same unit piece color*/
+				if (board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+					return false;
+				return true;
+			}
+		}
+     	}
+
+    	/*check for the diagonal path to bottom-left*/
+    	else if ((rowTo > rowFrom) && (columnTo < columnFrom))
+    	{
+		while (checkRow <= 7 && checkColumn >= 0)
+		{
+			checkRow += 1;
+			checkColumn -= 1;    
+			if ((rowTo == checkRow) && (columnTo == checkColumn))
+			{
+				/*check if there is any blocking piece on the path*/
+				rowCheck += 1;
+				columnCheck -= 1;
+				while(rowCheck < rowTo && columnCheck > columnTo)
+				{
+					if (board[rowCheck][columnCheck][0] != ' ')
+						return false;
+					rowCheck += 1;
+					columnCheck -= 1;
+				}
+			
+				/*return false if the destination has the same unit piece color*/
+				if (board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+					return false;
+				return true;
+			}
+		}
+    	}
+
+    	/*check for the diagonal path to bottom-right*/
+    	else if ((rowTo > rowFrom) && (columnTo > columnFrom))
+    	{
+		while (checkRow >= 0 && checkColumn <= 7)
+		{
+			checkRow += 1;
+			checkColumn += 1;    
+			if ((rowTo == checkRow) && (columnTo == checkColumn))
+			{
+				/*check if there is any blocking piece on the path*/
+				rowCheck += 1;
+				columnCheck += 1;
+				while(rowCheck < rowTo && columnCheck < columnTo)
+				{
+					if (board[rowCheck][columnCheck][0] != ' ')
+						return false;
+					rowCheck += 1;
+					columnCheck += 1;
+				}
+			
+			/*return false if the destination has the same unit piece color*/
+			if (board[rowTo][columnTo][0] == board[rowFrom][columnFrom][0])
+				return false;
+			return true;
+			}
+		}
+	}
+	/*default case*/
+	return false;	
 }
 
 bool checkKing(char from[2], char to[2], char board[8][8][2])
@@ -466,8 +725,8 @@ bool winCheck(char board[8][8][2])
 	bool result = false;
 	bool whiteCheck = false;
 	bool blackCheck = false;
-	bool whiteMate = false; // check if there is a check surrounding king
-	bool blackMate = false; // check if there is a check surrounding king
+	bool whiteMate = false; // check if there is a check in each spot surrounding the white king
+	bool blackMate = false; // check if there is a check in each spot surrounding the black king
 	int wKpos[2]; // position of white king ([0] - row, [1] - column)
 	int bKpos[2]; // position of black king ([0] - row, [1] - column)
 
@@ -483,7 +742,7 @@ bool winCheck(char board[8][8][2])
 					wKpos[0] = i;
 					wKpos[1] = j;
 				}
-				else if (board[i][j][0] == 'b')
+				if (board[i][j][0] == 'b')
 				{
 					bKpos[0] = i;
 					bKpos[1] = j;
@@ -495,13 +754,14 @@ bool winCheck(char board[8][8][2])
 	if (check(bKpos[0], bKpos[1], board, 'w'))
 	{
 		printf("White - check\n");
-		whiteCheck = true;
 	}
 	if (check(wKpos[0], wKpos[1], board, 'b'))
 	{
 		printf("Black - check\n");
-		blackCheck = true;
 	}
+
+	whiteCheck = checkAndBlock(bKpos[0], bKpos[1], board, 'w');
+	blackCheck = checkAndBlock(wKpos[0], wKpos[1], board, 'b');
 
 	int whiteCounter = 0; // counting number of false checks around black king
 	int blackCounter = 0; // counting number of false checks around white king
@@ -563,7 +823,6 @@ bool winCheck(char board[8][8][2])
 			whiteCounter++;
 		}
 	}
-
 	// black checkmate or stalemate
 	if (board[wKpos[0] - 1][wKpos[1] - 1][0]  == ' ' || board[wKpos[0] - 1][wKpos[1] - 1][0] == 'b')
 	{
@@ -650,13 +909,15 @@ bool winCheck(char board[8][8][2])
 		printf("Black - Checkmate!\n");
 		result = true;
 	}
-	else if ((!whiteCheck && !blackCheck) && whiteMate)
+	else if ((!whiteCheck && !blackCheck) && whiteMate && !anyAvailableMoves(board, 'b', 'w'))
 	{
-		// black's king stalemate
+		printf("Black's king stalemate! Draw\n");
+		result = true;
 	}
-	else if ((!whiteCheck && !blackCheck) && blackMate)
+	else if ((!whiteCheck && !blackCheck) && blackMate && !anyAvailableMoves(board, 'w', 'b'))
 	{
-		// white's king stalemate
+		printf("White's king stalemate! Draw\n");
+		result = true;
 	}
 	else
 	{
@@ -666,24 +927,107 @@ bool winCheck(char board[8][8][2])
 	return result;
 }
 
-// check if there is a check from one color side
-bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
+// check if there is a check and a possible block from one color side
+bool checkAndBlock(int kPosRow, int kPosCol, char board[8][8][2], char color)
 {
-	bool result = false;
+	bool check = false;
+	bool block = false;
+	int array[8][2]; // spaces that can be blocked
 	char pieceColor;
 	char pieceType;
 
-	// white pawn check
-	if ((board[kPosRow + 1][kPosCol + 1][0] == color && board[kPosRow + 1][kPosCol + 1][1] == 'P') || \
-		(board[kPosRow + 1][kPosCol - 1][0] == color && board[kPosRow + 1][kPosCol - 1][1] == 'P'))
+	for (int i = 0; i < 8; i++)
 	{
-		result = true;
+		for (int j = 0; j < 2; j++)
+		{
+			array[i][j] = 10;
+		}
 	}
-	//black pawn check
-	if ((board[kPosRow - 1][kPosCol + 1][0] == color && board[kPosRow - 1][kPosCol + 1][1] == 'P') || \
-		(board[kPosRow - 1][kPosCol - 1][0] == color && board[kPosRow - 1][kPosCol - 1][1] == 'P'))
+
+	// king and white pawn check
+	if (board[kPosRow + 1][kPosCol + 1][0] == color && (board[kPosRow + 1][kPosCol + 1][1] == 'P' || board[kPosRow + 1][kPosCol + 1][1] == 'K'))
 	{
-		result = true;
+		check = true;
+		array[0][0] = kPosRow + 1;
+		array[0][1] = kPosCol + 1;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	if (board[kPosRow + 1][kPosCol - 1][0] == color && (board[kPosRow + 1][kPosCol - 1][1] == 'P' || board[kPosRow + 1][kPosCol - 1][1] == 'K'))
+	{
+		check = true;
+		array[0][1] = kPosRow + 1;
+		array[0][1] = kPosCol - 1;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	// king black pawn check
+	if (board[kPosRow - 1][kPosCol + 1][0] == color && (board[kPosRow - 1][kPosCol + 1][1] == 'P' || board[kPosRow - 1][kPosCol + 1][1] == 'K'))
+	{
+		check = true;
+		array[0][0] = kPosRow - 1;
+		array[0][1] = kPosCol + 1;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+		
+	}
+	if (board[kPosRow - 1][kPosCol - 1][0] == color && (board[kPosRow - 1][kPosCol - 1][1] == 'P' || board[kPosRow - 1][kPosCol - 1][1] == 'K'))
+	{
+		check = true;
+		array[0][0] = kPosRow - 1;
+		array[0][1] = kPosCol - 1;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+
+	// king
+	if (board[kPosRow - 1][kPosCol][0] == color && board[kPosRow - 1][kPosCol][1] == 'K')
+	{
+		check = true;
+		array[0][0] = kPosRow - 1;
+		array[0][1] = kPosCol;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	if (board[kPosRow][kPosCol + 1][0] == color && board[kPosRow][kPosCol + 1][1] == 'K')
+	{
+		check = true;
+		array[0][0] = kPosRow;
+		array[0][1] = kPosCol + 1;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	if (board[kPosRow + 1][kPosCol][0] == color && board[kPosRow + 1][kPosCol][1] == 'K')
+	{
+		check = true;
+		array[0][0] = kPosRow + 1;
+		array[0][1] = kPosCol;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	if (board[kPosRow][kPosCol - 1][0] == color && board[kPosRow][kPosCol - 1][1] == 'K')
+	{
+		check = true;
+		array[0][0] = kPosRow;
+		array[0][1] = kPosCol - 1;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
 	}
 
 	// rook and queen
@@ -701,9 +1045,19 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockBelow = true;
 		}
-		if (!blockBelow && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')))
+		if (!blockBelow && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
 		{
-			result = true;
+			check = true;
+			for (int i = 1; i <= distance; i++)
+			{
+				array[i - 1][0] = kPosRow + i;
+				array[i - 1][1] = kPosCol;
+			}
+			if (checkBlock(board, color, array))
+			{
+				block = true;
+			}
 		}
 
 		// to the right of king
@@ -713,9 +1067,19 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockRight = true;
 		}
-		if (!blockRight && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')))
+		if (!blockRight && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
 		{
-			result = true;
+			check = true;
+			for (int i = 1; i <= distance; i++)
+			{
+				array[i - 1][0] = kPosRow;
+				array[i - 1][1] = kPosCol + i;
+			}
+			if (checkBlock(board, color, array))
+			{
+				block = true;
+			}
 		}
 
 		// above king
@@ -725,9 +1089,19 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockAbove = true;
 		}
-		if (!blockAbove && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')))
+		if (!blockAbove && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
 		{
-			result = true;
+			check = true;
+			for (int i = 1; i <= distance; i++)
+			{
+				array[i - 1][0] = kPosRow - i;
+				array[i - 1][1] = kPosCol;
+			}
+			if (checkBlock(board, color, array))
+			{
+				block = true;
+			}
 		}
 		
 		// to the left of king
@@ -737,9 +1111,19 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockLeft = true;
 		}
-		if (!blockLeft && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')))
+		if (!blockLeft && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
 		{
-			result = true;
+			check = true;
+			for (int i = 1; i <= distance; i++)
+			{
+				array[i - 1][0] = kPosRow;
+				array[i - 1][1] = kPosCol - i;
+			}
+			if (checkBlock(board, color, array))
+			{
+				block = true;
+			}
 		}
 	}
 
@@ -758,9 +1142,19 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockTopRight = true;
 		}
-		if (!blockTopRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockTopRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
 		{
-			result = true;
+			check = true;
+			for (int i = 1; i <= distance; i++)
+			{
+				array[i - 1][0] = kPosRow - i;
+				array[i - 1][1] = kPosCol + i;
+			}
+			if (checkBlock(board, color, array))
+			{
+				block = true;
+			}
 		}
 
 		// top left of king
@@ -770,9 +1164,19 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockTopLeft = true;
 		}
-		if (!blockTopLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockTopLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol - distance < 8 && kPosCol - distance >= 0))
 		{
-			result = true;
+			check = true;
+			for (int i = 1; i <= distance; i++)
+			{
+				array[i - 1][0] = kPosRow - i;
+				array[i - 1][1] = kPosCol - i;
+			}
+			if (checkBlock(board, color, array))
+			{
+				block = true;
+			}
 		}
 
 		// bottom right of king
@@ -782,9 +1186,19 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockBotRight = true;
 		}
-		if (!blockBotRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockBotRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
 		{
-			result = true;
+			check = true;
+			for (int i = 1; i <= distance; i++)
+			{
+				array[i - 1][0] = kPosRow + i;
+				array[i - 1][1] = kPosCol + i;
+			}
+			if (checkBlock(board, color, array))
+			{
+				block = true;
+			}
 		}
 		
 		// bottom left of king
@@ -794,7 +1208,342 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 		{
 			blockBotLeft = true;
 		}
-		if (!blockBotLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')))
+		if (!blockBotLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance >= 0 && kPosCol - distance < 8 && kPosCol - distance >= 0))
+		{
+			check = true;
+			for (int i = 1; i <= distance; i++)
+			{
+				array[i - 1][0] = kPosRow + i;
+				array[i - 1][1] = kPosCol - i;
+			}
+			if (checkBlock(board, color, array))
+			{
+				block = true;
+			}
+		}
+	}
+
+	// knight
+	// first case
+	pieceColor = board[kPosRow + 2][kPosCol - 1][0];
+	pieceType = board[kPosRow + 2][kPosCol - 1][1];
+	if (pieceColor == color && pieceType == 'N') {
+		check = true;
+		array[0][0] = kPosRow + 2;
+		array[0][1] = kPosCol - 1;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	// second case
+	pieceColor = board[kPosRow + 1][kPosCol - 2][0];
+	pieceType = board[kPosRow + 1][kPosCol - 2][1];
+	if (pieceColor == color && pieceType == 'N') {
+		check = true;
+		array[0][0] = kPosRow + 1;
+		array[0][1] = kPosCol - 2;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	
+	// third case
+	pieceColor = board[kPosRow - 1][kPosCol - 2][0];
+	pieceType = board[kPosRow - 1][kPosCol - 2][1];
+	if (pieceColor == color && pieceType == 'N') {
+		check = true;
+		array[0][0] = kPosRow - 1;
+		array[0][1] = kPosCol - 2;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	// fourth case
+	pieceColor = board[kPosRow - 2][kPosCol - 1][0];
+	pieceType = board[kPosRow - 2][kPosCol - 1][1];
+	if (pieceColor == color && pieceType == 'N') {
+		check = true;
+		array[0][0] = kPosRow - 2;
+		array[0][1] = kPosCol - 1;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	// fifth case
+	pieceColor = board[kPosRow - 2][kPosCol + 1][0];
+	pieceType = board[kPosRow - 2][kPosCol + 1][1];
+	if (pieceColor == color && pieceType == 'N') {
+		check = true;
+		array[0][0] = kPosRow - 2;
+		array[0][1] = kPosCol + 1;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	// sixth case
+	pieceColor = board[kPosRow - 1][kPosCol + 2][0];
+	pieceType = board[kPosRow - 1][kPosCol + 2][1];
+	if (pieceColor == color && pieceType == 'N') {
+		check = true;
+		array[0][0] = kPosRow - 1;
+		array[0][1] = kPosCol + 2;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	// seventh case
+	pieceColor = board[kPosRow + 1][kPosCol + 2][0];
+	pieceType = board[kPosRow + 1][kPosCol + 2][1];
+	if (pieceColor == color && pieceType == 'N') {
+		check = true;
+		array[0][0] = kPosRow + 1;
+		array[0][1] = kPosCol + 2;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+	// eight case
+	pieceColor = board[kPosRow + 2][kPosCol + 1][0];
+	pieceType = board[kPosRow + 2][kPosCol + 1][1];
+	if (pieceColor == color && pieceType == 'N') {
+		check = true;
+		array[0][0] = kPosRow + 2;
+		array[0][1] = kPosCol + 1;
+		if (checkBlock(board, color, array))
+		{
+			block = true;
+		}
+	}
+
+	if (check && !block)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
+// check if there is a block that could be made from a check
+bool checkBlock(char board[8][8][2], char color, int array[8][2])
+{
+	bool block = false;
+	char tempFrom[2];
+	char tempTo[2];
+
+	// check for blockage on king check
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			for (int k = 0; k < 8; k++)
+			{
+				if (color == 'w')
+				{
+					if (board[i][j][1] != 'K' && board[i][j][0] == 'b' && !block && array[k][0] != 10)
+					{
+						tempFrom[0] = (char) i;
+						tempFrom[1] = (char) j;
+						tempTo[0] = array[k][0];
+						tempTo[1] = array[k][1];
+						if (legalMove(tempFrom, tempTo, board))
+						{
+							block = true;
+						}
+					}
+				}
+				else if (color == 'b')
+				{
+					if (board[i][j][1] != 'K' && board[i][j][0] == 'w' && !block && array[k][0] != 10)
+					{
+						tempFrom[0] = (char) i;
+						tempFrom[1] = (char) j;
+						tempTo[0] = array[k][0];
+						tempTo[1] = array[k][1];
+						if (legalMove(tempFrom, tempTo, board))
+						{
+							block = true;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	return block;
+}
+
+// check if there is a check around the king
+bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
+{
+	bool result = false;
+	char pieceColor;
+	char pieceType;
+
+	// king and white pawn check
+	if (board[kPosRow + 1][kPosCol + 1][0] == color && (board[kPosRow + 1][kPosCol + 1][1] == 'P' || board [kPosRow + 1][kPosCol + 1][1] == 'K'))
+	{
+		result = true;
+	}
+	if (board[kPosRow + 1][kPosCol - 1][0] == color && (board[kPosRow + 1][kPosCol - 1][1] == 'P' || board [kPosRow + 1][kPosCol - 1][1] == 'K'))
+	{
+		result = true;
+	}
+	// king and black pawn check
+	if (board[kPosRow - 1][kPosCol + 1][0] == color && (board[kPosRow - 1][kPosCol + 1][1] == 'P' || board [kPosRow - 1][kPosCol + 1][1] == 'K'))
+	{
+		result = true;
+	}
+	if (board[kPosRow - 1][kPosCol - 1][0] == color && (board[kPosRow - 1][kPosCol - 1][1] == 'P' || board [kPosRow - 1][kPosCol - 1][1] == 'K'))
+	{
+		result = true;
+	}
+
+	// king
+	if (board[kPosRow - 1][kPosCol][0] == color && board[kPosRow - 1][kPosCol][1] == 'K')
+	{
+		result = true;
+	}
+	if (board[kPosRow][kPosCol + 1][0] == color && board[kPosRow][kPosCol + 1][1] == 'K')
+	{
+		result = true;
+	}
+	if (board[kPosRow + 1][kPosCol][0] == color && board[kPosRow + 1][kPosCol][1] == 'K')
+	{
+		result = true;
+	}
+	if (board[kPosRow][kPosCol - 1][0] == color && board[kPosRow][kPosCol - 1][1] == 'K')
+	{
+		result = true;
+	}
+
+	// rook and queen
+	bool blockBelow = false; // if there is a piece blocking the king from check from below
+	bool blockRight = false; // if there is a piece blocking the king from check from right
+	bool blockAbove = false; // if there is a piece blocking the king from check from above
+	bool blockLeft = false; // if there is a piece blocking the king from check from left
+
+	for (int distance = 1; distance < 8; distance++)
+	{
+		// below king
+		pieceColor = board[kPosRow + distance][kPosCol][0];
+		pieceType = board[kPosRow + distance][kPosCol][1];
+		if (!(pieceColor == ' ') && !(pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && pieceType != 'K')
+		{
+			blockBelow = true;
+		}
+		if (!blockBelow && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+		{
+			result = true;
+		}
+
+		// to the right of king
+		pieceColor = board[kPosRow][kPosCol + distance][0];
+		pieceType = board[kPosRow][kPosCol + distance][1];
+		if (!(pieceColor == ' ') && !(pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && pieceType != 'K')
+		{
+			blockRight = true;
+		}
+		if (!blockRight && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+		{
+			result = true;
+		}
+
+		// above king
+		pieceColor = board[kPosRow - distance][kPosCol][0];
+		pieceType = board[kPosRow - distance][kPosCol][1];
+		if (!(pieceColor == ' ') && !(pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && pieceType != 'K')
+		{
+			blockAbove = true;
+		}
+		if (!blockAbove && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+		{
+			result = true;
+		}
+		
+		// to the left of king
+		pieceColor = board[kPosRow][kPosCol - distance][0];
+		pieceType = board[kPosRow][kPosCol - distance][1];
+		if (!(pieceColor == ' ') && !(pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && pieceType != 'K')
+		{
+			blockLeft = true;
+		}
+		if (!blockLeft && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+		{
+			result = true;
+		}
+	}
+
+	// bishop and queen
+	bool blockTopRight = false; // if there is a piece blocking the king from the top right
+	bool blockTopLeft = false; // if there is a piece blocking the king from the top left
+	bool blockBotRight = false; // if there is a piece blocking the king from the bottom right
+	bool blockBotLeft = false; // if there is a piece blocking the king from the bottom left
+
+	for (int distance = 1; distance < 8; distance++)
+	{
+		// top right of king
+		pieceColor = board[kPosRow - distance][kPosCol + distance][0];
+		pieceType = board[kPosRow - distance][kPosCol + distance][1];
+		if (!(pieceColor == ' ') && !(pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && pieceType != 'K')
+		{
+			blockTopRight = true;
+		}
+		if (!blockTopRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+		{
+			result = true;
+		}
+
+		// top left of king
+		pieceColor = board[kPosRow - distance][kPosCol - distance][0];
+		pieceType = board[kPosRow - distance][kPosCol - distance][1];
+		if (!(pieceColor == ' ') && !(pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && pieceType != 'K')
+		{
+			blockTopLeft = true;
+		}
+		if (!blockTopLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol - distance < 8 && kPosCol - distance >= 0))
+		{
+			result = true;
+		}
+
+		// bottom right of king
+		pieceColor = board[kPosRow + distance][kPosCol + distance][0];
+		pieceType = board[kPosRow + distance][kPosCol + distance][1];
+		if (!(pieceColor == ' ') && !(pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && pieceType != 'K')
+		{
+			blockBotRight = true;
+		}
+		if (!blockBotRight && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+		{
+			result = true;
+		}
+		
+		// bottom left of king
+		pieceColor = board[kPosRow + distance][kPosCol - distance][0];
+		pieceType = board[kPosRow + distance][kPosCol - distance][1];
+		if (!(pieceColor == ' ') && !(pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && pieceType != 'K')
+		{
+			blockBotLeft = true;
+		}
+		if (!blockBotLeft && (pieceColor == color && (pieceType == 'B' || pieceType == 'Q')) && \
+			(kPosRow + distance < 8 && kPosRow + distance >= 0 && kPosCol - distance < 8 && kPosCol - distance >= 0))
 		{
 			result = true;
 		}
@@ -854,6 +1603,71 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 	return result;
 }
 
+// check if there are any moves left on one side to determine stalemate
+bool anyAvailableMoves(char board[8][8][2], char color, char enemyColor)
+{
+	bool result = false;
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			char tempColor = board[i][j][0];
+			char tempType = board[i][j][1];
+			if (tempColor == color)
+			{
+				//pawns
+				if (j + 1 != 8 && color == 'w' && tempType == 'P' && \
+					((board[i - 1][j - 1][0] == enemyColor && i - 1 < 8 && i - 1 >= 0 && j - 1 < 8 && j - 1 >= 0) || \
+					(board[i - 1][j][0] == ' ' && i - 1 < 8 && i - 1 >= 0) || \
+					(board[i - 1][j + 1][0] == enemyColor && i - 1 < 8 && i - 1 >= 0 && j + 1 < 8 && j + 1 >= 0)))
+				{
+					result = true;
+				}
+				if (j + 1 != 8 && color == 'b' && tempType == 'P' && \
+					((board[i + 1][j - 1][0] == enemyColor && i + 1 < 8 && i + 1 >= 0 && j - 1 < 8 && j - 1 >= 0) || \
+					(board[i + 1][j][0] == ' ' && i + 1 < 8 && i + 1 >= 0) || \
+					(board[i + 1][j + 1][0] == enemyColor && i + 1 < 8 && i + 1 >= 0 && j + 1 < 8 && j + 1 >= 0)))
+				{
+					result = true;
+				}
+				// rooks and queen
+				if ((tempType == 'R' || tempType == 'Q') && \
+					((board[i - 1][j][0] == ' ' || board[i - 1][j][0] == enemyColor) || \
+					(board[i][j + 1][0] == ' ' || board[i][j + 1][0] == enemyColor) || \
+					(board[i + 1][j][0] == ' ' || board[i + 1][j][0] == enemyColor) || \
+					(board[i][j - 1][0] == ' ' || board[i][j - 1][0] == enemyColor)))
+				{
+					result = true;
+				}
+				// bishops and queen
+				if ((tempType == 'B' || tempType == 'Q') && \
+					((board[i - 1][j - 1][0] == ' ' || board[i - 1][j - 1][0] == enemyColor) || \
+					(board[i - 1][j + 1][0] == ' ' || board[i - 1][j + 1][0] == enemyColor) || \
+					(board[i + 1][j + 1][0] == ' ' || board[i + 1][j + 1][0] == enemyColor) || \
+					(board[i + 1][j - 1][0] == ' ' || board[i + 1][j - 1][0] == enemyColor)))
+				{
+					result = true;
+				}
+				// knights
+				if (tempType == 'N' && \
+					((board[i + 2][j - 1][0] == ' ' || board[i + 2][j - 1][0] == enemyColor) || \
+					(board[i + 1][j - 2][0] == ' ' || board[i + 1][j - 2][0] == enemyColor) || \
+					(board[i - 1][j - 2][0] == ' ' || board[i - 1][j - 2][0] == enemyColor) || \
+					(board[i - 2][j - 1][0] == ' ' || board[i - 2][j - 1][0] == enemyColor) || \
+					(board[i - 2][j + 1][0] == ' ' || board[i - 2][j + 1][0] == enemyColor) || \
+					(board[i - 1][j + 2][0] == ' ' || board[i - 1][j + 2][0] == enemyColor) || \
+					(board[i + 1][j + 2][0] == ' ' || board[i + 1][j + 2][0] == enemyColor) || \
+					(board[i + 2][j + 1][0] == ' ' || board[i + 2][j + 1][0] == enemyColor)))
+				{
+					result = true;
+				}
+			}			
+		}
+	}
+
+	return result;
+}
+
 /*pawn promotion*/
 void pawnPromotion(int rowFrom, int columnFrom, char board[8][8][2])
 {
@@ -867,7 +1681,7 @@ void pawnPromotion(int rowFrom, int columnFrom, char board[8][8][2])
 	scanf("%d",&option);
 					
 	/*errors handling for invalid answer*/
-	while (option < 1 ||  option > 4)
+	while (option < 1 ||  option > 5)
 	{
 		printf("Invalid answer.Please enter 1-4 to make the change: ");
 		scanf("%d",&option);
@@ -882,6 +1696,8 @@ void pawnPromotion(int rowFrom, int columnFrom, char board[8][8][2])
 		/*Knight*/
 		case 2:												
 			board[rowFrom][columnFrom][1] = 'N';
+			break;
+			board[rowFrom][columnFrom][1] = 'B';
 			break;
 		/*Rook*/
 		case 3:						
