@@ -13,6 +13,24 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
+#include "fileio.h"
+
+int replayGame(FILE *file, moveList *m)
+{
+
+    char* current_time;
+    time_t t = time(NULL);
+
+    current_time = ctime(&t);
+
+    fprintf(file, "Chess Program, EECS22L Team 03 Spring 2021");
+    fprintf(file, "Chess Game played: %s", current_time);
+
+    //end of file
+    fprintf(file, "\n#EOF");
+    return 0;
+}
 
 /* EOF */

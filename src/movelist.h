@@ -10,6 +10,7 @@ typedef struct moveEntry {
 	char gameBoard[8][8][2];
 	struct moveEntry *next;
 	struct moveEntry *last;
+    int latestMove[4];
 } entry;
 
 typedef struct moveList{

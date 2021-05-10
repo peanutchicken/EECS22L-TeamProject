@@ -25,6 +25,12 @@ entry *newMoveEntry(moveList *m, char gb[8][8][2]){
     entry* temp = malloc(sizeof(entry));
     temp->next=NULL;
     temp->last=NULL;
+
+    for(int i=0; i<4; i++) 
+    {
+        temp->latestMove[i] = 0;
+    }
+
     for(int i=0;i<8;i++){
         for(int j=0;j<8;j++){
             for(int k=0;k<2;k++){
