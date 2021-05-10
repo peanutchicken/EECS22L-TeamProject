@@ -28,14 +28,17 @@ void playerVsPlayer(char gameBoard[8][8][2])
 	// main loop
 	while (!winCheck(gameBoard) && !playerExit) {
 		playerExit = playerInput(gameBoard, 'w');
+
 		if (!playerExit) {
 			printBoard(gameBoard);
 		}
 		append(list, gameBoard);
+
 		if (winCheck(gameBoard) || playerExit) {
 			break;
 		}
 		playerExit = playerInput(gameBoard, 'b');
+
 		if (!playerExit) {
 			printBoard(gameBoard);
 		}
@@ -149,11 +152,6 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 
         lastMoveConvert(move, from, to, lastMove);
 
-        ///////DEBUGGGGG//////
-        printf("fromRow: %c , fromCol: %c \n", from[0], from[1]);
-        printf("toRow: %c , toRow: %c \n", to[0], to[1]);
-        printf("gameboard: %c \n", gameBoard[lastMove[0]][lastMove[1]][0]);
-
 		while((!legalMove(from, to, gameBoard) || \
                 gameBoard[lastMove[0]][lastMove[1]][0] == 'b' || \
                 gameBoard[lastMove[0]][lastMove[1]][0] == ' ') && !playerExit) 
@@ -236,11 +234,6 @@ int lastMoveConvert(char move[4], char from[2], char to[2], int lastMove[4])
     to[0] = lastMove[2];
     to[1] = lastMove[3];
  
-    for (int i = 0; i < 4; i++) 
-    {
-        printf("move: %c , lastMove: %d  \n", move[i], lastMove[i]);
-    }
-    
     return 0;
 }
 
