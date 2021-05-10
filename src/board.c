@@ -15,9 +15,6 @@
 #include <stdlib.h>
 
 #include "board.h"
-#include "legalityCheck.h"
-#include "movelist.h"
-#include "ai.h"
 
 // game runner that loops through human vs human chess game
 void playerVsPlayer(char gameBoard[8][8][2]) 
@@ -78,6 +75,8 @@ void playerVsAI(char gameBoard[8][8][2]) {
 			makeMove(gameBoard,'b');
 			printBoard(gameBoard);
 			append(list,gameBoard);
+
+			//takeBackMove(gameBoard,list);
 		} else if (playerColor == 'b') {
 			// here is where AI makes its move
 			makeMove(gameBoard,'w');
@@ -92,6 +91,8 @@ void playerVsAI(char gameBoard[8][8][2]) {
 			}
 			// append the move list here
 			append(list,gameBoard);
+
+			//takeBackMove(gameBoard,list);
 		}
 	}
 
@@ -134,6 +135,8 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 	int toCol; // column number in board array of the new location
 	bool playerExit = false; // if the player chooses to exit the game or not
 
+    //move suggestion
+	suggestedMove(gameBoard,player);
 
 	// choosing white piece
 	if (player == 'w') {
@@ -281,4 +284,73 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 	return playerExit;
 }
 
+//prints a suggested move for the respective player
+void suggestedMove(char gameBoard[8][8][2], char player)
+{
+	/*
+		variable declarations
+	*/
+
+	//temporary gameboard
+	char tempGameBoard[8][8][2];
+
+	//suggested move output
+	char suggestedOut[5];
+
+	//copys the existing gameboard into a temporary gameboard
+
+	for(int i=0;i<8;i++)
+	{
+		for(int j=0;j<8;j++)
+		{
+			tempGameBoard[i][j][0]=gameBoard[i][j][0];
+			tempGameBoard[i][j][1]=gameBoard[i][j][1];
+		}
+	}
+
+
+
+	makeMove(tempGameBoard,player);
+
+	//printf("made Move in suggestedMove");
+
+	moveDifference(suggestedOut,gameBoard,tempGameBoard);
+	//printf("found move difference in suggestedMove");
+	printf("\nPsssst... try %s.\n", suggestedOut);
+}
+
+void takeBackMove(char gameBoard[8][8][2], moveList* list)
+{
+	int choice;
+
+	printf("Would you like to restart the turn? \n");
+	printf("1. Yes \n");
+	printf("2. No \n");
+	printf("Enter the number of your choice: ");
+	scanf("%d",&choice);
+
+
+	switch(choice)
+	{
+		case 1:
+			deleteNFromEnd(list,2);
+			for(int i=0;i<8;i++)
+			{
+				for(int j=0;j<8;j++)
+				{
+					gameBoard[i][j][0]=((list->last)->gameBoard)[i][j][0];
+					gameBoard[i][j][1]=((list->last)->gameBoard)[i][j][0];
+				}
+			}
+			return;
+			break;
+
+		default:
+			return;
+			break;
+
+	}
+	
+	
+}
 /* EOF */

@@ -22,28 +22,31 @@
 //makes a legal move for the specified player
 void makeMove(char gameBoard[8][8][2], char player)
 {
-
+    srand(time(0));
     //row/column values variables for original value
-    int fromRow = 0;
-    int fromCol = 0;
+    int fromRow = 999;
+    int fromCol = 999;
 
     //row/column values variables for destination value
-    int toRow = 0;
-    int toCol = 0;
+    int toRow = 999;
+    int toCol = 999;
 
     //char values for passing to legalMove()
     char from[2];
     char to[2];
 
+    int tempValue=100;
+
     if(player=='b')
     {
-        for(int row = 7; row>0; row--)
+        while(fromCol==999)
         {
-            for(int col = 0; col<7; col++)
+            tempValue = (rand() %(8));
+            for(int row = 7; row>0; row--)
             {
-                if(gameBoard[row][col][0]==player){
+                if((gameBoard[row][tempValue][0])=='b'){
                     fromRow = row;
-                    fromCol = col;
+                    fromCol = tempValue;
                     break;
                 }
             }
@@ -51,13 +54,14 @@ void makeMove(char gameBoard[8][8][2], char player)
     }
     else if(player=='w')
     {
-        for(int row = 0; row<7; row--)
+        while(fromCol==999)
         {
-            for(int col = 0; col<7; col++)
+            tempValue = (rand() %(8));
+            for(int row = 0; row<7; row++)
             {
-                if(gameBoard[row][col][0]==player){
+                if((gameBoard[row][tempValue][0])=='w'){
                     fromRow = row;
-                    fromCol = col;
+                    fromCol = tempValue;
                     break;
                 }
             }
@@ -67,7 +71,7 @@ void makeMove(char gameBoard[8][8][2], char player)
     from[0] = fromRow;
     from[1] = fromCol;
 
-    printf("from = %d,%d\n",fromRow,fromCol);
+    //printf("from = %d,%d\n",fromRow,fromCol);
     for(int row = 0;row<8; row++)
     {
         for(int col = 0; col<8; col++)
@@ -76,7 +80,7 @@ void makeMove(char gameBoard[8][8][2], char player)
             toCol=col;
             to[0]=row;
             to[1]=col;
-            printf("to = %d,%d\n",toRow,toCol);
+            //printf("to = %d,%d\n",toRow,toCol);
             
             if(legalMove(from,to,gameBoard)){
                 break;

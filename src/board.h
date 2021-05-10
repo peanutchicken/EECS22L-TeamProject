@@ -3,7 +3,9 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#endif
+#include "movelist.h"
+#include "legalityCheck.h"
+#include "ai.h"
 
 #include <stdbool.h>
 
@@ -19,4 +21,12 @@ void printBoard(char gameBoard[8][8][2]);
 // update the chess board accordingly from player user input and returns if the user has exited the game or not
 bool playerInput(char gameBoard[8][8][2], char player);
 
+//prints a suggested move for the respective player
+void suggestedMove(char gameBoard[8][8][2], char player);
+
+//restarts the turn
+void takeBackMove(char gameBoard[8][8][2], moveList* list);
+
 /* EOF */ 
+
+#endif
