@@ -233,12 +233,6 @@ bool playerInput(char gameBoard[8][8][2], char player) {
         to[0] = toRow;
         to[1] = toCol;
 
-    //assign converted ascii values back to from and to
-        from[0] = fromRow;
-        from[1] = fromCol;
-        to[0] = toRow;
-        to[1] = toCol;
-
 		while((!legalMove(from, to, gameBoard) || \
                 gameBoard[fromRow][fromCol][0] == 'w' || \
                 gameBoard[fromRow][fromCol][0] == ' ') && !playerExit) 
@@ -282,6 +276,14 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 	}
 
 	return playerExit;
+}
+
+int lastMoveConvert(char from[2], char to[2])
+{
+
+
+
+    return 0;
 }
 
 //prints a suggested move for the respective player
