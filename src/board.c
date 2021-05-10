@@ -263,8 +263,8 @@ void suggestedMove(char gameBoard[8][8][2], char player)
 	{
 		for(int j=0;j<8;j++)
 		{
-			tempGameBoard[i][j][0]=gameBoard[i][j][0];
-			tempGameBoard[i][j][1]=gameBoard[i][j][1];
+			tempGameBoard[i][j][0] = gameBoard[i][j][0];
+			tempGameBoard[i][j][1] = gameBoard[i][j][1];
 		}
 	}
 
@@ -274,7 +274,7 @@ void suggestedMove(char gameBoard[8][8][2], char player)
 
 	//printf("made Move in suggestedMove");
 
-	moveDifference(suggestedOut,gameBoard,tempGameBoard);
+	moveDifference(suggestedOut, gameBoard, tempGameBoard);
 	//printf("found move difference in suggestedMove");
 	printf("\nPsssst... try %s.\n", suggestedOut);
 }
