@@ -80,7 +80,7 @@ void deleteMoveEntry(moveList *m,entry *a)
 }
 
 //creates new entry and adds it to the end of the movelist
-void append(moveList *m,char gameBoard[8][8][2])
+void append(moveList *m,char gameBoard[8][8][2], int latestMove[4])
 {
     entry* newEntry = newMoveEntry(m,gameBoard);
     if(m->first == NULL&&m->last==NULL) //if the list is empty
@@ -147,7 +147,8 @@ void moveDifference(char out[5],char gameBoard1[8][8][2], char gameBoard2[8][8][
         for(int j=0;j<8;j++)
         {
             
-            if((gameBoard1[i][j][0]!=gameBoard2[i][j][0])&&(gameBoard1[i][j][1]!=gameBoard2[i][j][1])) //finds where the two boards are different, should be 2 positions
+            //finds where the two boards are different, should be 2 positions
+            if((gameBoard1[i][j][0]!=gameBoard2[i][j][0])&&(gameBoard1[i][j][1]!=gameBoard2[i][j][1])) 
             { 
                 if(gameBoard1[i][j][0]==' ')
                 {

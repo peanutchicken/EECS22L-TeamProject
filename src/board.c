@@ -161,16 +161,15 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 		toRow = 8 - (move[3] - 48);
 		toCol = move[2] - 65;
 
-        	//assign converted ascii values back to from and to
-	        from[0] = fromRow;
-	        from[1] = fromCol;
-	        to[0] = toRow;
-	        to[1] = toCol;
+        //assign converted ascii values back to from and to
+        from[0] = fromRow;
+        from[1] = fromCol;
+        to[0] = toRow;
+        to[1] = toCol;
 
 		while((!legalMove(from, to, gameBoard) || \
-			gameBoard[fromRow][fromCol][0] == 'b' || \
-			gameBoard[fromRow][fromCol][0] == ' ') && \
-			!playerExit) 
+                gameBoard[fromRow][fromCol][0] == 'b' || \
+                gameBoard[fromRow][fromCol][0] == ' ') && !playerExit) 
         {
 			printf("Invalid move. Please enter again(or \"exit\" to exit current game): ");
 			scanf("%s", move);
@@ -193,11 +192,11 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 			toRow = 8 - (move[3] - 48);
 			toCol = move[2] - 65;
 
-	        	//assign converted ascii values back to from and to
-		        from[0] = fromRow;
-	        	from[1] = fromCol;
-		        to[0] = toRow;
-		        to[1] = toCol;
+            //assign converted ascii values back to from and to
+            from[0] = fromRow;
+            from[1] = fromCol;
+            to[0] = toRow;
+            to[1] = toCol;
 		}
 			
 	}
@@ -227,22 +226,23 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 		toRow = 8 - (move[3] - 48);
 		toCol = move[2] - 65;
 		
-		
-               //assign converted ascii values back to from and to
-               from[0] = fromRow;
-               from[1] = fromCol;
-               to[0] = toRow;
-               to[1] = toCol;
+            
+        //assign converted ascii values back to from and to
+        from[0] = fromRow;
+        from[1] = fromCol;
+        to[0] = toRow;
+        to[1] = toCol;
 
-        	//assign converted ascii values back to from and to
-	        from[0] = fromRow;
-	        from[1] = fromCol;
-	        to[0] = toRow;
-	        to[1] = toCol;
+    //assign converted ascii values back to from and to
+        from[0] = fromRow;
+        from[1] = fromCol;
+        to[0] = toRow;
+        to[1] = toCol;
 
-		while((!legalMove(from, to, gameBoard) || gameBoard[fromRow][fromCol][0] == 'w' || gameBoard[fromRow][fromCol][0] == ' ') && \
-			!playerExit) 
-        	{
+		while((!legalMove(from, to, gameBoard) || \
+                gameBoard[fromRow][fromCol][0] == 'w' || \
+                gameBoard[fromRow][fromCol][0] == ' ') && !playerExit) 
+        {
 			printf("Invalid move. Please enter again(or \"exit\" to exit current game): ");
 			scanf("%s", move);
 
@@ -264,11 +264,11 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 			toRow = 8- (move[3] - 48);
 			toCol = move[2] - 65;
 			
-        		//assign converted ascii values back to from and to
-        		from[0] = fromRow;
-        		from[1] = fromCol;
-        		to[0] = toRow;
-        		to[1] = toCol;
+            //assign converted ascii values back to from and to
+            from[0] = fromRow;
+            from[1] = fromCol;
+            to[0] = toRow;
+            to[1] = toCol;
 		}
 
 	}
