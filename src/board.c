@@ -56,7 +56,6 @@ void playerVsAI(char gameBoard[8][8][2]) {
 	// main loop
 	while (!winCheck(gameBoard)) {
 		if (playerColor == 'w') {
-			suggestedMove(gameBoard, 'w');
 			playerInput(gameBoard, 'w');
 			printBoard(gameBoard);
 			if (winCheck(gameBoard)) {
@@ -68,6 +67,8 @@ void playerVsAI(char gameBoard[8][8][2]) {
 			makeMove(gameBoard,'b');
 			printBoard(gameBoard);
 			append(list,gameBoard);
+
+			//takeBackMove(gameBoard,list);
 		} else if (playerColor == 'b') {
 			// here is where AI makes its move
 			makeMove(gameBoard,'w');
@@ -76,11 +77,12 @@ void playerVsAI(char gameBoard[8][8][2]) {
 			}
 			append(list,gameBoard);
 			printBoard(gameBoard);
-			suggestedMove(gameBoard, 'b');
 			playerInput(gameBoard, 'b');
 			printBoard(gameBoard);
 			// append the move list here
 			append(list,gameBoard);
+
+			//takeBackMove(gameBoard,list);
 		}
 	}
 
@@ -243,19 +245,17 @@ void playerInput(char gameBoard[8][8][2], char player) {
 //prints a suggested move for the respective player
 void suggestedMove(char gameBoard[8][8][2], char player)
 {
-	printf("suggestedMove");
 	/*
 		variable declarations
 	*/
 
 	//temporary gameboard
 	char tempGameBoard[8][8][2];
-	//printf("declare temp board in suggestedMove");
+
 	//suggested move output
 	char suggestedOut[5];
-	//printf("declare output in suggestedMove");
+
 	//copys the existing gameboard into a temporary gameboard
-	//printf("begin copy in suggestedMove");
 
 	for(int i=0;i<8;i++)
 	{
@@ -266,7 +266,7 @@ void suggestedMove(char gameBoard[8][8][2], char player)
 		}
 	}
 
-	//printf("finished copy in suggestedMove");
+
 
 	makeMove(tempGameBoard,player);
 
@@ -279,14 +279,36 @@ void suggestedMove(char gameBoard[8][8][2], char player)
 
 void takeBackMove(char gameBoard[8][8][2], moveList* list)
 {
-	deleteNFromEnd(list,2);
-	for(int i=0;i<8;i++)
+	int choice;
+
+	printf("Would you like to restart the turn? \n");
+	printf("1. Yes \n");
+	printf("2. No \n");
+	printf("Enter the number of your choice: ");
+	scanf("%d",&choice);
+
+
+	switch(choice)
 	{
-		for(int j=0;j<8;j++)
-		{
-			gameBoard[i][j][0]=((list->last)->gameBoard)[i][j][0];
-			gameBoard[i][j][1]=((list->last)->gameBoard)[i][j][0];
-		}
+		case 1:
+			deleteNFromEnd(list,2);
+			for(int i=0;i<8;i++)
+			{
+				for(int j=0;j<8;j++)
+				{
+					gameBoard[i][j][0]=((list->last)->gameBoard)[i][j][0];
+					gameBoard[i][j][1]=((list->last)->gameBoard)[i][j][0];
+				}
+			}
+			return;
+			break;
+
+		default:
+			return;
+			break;
+
 	}
+	
+	
 }
 /* EOF */
