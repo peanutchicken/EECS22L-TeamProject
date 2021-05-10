@@ -212,6 +212,7 @@ bool playerInput(moveList *m, char gameBoard[8][8][2], char player) {
 
 	}
 
+    //append gameboard to moveList
     append(m, gameBoard, lastMove);
 	
 	if (!playerExit)
@@ -225,6 +226,7 @@ bool playerInput(moveList *m, char gameBoard[8][8][2], char player) {
 	return playerExit;
 }
 
+//converts ascii input of last move made into int values for chessboard
 int lastMoveConvert(char move[4], char from[2], char to[2], int lastMove[4])
 {
     //lastMove contains the int board values of the last move made in the format:
@@ -250,9 +252,6 @@ int lastMoveConvert(char move[4], char from[2], char to[2], int lastMove[4])
 //prints a suggested move for the respective player
 void suggestedMove(char gameBoard[8][8][2], char player)
 {
-	/*
-		variable declarations
-	*/
 
 	//temporary gameboard
 	char tempGameBoard[8][8][2];

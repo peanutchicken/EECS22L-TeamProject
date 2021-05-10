@@ -7,15 +7,21 @@
 
 typedef struct moveEntry {
 	struct moveList* list;
+    //each entry has a gameboard
 	char gameBoard[8][8][2];
+
+    //next and last to go forward/backward one move
 	struct moveEntry *next;
 	struct moveEntry *last;
+
+    //last move made is also stored in each entry
     int latestMove[4];
 } entry;
 
 typedef struct moveList{
 	entry* first;
 	entry* last;
+    int length;
 } moveList;
 
 
