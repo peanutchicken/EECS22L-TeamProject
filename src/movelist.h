@@ -10,6 +10,7 @@ typedef struct moveEntry {
 	char gameBoard[8][8][2];
 	struct moveEntry *next;
 	struct moveEntry *last;
+    int latestMove[4];
 } entry;
 
 typedef struct moveList{
@@ -25,6 +26,7 @@ entry *newMoveEntry(moveList *m, char gb[8][8][2]);
 void deleteMoveEntry(moveList *m,entry *a);
 
 //creates new entry and adds it to the end of the movelist
+//void append(moveList *m,char gameBoard[8][8][2], int latestMove[4]);
 void append(moveList *m,char gameBoard[8][8][2]);
 
 //creates a list and returns it

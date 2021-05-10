@@ -19,13 +19,18 @@
 #include "movelist.h"
 #include "ai.h"
 #include "legalityCheck.h"
+#include "fileio.h"
 
-/* print a menu */
+/* declare printMenu function below */
 void PrintMenu();
 
 int main()
 {       
 	int n;
+
+    //set up file to write output to
+    //FILE * file;
+    //file = fopen("chessGameReplay.txt", "w+");
 	
 /*	char gameBoard[8][8][2] = {
 				{"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},

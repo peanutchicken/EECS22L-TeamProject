@@ -25,6 +25,12 @@ entry *newMoveEntry(moveList *m, char gb[8][8][2]){
     entry* temp = malloc(sizeof(entry));
     temp->next=NULL;
     temp->last=NULL;
+
+    for(int i=0; i<4; i++) 
+    {
+        temp->latestMove[i] = 0;
+    }
+
     for(int i=0;i<8;i++){
         for(int j=0;j<8;j++){
             for(int k=0;k<2;k++){
@@ -74,6 +80,7 @@ void deleteMoveEntry(moveList *m,entry *a)
 }
 
 //creates new entry and adds it to the end of the movelist
+//void append(moveList *m,char gameBoard[8][8][2], int latestMove[4])
 void append(moveList *m,char gameBoard[8][8][2])
 {
     entry* newEntry = newMoveEntry(m,gameBoard);
@@ -141,7 +148,8 @@ void moveDifference(char out[5],char gameBoard1[8][8][2], char gameBoard2[8][8][
         for(int j=0;j<8;j++)
         {
             
-            if((gameBoard1[i][j][0]!=gameBoard2[i][j][0])&&(gameBoard1[i][j][1]!=gameBoard2[i][j][1])) //finds where the two boards are different, should be 2 positions
+            //finds where the two boards are different, should be 2 positions
+            if((gameBoard1[i][j][0]!=gameBoard2[i][j][0])&&(gameBoard1[i][j][1]!=gameBoard2[i][j][1])) 
             { 
                 if(gameBoard1[i][j][0]==' ')
                 {
