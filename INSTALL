@@ -2,9 +2,10 @@
 This file details how to install the chess program. 
 
 1. Use tar to extract the files from the tarball:
-tar -xzvf Chess_Beta_src.tar.gz
-2. Go to Directory
-d Chess_Beta_src
-3. Compile the Program
-make
-4. The program should now be installed!
+    tar -xzvf Chess_Beta_src.tar.gz
+2. Go to directory containing the files:
+    cd Chess_Beta_src
+3. Compile the program:
+    make
+4. The program should now be installed! Navigate to the bin/ directory in order to play the game, and then launch it with:
+    ./chessGame

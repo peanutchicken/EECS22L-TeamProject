@@ -57,7 +57,6 @@ void playerVsPlayer(char gameBoard[8][8][2], FILE *file)
 
 // game runner that loops through human vs AI chess game
 void playerVsAI(char gameBoard[8][8][2], FILE *file) {
-    /*
 	moveList* list = createList();
 	bool playerExit = false;
 	char playerColor;
@@ -70,7 +69,9 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 		scanf(" %c", &playerColor);
 	}
 	printBoard(gameBoard);
-	append(list,gameBoard);
+
+    int latestMove[4];      //blank move to pass to first append
+	append(list,gameBoard, latestMove); 
 	// main loop
 	while (!winCheck(gameBoard) && !playerExit) {
 		if (playerColor == 'w') {
@@ -109,7 +110,6 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 
 	deleteList(list);
 	list = NULL;
-    */	
 }
 
 // print current state of the chess board and its pieces
