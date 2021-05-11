@@ -8,6 +8,8 @@ src/testChessGame
 # client spec
 ProjectSpecFromClient.pdf
 
+chessGameReplay.txt
+
 # Object files
 *.o
 *.ko

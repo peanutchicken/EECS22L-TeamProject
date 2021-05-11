@@ -19,7 +19,6 @@
 #include "board.h"
 
 
-
 //creates a new entry and returns it
 entry *newMoveEntry(moveList *m, char gb[8][8][2]){
     entry* temp = malloc(sizeof(entry));
@@ -80,20 +79,30 @@ void deleteMoveEntry(moveList *m,entry *a)
 }
 
 //creates new entry and adds it to the end of the movelist
-//void append(moveList *m,char gameBoard[8][8][2], int latestMove[4])
-void append(moveList *m,char gameBoard[8][8][2])
+void append(moveList *m,char gameBoard[8][8][2], int latestMove[4])
 {
     entry* newEntry = newMoveEntry(m,gameBoard);
-    if(m->first == NULL&&m->last==NULL) //if the list is empty
+
+    //set newentry latest move = arg latestmove
+    for(int i = 0; i < 4; i++) 
+    {
+        newEntry->latestMove[i] = latestMove[i];
+    }
+
+    //if list is empty, start it
+    if(m->first == NULL&&m->last==NULL) 
     {
         m->first = newEntry;
         m->last = newEntry;
+        //length IS NOT incremented for the first empty item to make replaying the game less messy
     }
+    //else if list isn't empty, add it as usual
     else
     {
         newEntry->last = m->last; //assign old last to last of the newEntry
         (m->last)->next = newEntry; //reassign the old last's next to newEntry
         m->last = newEntry; //reassign last of the list to newEntry
+        m->length++;                //increment list length
         
     }
 }
@@ -104,6 +113,7 @@ moveList *createList()
     moveList *temp = malloc(sizeof(moveList));
     temp->first = NULL;
     temp->last = NULL;
+    temp->length = 0;
     return temp;
 }
 
@@ -147,7 +157,6 @@ void moveDifference(char out[5],char gameBoard1[8][8][2], char gameBoard2[8][8][
     for(int i=0;i<8;i++){
         for(int j=0;j<8;j++)
         {
-            
             //finds where the two boards are different, should be 2 positions
             if((gameBoard1[i][j][0]!=gameBoard2[i][j][0])&&(gameBoard1[i][j][1]!=gameBoard2[i][j][1])) 
             { 
@@ -177,13 +186,17 @@ void moveDifference(char out[5],char gameBoard1[8][8][2], char gameBoard2[8][8][
 //used for debugging
 void printList(moveList *m)
 {
+    printf("\n\n");
+    printf("============================================\n");
+    printf("=============PRINTING BOARD LIST ===========\n");
+    printf("============================================\n");
     entry* current=m->first;
     do
     {
         printBoard(current->gameBoard);
         current=current->next;
-    }
-    while(current->next!=NULL);
+    } while(current->next!=NULL);
+
     printBoard((m->last)->gameBoard);
     
 }

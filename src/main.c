@@ -29,19 +29,9 @@ int main()
 	int n;
 
     //set up file to write output to
-    //FILE * file;
-    //file = fopen("chessGameReplay.txt", "w+");
+    FILE *file;
+    file = fopen("chessGameReplay.txt", "w+");
 	
-/*	char gameBoard[8][8][2] = {
-				{"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
-				{"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
-				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-				{"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
-				{"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};
-*/
 	PrintMenu();
 	scanf("%d", &n);
 	while(n != 3) {
@@ -55,20 +45,21 @@ int main()
 				{"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
 				{"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};
 		switch (n) {
-	                    case 1:
-	                        printf("player Vs Player is loading...\n");
-	                        playerVsPlayer(gameBoard);
-	                        break;
-	                    case 2:
-	                        printf("player Vs AI is loading...\n");
-	                        playerVsAI(gameBoard);
-				break;
-			    default :
-	                        printf("Invalid option!\n" );
+            case 1:
+                printf("player Vs Player is loading...\n");
+                playerVsPlayer(gameBoard, file);
+                break;
+            case 2:
+                printf("player Vs AI is loading...\n");
+                playerVsAI(gameBoard, file);
+                break;
+            default :
+                printf("Invalid option!\n" );
 		}
 		PrintMenu();
 		scanf("%d", &n);
 	}	
+    fclose(file);
 	
 	return 0;
 }

@@ -17,39 +17,47 @@
 #include "board.h"
 
 // game runner that loops through human vs human chess game
-void playerVsPlayer(char gameBoard[8][8][2]) 
+void playerVsPlayer(char gameBoard[8][8][2], FILE *file) 
 {
 	moveList* list = createList();
+
 	bool playerExit = false;
 
 	printf("\nWelcome to Player vs Player Chess Game!\n");
 	printBoard(gameBoard);
-	append(list,gameBoard); // adds the starting board state
+
+    // adds the starting board state
+    int latestMove[4];      //blank move to pass to first append
+	append(list,gameBoard, latestMove); 
+
 	// main loop
 	while (!winCheck(gameBoard) && !playerExit) {
-		playerExit = playerInput(gameBoard, 'w');
+		playerExit = playerInput(list, gameBoard, 'w');
 
 		if (!playerExit) {
 			printBoard(gameBoard);
 		}
-		append(list, gameBoard);
 
 		if (winCheck(gameBoard) || playerExit) {
 			break;
 		}
-		playerExit = playerInput(gameBoard, 'b');
+		playerExit = playerInput(list, gameBoard, 'b');
 
 		if (!playerExit) {
 			printBoard(gameBoard);
 		}
-		append(list,gameBoard);
 	}
+
+
+    replayGame(file, list, 0);
+
 	deleteList(list);
 	list = NULL;
 }
 
 // game runner that loops through human vs AI chess game
-void playerVsAI(char gameBoard[8][8][2]) {
+void playerVsAI(char gameBoard[8][8][2], FILE *file) {
+    /*
 	moveList* list = createList();
 	bool playerExit = false;
 	char playerColor;
@@ -101,7 +109,7 @@ void playerVsAI(char gameBoard[8][8][2]) {
 
 	deleteList(list);
 	list = NULL;
-	
+    */	
 }
 
 // print current state of the chess board and its pieces
@@ -128,7 +136,7 @@ void printBoard(char gameBoard[8][8][2]) {
 }
 
 // update the chess board accordingly from player user input and returns if the user has exited the game or not
-bool playerInput(char gameBoard[8][8][2], char player) {
+bool playerInput(moveList *m, char gameBoard[8][8][2], char player) {
 	char move[4]; // 2 coordinates that the user wants to move the chess piece to
 	char from[2]; // start coordinate to pass into legalMove
 	char to[2]; // end coordinate to pass into legalMove
@@ -203,6 +211,9 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 		}
 
 	}
+
+    //append gameboard to moveList
+    append(m, gameBoard, lastMove);
 	
 	if (!playerExit)
 	{
@@ -215,6 +226,7 @@ bool playerInput(char gameBoard[8][8][2], char player) {
 	return playerExit;
 }
 
+//converts ascii input of last move made into int values for chessboard
 int lastMoveConvert(char move[4], char from[2], char to[2], int lastMove[4])
 {
     //lastMove contains the int board values of the last move made in the format:
@@ -240,9 +252,6 @@ int lastMoveConvert(char move[4], char from[2], char to[2], int lastMove[4])
 //prints a suggested move for the respective player
 void suggestedMove(char gameBoard[8][8][2], char player)
 {
-	/*
-		variable declarations
-	*/
 
 	//temporary gameboard
 	char tempGameBoard[8][8][2];
