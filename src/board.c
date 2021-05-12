@@ -94,7 +94,8 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 			printBoard(gameBoard);
 
 			//takeBackMove(gameBoard,list);
-		} else if (playerColor == 'b') {
+		} 
+        else if (playerColor == 'b') {
             gameOpponent = 2;
 			// here is where AI makes its move
 			makeMove(list, gameBoard,'w');
