@@ -23,73 +23,92 @@ void makeMove(char gameBoard[8][8][2], char player)
 {
     srand(time(0));
     //row/column values variables for original value
-    int fromRow = 999;
-    int fromCol = 999;
+    int fromRow;
+    int fromCol;
 
     //row/column values variables for destination value
-    int toRow = 999;
-    int toCol = 999;
+    int toRow;
+    int toCol;
 
     //char values for passing to legalMove()
     char from[2];
     char to[2];
 
-    int tempValue=100;
+    int tempValue;
 
-    if(player=='b')
+    bool moveFound = false;
+    //loop until a legal move is found completely
+    while(!moveFound)
     {
-        while(fromCol==999)
+        //row/column values variables for original value
+        fromRow = 65;
+        fromCol = 65;
+
+        //row/column values variables for destination value
+        toRow = 65;
+        toCol = 65;
+
+
+        tempValue=65;
+        
+
+        if(player=='b')
         {
-            tempValue = (rand() %(8));
-            for(int row = 7; row>0; row--)
+            while(fromCol==65)
             {
-                if((gameBoard[row][tempValue][0])=='b'){
-                    fromRow = row;
-                    fromCol = tempValue;
-                    break;
+                tempValue = (rand() %(8));
+                for(int row = 7; row>0; row--)
+                {
+                    if((gameBoard[row][tempValue][0])=='b'){
+                        fromRow = row;
+                        fromCol = tempValue;
+                        break;
+                    }
                 }
             }
         }
-    }
-    else if(player=='w')
-    {
-        while(fromCol==999)
+        else if(player=='w')
         {
-            tempValue = (rand() %(8));
-            for(int row = 0; row<7; row++)
+            while(fromCol==65)
             {
-                if((gameBoard[row][tempValue][0])=='w'){
-                    fromRow = row;
-                    fromCol = tempValue;
-                    break;
+                tempValue = (rand() %(8));
+                for(int row = 0; row<7; row++)
+                {
+                    if((gameBoard[row][tempValue][0])=='w'){
+                        fromRow = row;
+                        fromCol = tempValue;
+                        break;
+                    }
                 }
             }
         }
-    }
 
-    from[0] = fromRow;
-    from[1] = fromCol;
+        from[0] = fromRow;
+        from[1] = fromCol;
 
-    //printf("from = %d,%d\n",fromRow,fromCol);
-    for(int row = 0;row<8; row++)
-    {
-        for(int col = 0; col<8; col++)
+        //printf("from = %d,%d\n",fromRow,fromCol);
+        for(int row = 0;row<8; row++)
         {
-            toRow=row;
-            toCol=col;
-            to[0]=row;
-            to[1]=col;
-            //printf("to = %d,%d\n",toRow,toCol);
-            
+            for(int col = 0; col<8; col++)
+            {
+                toRow=row;
+                toCol=col;
+                to[0]=row;
+                to[1]=col;
+                //printf("to = %d,%d\n",toRow,toCol);
+                
+                if(legalMove(from,to,gameBoard)){
+                    moveFound = true;
+                    break;
+                }
+            }
+
             if(legalMove(from,to,gameBoard)){
-                break;
+                    break;
             }
         }
-
-        if(legalMove(from,to,gameBoard)){
-                break;
-        }
     }
+    
 
     
 
