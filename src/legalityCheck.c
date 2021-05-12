@@ -1114,7 +1114,7 @@ bool checkAndBlock(int kPosRow, int kPosCol, char board[8][8][2], char color)
 			blockBelow = true;
 		}
 		if (!blockBelow && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
-			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+			(kPosRow + distance < 8 && kPosRow + distance >= 0 && kPosCol < 8 && kPosCol >= 0))
 		{
 			check = true;
 			for (int i = 1; i <= distance; i++)
@@ -1136,7 +1136,7 @@ bool checkAndBlock(int kPosRow, int kPosCol, char board[8][8][2], char color)
 			blockRight = true;
 		}
 		if (!blockRight && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
-			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+			(kPosRow < 8 && kPosRow >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
 		{
 			check = true;
 			for (int i = 1; i <= distance; i++)
@@ -1158,7 +1158,7 @@ bool checkAndBlock(int kPosRow, int kPosCol, char board[8][8][2], char color)
 			blockAbove = true;
 		}
 		if (!blockAbove && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
-			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol < 8 && kPosCol >= 0))
 		{
 			check = true;
 			for (int i = 1; i <= distance; i++)
@@ -1180,7 +1180,7 @@ bool checkAndBlock(int kPosRow, int kPosCol, char board[8][8][2], char color)
 			blockLeft = true;
 		}
 		if (!blockLeft && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
-			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+			(kPosRow < 8 && kPosRow >= 0 && kPosCol - distance < 8 && kPosCol - distance >= 0))
 		{
 			check = true;
 			for (int i = 1; i <= distance; i++)
@@ -1511,7 +1511,7 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 			blockBelow = true;
 		}
 		if (!blockBelow && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
-			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+			(kPosRow + distance < 8 && kPosRow + distance >= 0 && kPosCol < 8 && kPosCol >= 0))
 		{
 			result = true;
 		}
@@ -1524,7 +1524,7 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 			blockRight = true;
 		}
 		if (!blockRight && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
-			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+			(kPosRow < 8 && kPosRow >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
 		{
 			result = true;
 		}
@@ -1537,7 +1537,7 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 			blockAbove = true;
 		}
 		if (!blockAbove && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
-			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol < 8 && kPosCol >= 0))
 		{
 			result = true;
 		}
@@ -1550,7 +1550,7 @@ bool check(int kPosRow, int kPosCol, char board[8][8][2], char color)
 			blockLeft = true;
 		}
 		if (!blockLeft && (pieceColor == color && (pieceType == 'R' || pieceType == 'Q')) && \
-			(kPosRow - distance < 8 && kPosRow - distance >= 0 && kPosCol + distance < 8 && kPosCol + distance >= 0))
+			(kPosRow < 8 && kPosRow >= 0 && kPosCol - distance < 8 && kPosCol - distance >= 0))
 		{
 			result = true;
 		}
