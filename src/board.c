@@ -57,10 +57,10 @@ void playerVsPlayer(char gameBoard[8][8][2], FILE *file)
 
 // game runner that loops through human vs AI chess game
 void playerVsAI(char gameBoard[8][8][2], FILE *file) {
-
 	moveList* list = createList();
 	bool playerExit = false;
 	char playerColor;
+    int gameOpponent = 0;       //used to record what color ai is
 
 	printf("\nWelcome to Player vs AI chess game!\n");
 	printf("Choose White('w') or Black('b'): ");
@@ -79,6 +79,7 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 	// main loop
 	while (!winCheck(gameBoard) && !playerExit) {
 		if (playerColor == 'w') {
+            gameOpponent = 1;
 			playerExit = playerInput(list, gameBoard, 'w');
 			if (!playerExit) {
 				printBoard(gameBoard);
@@ -94,6 +95,7 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 
 			//takeBackMove(gameBoard,list);
 		} else if (playerColor == 'b') {
+            gameOpponent = 2;
 			// here is where AI makes its move
 			makeMove(list, gameBoard,'w');
 			printBoard(gameBoard);
@@ -113,7 +115,7 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 	}
 
     //save game to file
-    replayGame(file, list, 1);
+    replayGame(file, list, gameOpponent);
 
 	deleteList(list);
 	list = NULL;
@@ -144,9 +146,9 @@ void printBoard(char gameBoard[8][8][2]) {
 
 // update the chess board accordingly from player user input and returns if the user has exited the game or not
 bool playerInput(moveList *m, char gameBoard[8][8][2], char player) {
-	char move[4]; // 2 coordinates that the user wants to move the chess piece to
-	char from[2]; // start coordinate to pass into legalMove
-	char to[2]; // end coordinate to pass into legalMove
+	char move[4];       // 2 coordinates that the user wants to move the chess piece to
+	char from[2];       // start coordinate to pass into legalMove
+	char to[2];         // end coordinate to pass into legalMove
     int lastMove[4];    //last move made in int arr format
 	bool playerExit = false; // if the player chooses to exit the game or not
 
