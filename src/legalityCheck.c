@@ -795,8 +795,8 @@ bool winCheck(char board[8][8][2])
 	bool blackCheck = false;
 	bool whiteMate = false; // check if there is a check in each spot surrounding the white king
 	bool blackMate = false; // check if there is a check in each spot surrounding the black king
-	int wKpos[2] = {0,0}; // position of white king ([0] - row, [1] - column)
-	int bKpos[2] = {0,0}; // position of black king ([0] - row, [1] - column)
+	int wKpos[2]; // position of white king ([0] - row, [1] - column)
+	int bKpos[2]; // position of black king ([0] - row, [1] - column)
 
 	// find positions of white and black king
 	for (int i = 0; i < 8; i++)
