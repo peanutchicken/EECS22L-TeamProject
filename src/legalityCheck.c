@@ -1765,8 +1765,6 @@ void pawnPromotion(int rowFrom, int columnFrom, char board[8][8][2])
 		case 2:												
 			board[rowFrom][columnFrom][1] = 'N';
 			break;
-			board[rowFrom][columnFrom][1] = 'B';
-			break;
 		/*Rook*/
 		case 3:						
 			board[rowFrom][columnFrom][1] = 'R';
