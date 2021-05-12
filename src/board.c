@@ -111,6 +111,9 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 		}
 	}
 
+    //save game to file
+    replayGame(file, list, 1);
+
 	deleteList(list);
 	list = NULL;
 }
