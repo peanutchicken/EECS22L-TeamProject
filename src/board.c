@@ -57,6 +57,7 @@ void playerVsPlayer(char gameBoard[8][8][2], FILE *file)
 
 // game runner that loops through human vs AI chess game
 void playerVsAI(char gameBoard[8][8][2], FILE *file) {
+
 	moveList* list = createList();
 	bool playerExit = false;
 	char playerColor;
