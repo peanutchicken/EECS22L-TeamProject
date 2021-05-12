@@ -151,7 +151,9 @@ void moveDifference(char out[5],char gameBoard1[8][8][2], char gameBoard2[8][8][
             //finds where the two boards are different, should be 2 positions
             if((gameBoard1[i][j][0]!=gameBoard2[i][j][0])&&(gameBoard1[i][j][1]!=gameBoard2[i][j][1])) 
             { 
-                if(gameBoard1[i][j][0]==' ')
+                if((gameBoard1[i][j][0]==' ')                           ||
+                   (gameBoard1[i][j][0]=='w'&&gameBoard2[i][j][0]=='b') ||
+                   (gameBoard1[i][j][0]=='b'&&gameBoard2[i][j][0]=='w')     )
                 {
                     to[0] = 'A'+j;
                     to[1] = '8'-i;
@@ -167,6 +169,25 @@ void moveDifference(char out[5],char gameBoard1[8][8][2], char gameBoard2[8][8][
 
         }
     }
+
+    for(int i=0;i<8;i++){
+        for(int j=0;j<8;j++)
+        {
+            
+             if(   (gameBoard1[i][j][0]=='w'&&gameBoard2[i][j][0]=='b') ||
+                   (gameBoard1[i][j][0]=='b'&&gameBoard2[i][j][0]=='w')     )
+                {
+                    to[0] = 'A'+j;
+                    to[1] = '8'-i;
+                    to[2] = '\0';
+                }
+
+        }
+    }
+
+
+    
+    
     strcat(retVal,from);
     strcat(retVal,",");
     strcat(retVal,to);
