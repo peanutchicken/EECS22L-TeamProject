@@ -17,10 +17,9 @@
 #include <stdbool.h>
 
 #include "ai.h"
-#include "legalityCheck.h"
 
 //makes a legal move for the specified player
-void makeMove(char gameBoard[8][8][2], char player)
+void makeMove(moveList *m, char gameBoard[8][8][2], char player)
 {
     srand(time(0));
     //row/column values variables for original value
@@ -34,6 +33,8 @@ void makeMove(char gameBoard[8][8][2], char player)
     //char values for passing to legalMove()
     char from[2];
     char to[2];
+    //int array used to add move to linkedlist
+    int lastMove[4];
 
     int tempValue;
 
@@ -111,13 +112,17 @@ void makeMove(char gameBoard[8][8][2], char player)
     }
     
 
-    
+    lastMove[0] = fromRow;
+    lastMove[1] = fromCol;
+    lastMove[2] = toRow;
+    lastMove[3] = toCol;
 
-    
-    
+    append(m, gameBoard, lastMove);
 
+    //in passing to this, only the move[4] values are used to add it in; from[2] and to[2]
+    //are only for legacy support
 
-    //code from the end of player input to maintain consistancy
+    //move piece
     gameBoard[toRow][toCol][0] = gameBoard[fromRow][fromCol][0];
 	gameBoard[toRow][toCol][1] = gameBoard[fromRow][fromCol][1];
 	gameBoard[fromRow][fromCol][0] = ' ';

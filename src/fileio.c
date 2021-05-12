@@ -72,12 +72,6 @@ int revertPrintNotation(char asciiMove[4], int lastMove[4])
     asciiMove[3] = 56 - lastMove[2]; 
     asciiMove[2] = lastMove[3] + 65;
 
-    /*
-    //DEBUG STATEMENT
-    for (int i = 0; i < 4; i++)
-        printf("%c", asciiMove[i]);
-    */
-
     return 0;
 }
 

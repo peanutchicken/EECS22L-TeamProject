@@ -57,7 +57,7 @@ void playerVsPlayer(char gameBoard[8][8][2], FILE *file)
 
 // game runner that loops through human vs AI chess game
 void playerVsAI(char gameBoard[8][8][2], FILE *file) {
-   /* 
+
 	moveList* list = createList();
 	bool playerExit = false;
 	char playerColor;
@@ -65,51 +65,58 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 	printf("\nWelcome to Player vs AI chess game!\n");
 	printf("Choose White('w') or Black('b'): ");
 	scanf(" %c", &playerColor);
+
 	while (!(playerColor == 'w' || playerColor == 'b')) {
 		printf("Invalid color. White('w') or Black('b'): ");
 		scanf(" %c", &playerColor);
 	}
 	printBoard(gameBoard);
-	append(list,gameBoard);
+
+    //blank move for first position in board list
+    int latestMove[4];
+	append(list, gameBoard, latestMove);
+
 	// main loop
 	while (!winCheck(gameBoard) && !playerExit) {
 		if (playerColor == 'w') {
-			playerExit = playerInput(gameBoard, 'w');
+			playerExit = playerInput(list, gameBoard, 'w');
 			if (!playerExit) {
 				printBoard(gameBoard);
 			}
-			append(list, gameBoard);
+
 			if (winCheck(gameBoard) || playerExit) {
 				break;
 			}
+
 			// here is where AI makes its move
-			makeMove(gameBoard,'b');
+			makeMove(list, gameBoard,'b');
 			printBoard(gameBoard);
-			append(list,gameBoard);
 
 			//takeBackMove(gameBoard,list);
 		} else if (playerColor == 'b') {
 			// here is where AI makes its move
-			makeMove(gameBoard,'w');
+			makeMove(list, gameBoard,'w');
 			printBoard(gameBoard);
-			if (winCheck(gameBoard)) {
+
+			if (winCheck(gameBoard)) 
 				break;
-			}
-			append(list,gameBoard);
-			playerExit = playerInput(gameBoard, 'b');
-			if (!playerExit) {
+			
+
+            //here's where the player makes their move
+			playerExit = playerInput(list, gameBoard, 'b');
+
+			if (!playerExit) 
 				printBoard(gameBoard);
-			}
-			// append the move list here
-			append(list,gameBoard);
 
 			//takeBackMove(gameBoard,list);
 		}
 	}
 
+    //save game to file
+    replayGame(file, list, 1);
+
 	deleteList(list);
 	list = NULL;
-    */	
 }
 
 // print current state of the chess board and its pieces
@@ -255,6 +262,8 @@ void suggestedMove(char gameBoard[8][8][2], char player)
 
 	//temporary gameboard
 	char tempGameBoard[8][8][2];
+    //temporary linkedlist
+	moveList* list = createList();
 
 	//suggested move output
 	char suggestedOut[5];
@@ -271,8 +280,9 @@ void suggestedMove(char gameBoard[8][8][2], char player)
 	}
 
 
+    //use temporary moveList to that the suggested move doesn't get added to the real one
 
-	makeMove(tempGameBoard,player);
+	makeMove(list, tempGameBoard,player);
 
 	//printf("made Move in suggestedMove");
 

@@ -4,6 +4,8 @@
 # Executables
 src/chessGame
 src/testChessGame
+bin/chessGame
+bin/chess
 
 # client spec
 ProjectSpecFromClient.pdf
