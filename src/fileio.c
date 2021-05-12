@@ -76,6 +76,7 @@ int replayGame(FILE *file, moveList *m, char gameOpponent)
         if (!current->latestMove)
             continue;
 
+        //weird indexing on this is to account for blank move & board at beginning of list
         if (a % 2 == 1)
             fprintf(file, "w: ");
         else if (a == 0)
@@ -93,6 +94,7 @@ int replayGame(FILE *file, moveList *m, char gameOpponent)
         current=current->next;
         a++;
     } while(current->next!=NULL);
+
     fprintBoard((m->last)->gameBoard, file);
 
     //end of file
