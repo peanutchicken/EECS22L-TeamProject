@@ -7,10 +7,7 @@ Authors: Jacob Bokor, Rayi Lam, Nghi Nguyen, Ryan Shum, Lichen Wang
 
 Date: 5/12/2021
 
-For copyright information, please refer to COPYRIGHT.
-
-For installation instructions, please refer to INSTALL.
-
-For more information about playing the game, please refer to Chess_UserManual.pdf.
-	 
-For more information about the technical details of th program, including technical documentation, please refer to Chess_SoftwareSpec.pdf. 
+* For copyright and license information, please refer to COPYRIGHT.
+* For installation instructions, please refer to INSTALL.
+* For more information about playing the game, please refer to Chess_UserManual.pdf.
+* For more information about the technical details of th program, including technical documentation, please refer to Chess_SoftwareSpec.pdf. 

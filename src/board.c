@@ -88,22 +88,18 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 			}
 
 			// here is where AI makes its move
-			makeMove(gameBoard,'b');
+			makeMove(list, gameBoard,'b');
 			printBoard(gameBoard);
-            //this needs to be moved to ai move function
-			//append(list,gameBoard);
 
 			//takeBackMove(gameBoard,list);
 		} else if (playerColor == 'b') {
 			// here is where AI makes its move
-			makeMove(gameBoard,'w');
+			makeMove(list, gameBoard,'w');
 			printBoard(gameBoard);
 
 			if (winCheck(gameBoard)) 
 				break;
 			
-            //this needs to be moved to ai move function
-			//append(list,gameBoard);
 
             //here's where the player makes their move
 			playerExit = playerInput(list, gameBoard, 'b');
@@ -262,6 +258,8 @@ void suggestedMove(char gameBoard[8][8][2], char player)
 
 	//temporary gameboard
 	char tempGameBoard[8][8][2];
+    //temporary linkedlist
+	moveList* list = createList();
 
 	//suggested move output
 	char suggestedOut[5];
@@ -278,8 +276,9 @@ void suggestedMove(char gameBoard[8][8][2], char player)
 	}
 
 
+    //use temporary moveList to that the suggested move doesn't get added to the real one
 
-	makeMove(tempGameBoard,player);
+	makeMove(list, tempGameBoard,player);
 
 	//printf("made Move in suggestedMove");
 
