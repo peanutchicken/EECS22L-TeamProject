@@ -27,7 +27,7 @@ void playerVsPlayer(char gameBoard[8][8][2], FILE *file)
 	printBoard(gameBoard);
 
     // adds the starting board state
-    int latestMove[4];      //blank move to pass to first append
+    int latestMove[4] = {0,0,0,0};      //blank move to pass to first append
 	append(list,gameBoard, latestMove); 
 
 	// main loop
@@ -73,7 +73,7 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 	printBoard(gameBoard);
 
     //blank move for first position in board list
-    int latestMove[4];
+    int latestMove[4] = {0,0,0,0};
 	append(list, gameBoard, latestMove);
 
 	// main loop
@@ -149,7 +149,7 @@ bool playerInput(moveList *m, char gameBoard[8][8][2], char player) {
 	char move[4];       // 2 coordinates that the user wants to move the chess piece to
 	char from[2];       // start coordinate to pass into legalMove
 	char to[2];         // end coordinate to pass into legalMove
-    int lastMove[4];    //last move made in int arr format
+    int lastMove[4] = {0,0,0,0};    //last move made in int arr format
 	bool playerExit = false; // if the player chooses to exit the game or not
 
 
@@ -291,6 +291,9 @@ void suggestedMove(char gameBoard[8][8][2], char player)
 	moveDifference(suggestedOut, gameBoard, tempGameBoard);
 	//printf("found move difference in suggestedMove");
 	printf("\nPsssst... try %s.\n", suggestedOut);
+
+	deleteList(list);
+	list = NULL;
 }
 
 void takeBackMove(char gameBoard[8][8][2], moveList* list)
