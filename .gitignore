@@ -6,6 +6,7 @@ src/chessGame
 src/testChessGame
 bin/chessGame
 bin/chess
+src/testclient
 
 # client spec
 ProjectSpecFromClient.pdf

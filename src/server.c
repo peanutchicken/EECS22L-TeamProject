@@ -1,59 +1,59 @@
 #include "server.h"
 
-int main(int argc, char *argv[])
-{
-    //creating the test accounts
-    // account test1, test2;
+// int main(int argc, char *argv[])
+// {
+//     //creating the test accounts
+//     // account test1, test2;
 
-    // test1.username = "test1";
-    // test1.password = "test1";
-    // test1.socket = 0;
-    // test1.opponentSocket = 0;
-    // test1.next = &test2;
-    // test1.prev = NULL;
-
-
-    // test2.username = "test2";
-    // test2.password = "test2";
-    // test2.socket = 0;
-    // test2.opponentSocket = 0;
-    // test2.next = NULL;
-    // test2.prev = &test1;
-
-    accountList list;
-    // list.first = test1;
-    // list.last = test2;
+//     // test1.username = "test1";
+//     // test1.password = "test1";
+//     // test1.socket = 0;
+//     // test1.opponentSocket = 0;
+//     // test1.next = &test2;
+//     // test1.prev = NULL;
 
 
-    int serverSocket = serverInit(SERVERPORT, 5);
-    fd_set availableSockets;
-    fd_set readySockets;
+//     // test2.username = "test2";
+//     // test2.password = "test2";
+//     // test2.socket = 0;
+//     // test2.opponentSocket = 0;
+//     // test2.next = NULL;
+//     // test2.prev = &test1;
 
-    FD_ZERO(&availableSockets);
-    FD_SET(serverSocket, &availableSockets);
+//     accountList list;
+//     // list.first = test1;
+//     // list.last = test2;
 
-    while (1)
-    {
-        readySockets = availableSockets;
-        select(FD_SETSIZE, &readySockets, NULL, NULL, NULL);
-        for (int i = 0; i < FD_SETSIZE; i++)
-        {
-            if (FD_ISSET(i, &readySockets))
-            {
-                if(i == serverSocket) //new connection
-                {
-                    int tempSocket = acceptConnection(serverSocket);
-                    FD_SET(tempSocket, &availableSockets);
-                }
-                else //client is ready to send data
-                {
-                    doStuff(i, list);
-                    FD_CLR(i,&availableSockets);
-                }
-            }
-        }
-    }
-}
+
+//     int serverSocket = serverInit(SERVERPORT, 5);
+//     fd_set availableSockets;
+//     fd_set readySockets;
+
+//     FD_ZERO(&availableSockets);
+//     FD_SET(serverSocket, &availableSockets);
+
+//     while (1)
+//     {
+//         readySockets = availableSockets;
+//         select(FD_SETSIZE, &readySockets, NULL, NULL, NULL);
+//         for (int i = 0; i < FD_SETSIZE; i++)
+//         {
+//             if (FD_ISSET(i, &readySockets))
+//             {
+//                 if(i == serverSocket) //new connection
+//                 {
+//                     int tempSocket = acceptConnection(serverSocket);
+//                     FD_SET(tempSocket, &availableSockets);
+//                 }
+//                 else //client is ready to send data
+//                 {
+//                     doStuff(i, list);
+//                     FD_CLR(i,&availableSockets);
+//                 }
+//             }
+//         }
+//     }
+// }
 
 int serverInit(short port, int backlog)
 {
