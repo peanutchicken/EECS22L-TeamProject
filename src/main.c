@@ -22,6 +22,7 @@
 #include "legalityCheck.h"
 #include "fileio.h"
 #include "server.h"
+#include "account.h"
 
 /* declare printMenu function below */
 void PrintMenu();

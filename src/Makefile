@@ -39,7 +39,7 @@ account.o: account.c account.h
 main.o: main.c board.c board.h movelist.c movelist.h ai.c ai.h legalityCheck.c legalityCheck.h fileio.c fileio.h server.h account.h
 	$(CC) $(CFLAGS) main.c -o main.o
 
-server.o: server.c server.h
+server.o: server.c server.h account.h
 	$(CC) $(CFLAGS) server.c -o server.o
 
 testclient.o: testclient.c
@@ -62,8 +62,8 @@ testChessGame: DEBUG_main.o board.o movelist.o ai.o legalityCheck.o fileio.o ser
 testclient: testclient.o
 	$(CC) $(LFLAGS) -DNDEBUG testclient.o -o testclient
 
-server: server.o
-	$(CC) $(LFLAGS) -DNDEBUG server.o -o server
+server: server.o account.o
+	$(CC) $(LFLAGS) -DNDEBUG server.o account.o -o server
 
 #MAKE TARGET TO TAR PACKAGE
 #tar:

@@ -67,7 +67,8 @@ int main()
     short port = 10300;
     int recvBufSize;
     
-    Server = gethostbyname("crystalcove.eecs.uci.edu");
+    //Server = gethostbyname("crystalcove.eecs.uci.edu");
+    Server = gethostbyname("zuma.eecs.uci.edu");
 
     ServerAddress.sin_family = AF_INET;
 	ServerAddress.sin_port = htons(port);
@@ -93,7 +94,10 @@ int main()
         RecvBuf[recvBufSize] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
 
         printf("Received response: %s\n",  RecvBuf); 
-
+	if (RecvBuf == "1")
+	{
+		break;
+	}
     } while(atoi(RecvBuf)!=1); //wait for server to respond with 1 for succesful login, atoi() converts string number inputs to an integer value. ie: converts "1" to integer number 1
 
     printf("Succesful Login!"); //if the loop breaks then the login was successful
