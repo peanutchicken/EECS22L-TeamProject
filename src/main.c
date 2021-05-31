@@ -20,11 +20,45 @@
 #include "ai.h"
 #include "legalityCheck.h"
 #include "fileio.h"
+#include "networking.h"
 
 /* declare printMenu function below */
 void PrintMenu();
+int mainGame();
+void printLoginMenu();
 
 int main()
+{
+	int n, game = 0;
+
+	printLoginMenu();
+	scanf("%d", &n);
+	while(n != 3 && game == 0) {
+		switch (n) {
+			case 1:
+				login();
+				game = 1;
+				break;
+			case 2:
+				registerAcct();
+				break;
+			default:
+				printf("Invalid Option\n");
+		}
+		if (game == 0) {
+			printLoginMenu();
+			scanf("%d", &n);
+		}
+	}
+
+	if (game != 0) {
+		mainGame();
+	}
+
+	return 0;
+}
+
+int mainGame()
 {       
 	int n;
 
@@ -66,7 +100,6 @@ int main()
 /* Menu */
 void PrintMenu()
 {
-
     printf("\n-------------------------\n");
     printf(" 1: Player vs player\n");
     printf(" 2: Player vs AI\n");
@@ -74,4 +107,16 @@ void PrintMenu()
     printf("\n-------------------------\n");
     printf("Please make your choice: ");
 }
+
+// login menu
+void printLoginMenu()
+{
+    printf("\n-------------------------\n");
+    printf(" 1: Log in\n");
+    printf(" 2: Register for a new account\n");
+    printf(" 3: Exit Program\n");
+    printf("\n-------------------------\n");
+    printf("Please make your choice: ");
+}
+
 /* EOF */
