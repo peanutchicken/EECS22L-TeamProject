@@ -165,7 +165,6 @@ bool playerInput(moveList *m, char gameBoard[8][8][2], char player) {
 		// exit
 		if (move[0] == 'e' && move[1] == 'x' && move[2] == 'i' && move[3] == 't') {
 			playerExit = true;
-			return true;
 		}
 
         lastMoveConvert(move, from, to, lastMove);
@@ -180,7 +179,6 @@ bool playerInput(moveList *m, char gameBoard[8][8][2], char player) {
 			// exit
 			if (move[0] == 'e' && move[1] == 'x' && move[2] == 'i' && move[3] == 't') {
 				playerExit = true;
-				return true;
 			}
 
         lastMoveConvert(move, from, to, lastMove);
@@ -198,7 +196,6 @@ bool playerInput(moveList *m, char gameBoard[8][8][2], char player) {
 		// exit
 		if (move[0] == 'e' && move[1] == 'x' && move[2] == 'i' && move[3] == 't') {
 			playerExit = true;
-			return true;
 		}
 
         //convert char input values to ascii
@@ -214,7 +211,6 @@ bool playerInput(moveList *m, char gameBoard[8][8][2], char player) {
 			// exit
 			if (move[0] == 'e' && move[1] == 'x' && move[2] == 'i' && move[3] == 't') {
 				playerExit = true;
-				return true;
 			}
 
             lastMoveConvert(move, from, to, lastMove);
