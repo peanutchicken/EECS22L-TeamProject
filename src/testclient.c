@@ -67,8 +67,7 @@ int main()
     short port = 10300;
     int recvBufSize;
     
-    //Server = gethostbyname("crystalcove.eecs.uci.edu");
-    Server = gethostbyname("zuma.eecs.uci.edu");
+    Server = gethostbyname("crystalcove.eecs.uci.edu");
 
     ServerAddress.sin_family = AF_INET;
 	ServerAddress.sin_port = htons(port);
