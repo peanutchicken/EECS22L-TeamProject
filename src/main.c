@@ -22,13 +22,13 @@
 #include "legalityCheck.h"
 #include "fileio.h"
 #include "server.h"
-
+#include "account.h"
 
 /* declare printMenu function below */
 void PrintMenu();
 
 int main()
-{       
+{
 	// int n;
 
     // //set up file to write output to
@@ -165,7 +165,6 @@ int main()
 /* Menu */
 void PrintMenu()
 {
-
     printf("\n-------------------------\n");
     printf(" 1: Player vs player\n");
     printf(" 2: Player vs AI\n");
@@ -173,4 +172,5 @@ void PrintMenu()
     printf("\n-------------------------\n");
     printf("Please make your choice: ");
 }
+
 /* EOF */
