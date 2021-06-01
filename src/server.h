@@ -10,29 +10,12 @@
 #include <sys/types.h>
 #include <sys/select.h>
 
+#include "account.h"
+
 #define SERVERPORT 10300
 
-struct accountList{
-    struct account* first;
-    struct account* last;
-};
-
-struct account{
-    char username[10];
-    char password[10];
-    int socket;
-    int opponentSocket;
-    struct account* next;
-    struct account* prev;
-    
-};
-
-typedef struct account account;
-typedef struct accountList accountList;
 typedef struct sockaddr_in sockaddr_in;
 typedef struct sockaddr sockaddr;
-
-
 
 //does the inital server setup, and returns the server socket
 int serverInit(short port, int backlog);
@@ -41,14 +24,11 @@ int serverInit(short port, int backlog);
 int acceptConnection(int serverSocket);
 
 //handles the parsing of the data sent, and also sends data to other client
-int doStuff(int clientSocket, accountList list);
+int doStuff(int clientSocket, accountList *list);
 
 //handles login. data comes in form -l <username> <password>.
 //returns 1 if successful login
 //returns 0 if unsuccessful
-int usernameCheck(int socket, char* data, accountList list);
-
-//returns pointer to account with a specified socket
-account* findAccount(int socket, accountList list);
+int usernameCheck(int socket, char* data, accountList *list);
 
 #endif /* SERVER */

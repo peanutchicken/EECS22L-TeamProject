@@ -85,7 +85,7 @@ int acceptConnection(int serverSocket)
     return accept(serverSocket, (sockaddr *)&clientAddress, (socklen_t *)&addressSize);
 }
 
-int doStuff(int clientSocket,accountList list)
+int doStuff(int clientSocket,accountList *list)
 {
     int echo=1; //if echo is 0, send the sendBuffer to the opponent socket of the account attached to the client socket
     int readRet;
