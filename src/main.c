@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "constants.h"
 #include "board.h"
@@ -73,7 +74,7 @@ int main()
 
     int readRet;
 
-
+    int n, m;
     int serverSocket = serverInit(SERVERPORT, 5);
     fd_set availableSockets;
     fd_set readySockets;
@@ -104,7 +105,7 @@ int main()
                     char sendBuffer[256];
 
                     
-                    readRet = read(i,recvBuffer,sizeof(recvBuffer-1)); //readRet now contains the length of the data sent by the client
+                    readRet = read(i,recvBuffer,sizeof(recvBuffer)-1); //readRet now contains the length of the data sent by the client
 
                     recvBuffer[readRet]=0; //setting the last n'th value of recvBuffer to NULL so that we can use string functions on it and print it as a string
 
@@ -115,8 +116,22 @@ int main()
                         switch(recvBuffer[1]) //switch case for all the commands
                         {
                             case 'm': //message
-                                
-                                printf("Server received a message\n");
+				printf("Server received a message\n");
+                               // n  = read(clientSocket, recvBuffer, sizeof(recvBuffer-1));
+                                /*
+            			if (n < 0)
+            			{   
+					FatalError(argv[0], "reading from data socket failed");
+            			}
+				*/
+                                //strncpy(sendBuffer, "Server received the message",sizeof(sendBuffer) - 1);
+				//m  = write(clientSocket,sendBuffer, sizeof(sendBuffer-1));
+				/*
+            			if (n < 0)
+            			{   
+					FatalError(argv[0], "writing to data socket failed");
+            			}
+				*/
                                 break;
 
                             case 'l': //login request
@@ -127,7 +142,9 @@ int main()
                                 //grabs the username
                                 char* username = strtok(NULL," ");
 
-                                if(strcmp(username,"test1")||strcmp(username,"test2")) //checking against the testing usernames
+				m = strcmp(username,"test1");
+			
+                                if((strcmp(username,"test1") == 10) || (strcmp(username,"test2") == 10)) //checking against the testing usernames
                                 {
                                     strcpy(sendBuffer,"1");
                                 }
