@@ -72,7 +72,7 @@ int main()
 
 
     int readRet;
-
+    int running = 1;
 
     int serverSocket = serverInit(SERVERPORT, 5);
     fd_set availableSockets;
@@ -82,7 +82,7 @@ int main()
     FD_SET(serverSocket, &availableSockets);
     printf("\nserver initialized, beginning running loop\n");
     //server running loop
-    while (1)
+    while (running==1)
     {
         readySockets = availableSockets;
         printf("waiting for select\n");
@@ -117,6 +117,8 @@ int main()
                             case 'm': //message
                                 
                                 printf("Server received a message\n");
+                                strcpy(sendBuffer, "message recieved");
+                                write(i,sendBuffer,strlen(sendBuffer));
                                 break;
 
                             case 'l': //login request
@@ -137,7 +139,16 @@ int main()
                                 }
                                 write(i,sendBuffer,strlen(sendBuffer)); //sends the sendBuffer back to the client that sent data
                                 break;
+                            case 'q': //quits the server
+                                printf("Quitting the server\n");
+                                strcpy(sendBuffer, "Quitting server");
+                                write(i,sendBuffer,strlen(sendBuffer));
+                                running = 0;
+                                break;
                             default:
+                                printf("unrecognized command\n");
+                                strcpy(sendBuffer, "unknown command");
+                                write(i,sendBuffer,strlen(sendBuffer));
                                 break;
                         }
                     }
@@ -147,7 +158,7 @@ int main()
             }
         }
     }
-
+    close(serverSocket);
 	return 0;
 }
 

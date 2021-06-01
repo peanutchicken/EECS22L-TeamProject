@@ -84,7 +84,7 @@ int main()
         strcat(SendBuf, "-l ");
         strcat(SendBuf,username);
         l = strlen(SendBuf);
-        printf("send buffer = %s",SendBuf);
+        printf("send buffer = %s\n",SendBuf);
         int connectRet=connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
         printf("connectRet=%d\n",connectRet);
         write(SocketFD, SendBuf, l); //write to the socket
@@ -96,19 +96,26 @@ int main()
 
     } while(atoi(RecvBuf)!=1); //wait for server to respond with 1 for succesful login, atoi() converts string number inputs to an integer value. ie: converts "1" to integer number 1
 
-    printf("Succesful Login!"); //if the loop breaks then the login was successful
+    printf("Succesful Login!\n"); //if the loop breaks then the login was successful
 
 
     //this is where the menu for client would go, will need a way for server to know game started, possibly start as soon as both players are ready. Maybe send a specific flag for readying?
 
-    
-    //game loop for receiving and sending data
+    //basic input and recieve loop
     while(1)
     {
-        SocketFD = socket(AF_INET, SOCK_STREAM, 0); //setup socket
+        SocketFD = socket(AF_INET, SOCK_STREAM, 0);
+
+        printf("Enter a command to send to the server:\n");
+        printf("-l for login, -m for message, -q to close server\n");
+
+        fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
+
+		l = strlen(SendBuf); //length of the sendbuffer
 
         connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
 
+        write(SocketFD, SendBuf, l); //write to the socket
 
         n = read(SocketFD, RecvBuf, sizeof(RecvBuf) - 1); //server respnse data
 
@@ -118,14 +125,40 @@ int main()
 
 		printf("Received response: %s\n",  RecvBuf); 
         
-        fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
-
-		l = strlen(SendBuf); //length of the sendbuffer
-        
-        write(SocketFD, SendBuf, l); //write to the socket
+        if(SendBuf[0]=='-'&&SendBuf[1]=='q')
+        {
+            printf("quitting client\n");
+            close(SocketFD);
+            return 0;
+        }
 
     }
     
+    // //game loop for receiving and sending data, just for reference, commented out for whoever implements the game loop
+    // while(1)
+    // {
+    //     SocketFD = socket(AF_INET, SOCK_STREAM, 0); //setup socket
+
+    //     connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
+
+
+    //     n = read(SocketFD, RecvBuf, sizeof(RecvBuf) - 1); //server respnse data
+
+
+    //     RecvBuf[n] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
+
+
+	// 	printf("Received response: %s\n",  RecvBuf); 
+        
+    //     fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
+
+	// 	l = strlen(SendBuf); //length of the sendbuffer
+        
+    //     write(SocketFD, SendBuf, l); //write to the socket
+
+    // }
+    
     close(SocketFD);
 
+    return 0;
 }
