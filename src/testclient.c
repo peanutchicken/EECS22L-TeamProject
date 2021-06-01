@@ -92,11 +92,8 @@ int main()
         recvBufSize = read(SocketFD, RecvBuf, sizeof(RecvBuf) - 1); //read server response
         RecvBuf[recvBufSize] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
 
-        printf("Received response: %s\n",  RecvBuf); 
-	if (RecvBuf == "1")
-	{
-		break;
-	}
+        printf("Received response: %s\n",  RecvBuf);
+ 
     } while(atoi(RecvBuf)!=1); //wait for server to respond with 1 for succesful login, atoi() converts string number inputs to an integer value. ie: converts "1" to integer number 1
 
     printf("Succesful Login!"); //if the loop breaks then the login was successful
