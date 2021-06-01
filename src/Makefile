@@ -1,7 +1,7 @@
 #Makefile for EECS22L Team03 Chess Project
 
 #this is where library name will go
-DESIGN = chessGame testChessGame testclient server
+DESIGN = chessGame testChessGame gameClient server
 LIBS = 
 
 #makefile var defs
@@ -12,7 +12,7 @@ LFLAGS = -ansi -std=c99 -Wall
 AR     = ar rc
 RANLIB = ranlib
 
-all: chessGame testChessGame testclient
+all: chessGame testChessGame gameClient
 
 ########################################
 #Generate object files
@@ -42,8 +42,8 @@ main.o: main.c board.c board.h movelist.c movelist.h ai.c ai.h legalityCheck.c l
 server.o: server.c server.h account.h
 	$(CC) $(CFLAGS) server.c -o server.o
 
-testclient.o: testclient.c
-	$(CC) $(CFLAGS) testclient.c -o testclient.o
+gameClient.o: gameClient.c
+	$(CC) $(CFLAGS) gameClient.c -o gameClient.o
 
 #just because a main debug target exists DOES NOT mean that debug is enabled on all other object files
 DEBUG_main.o: main.c board.c board.h movelist.c movelist.h ai.c ai.h legalityCheck.c legalityCheck.h fileio.c fileio.h account.h
@@ -59,8 +59,8 @@ chessGame: main.o board.o movelist.o ai.o legalityCheck.o fileio.o server.o acco
 testChessGame: DEBUG_main.o board.o movelist.o ai.o legalityCheck.o fileio.o server.o account.o
 	$(CC) $(LFLAGS) $(DEBUG) DEBUG_main.o board.o movelist.o ai.o legalityCheck.o fileio.o server.o account.o -o testChessGame
 
-testclient: testclient.o
-	$(CC) $(LFLAGS) -DNDEBUG testclient.o -o testclient
+gameClient: gameClient.o
+	$(CC) $(LFLAGS) -DNDEBUG gameClient.o -o gameClient
 
 server: server.o account.o
 	$(CC) $(LFLAGS) -DNDEBUG server.o account.o -o server

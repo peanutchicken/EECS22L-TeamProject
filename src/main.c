@@ -125,7 +125,8 @@ int main()
                                 printf("Server received a login request\n");
 
                                 //checks the username against the two test accounts, will need to implement a working account system
-                                char* input = strtok(recvBuffer," "); //removes the -l
+                                //currently unused??
+                                //char* input = strtok(recvBuffer," "); //removes the -l
                                 //grabs the username
                                 char* username = strtok(NULL," ");
 
