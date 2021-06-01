@@ -5,6 +5,8 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+#include "addr_server.h"
+
 int main()
 {
     // int l, n;
@@ -67,7 +69,7 @@ int main()
     short port = 10300;
     int recvBufSize;
     
-    Server = gethostbyname("crystalcove.eecs.uci.edu");
+    Server = gethostbyname(addr_server);
 
     ServerAddress.sin_family = AF_INET;
 	ServerAddress.sin_port = htons(port);
@@ -162,4 +164,3 @@ int main()
 
     return 0;
 }
-
