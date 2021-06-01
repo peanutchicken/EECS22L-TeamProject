@@ -13,6 +13,9 @@ ProjectSpecFromClient.pdf
 
 chessGameReplay.txt
 
+#server address
+addr_server.h
+
 # Object files
 *.o
 *.ko
