@@ -10,6 +10,8 @@ void printBoard(char gameBoard[8][8][2]);
 int printMenu();
 
 
+#include "addr_server.h"
+
 int main()
 {
     // int l, n;
@@ -72,7 +74,7 @@ int main()
     short port = 10300;
     int recvBufSize;
     
-    Server = gethostbyname("crystalcove.eecs.uci.edu");
+    Server = gethostbyname(addr_server);
 
     ServerAddress.sin_family = AF_INET;
     ServerAddress.sin_port = htons(port);
@@ -93,7 +95,7 @@ int main()
         strcat(SendBuf, "-l ");
         strcat(SendBuf,username);
         l = strlen(SendBuf);
-        printf("send buffer = %s",SendBuf);
+        printf("send buffer = %s\n",SendBuf);
         int connectRet=connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
         printf("connectRet=%d\n",connectRet);
         write(SocketFD, SendBuf, l); //write to the socket
@@ -101,14 +103,15 @@ int main()
         recvBufSize = read(SocketFD, RecvBuf, sizeof(RecvBuf)- 1); //read server response
         RecvBuf[recvBufSize] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
 
-        printf("Received response: %s\n",  RecvBuf); 
-
+        printf("Received response: %s\n",  RecvBuf);
+ 
     } while(atoi(RecvBuf)!=1); //wait for server to respond with 1 for succesful login, atoi() converts string number inputs to an integer value. ie: converts "1" to integer number 1
 
     printf("Succesful Login!\n"); //if the loop breaks then the login was successful
 
 
     //this is where the menu for client would go, will need a way for server to know game started, possibly start as soon as both players are ready. Maybe send a specific flag for readying?
+
     printf("\nPlayer vs. Player Game Start\n");
   char gameBoard[8][8][2] = {
                                     {"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
@@ -125,21 +128,25 @@ int main()
     //game loop for receiving and sending data
     
     /*
+
+    //basic input and recieve loop
+
     while(1)
     {
-        SocketFD = socket(AF_INET, SOCK_STREAM, 0); //setup socket
+        SocketFD = socket(AF_INET, SOCK_STREAM, 0);
+
+        printf("Enter a command to send to the server:\n");
+        printf("-l for login, -m for message, -q to close server\n");
+
+        fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
+
+		l = strlen(SendBuf); //length of the sendbuffer
 
         connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
-
-	//printf("Sending message to the server: ");
-	//fgets(SendBuf, sizeof(SendBuf), stdin);
-	
-	//format the message as "-m <message>"
-	//strcat(SendBuf, "-m");
-        //l = strlen(SendBuf);
-	//n = write(SocketFD, SendBuf, l);
         
        
+        write(SocketFD, SendBuf, l); //write to the socket
+
         n = read(SocketFD, RecvBuf, sizeof(RecvBuf) - 1); //server respnse data
 
 
@@ -148,35 +155,39 @@ int main()
 
 	printf("Received response: %s\n",  RecvBuf); 
         
-        fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
+        if(SendBuf[0]=='-'&&SendBuf[1]=='q')
+        {
+            printf("quitting client\n");
+            close(SocketFD);
+            return 0;
+        }
 
-	l = strlen(SendBuf); //length of the sendbuffer
+    }
+    
+    // //game loop for receiving and sending data, just for reference, commented out for whoever implements the game loop
+    // while(1)
+    // {
+    //     SocketFD = socket(AF_INET, SOCK_STREAM, 0); //setup socket
+
+    //     connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
+
+
+    //     n = read(SocketFD, RecvBuf, sizeof(RecvBuf) - 1); //server respnse data
+
+
+    //     RecvBuf[n] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
+
+
+	// 	printf("Received response: %s\n",  RecvBuf); 
+>>>>>>> master:src/gameClient.c
         
-        write(SocketFD, SendBuf, l); //write to the socket
+    //     fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
 
+<<<<<<< HEAD:src/testclient.c
     }*/
 	
 //}
-/*
-else if (input == 2)
-{
-        SocketFD = socket(AF_INET, SOCK_STREAM, 0); //setup socket
-        printf("Enter your message: ");
-
-        fgets(message, sizeof(message), stdin); //takes input
-
-        //formats the username login as "-m <message>"
-        strcat(SendBuf, "-m ");
-        strcat(SendBuf,message);
-        l = strlen(SendBuf);
-        printf("send buffer = %s",SendBuf);
-        int connectRet=connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
-        printf("connectRet=%d\n",connectRet);
-        write(SocketFD, SendBuf, l); //write to the socket
-
-        recvBufSize = read(SocketFD, RecvBuf, sizeof(RecvBuf)- 1); //read server response
-        RecvBuf[recvBufSize] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
-}*/
+       
     
     close(SocketFD);
 //}
@@ -219,4 +230,4 @@ int printMenu()
 }
 
 
-
+}

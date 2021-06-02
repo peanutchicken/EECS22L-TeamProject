@@ -23,13 +23,13 @@
 #include "legalityCheck.h"
 #include "fileio.h"
 #include "server.h"
-
+#include "account.h"
 
 /* declare printMenu function below */
 void PrintMenu();
 
 int main()
-{       
+{
 	// int n;
 
     // //set up file to write output to
@@ -74,7 +74,8 @@ int main()
 
     int readRet;
 
-    int n, m;
+    int running = 1;
+
     int serverSocket = serverInit(SERVERPORT, 5);
     fd_set availableSockets;
     fd_set readySockets;
@@ -83,7 +84,7 @@ int main()
     FD_SET(serverSocket, &availableSockets);
     printf("\nserver initialized, beginning running loop\n");
     //server running loop
-    while (1)
+    while (running==1)
     {
         readySockets = availableSockets;
         printf("waiting for select\n");
@@ -116,33 +117,21 @@ int main()
                         switch(recvBuffer[1]) //switch case for all the commands
                         {
                             case 'm': //message
-				printf("Server received a message\n");
-                               // n  = read(clientSocket, recvBuffer, sizeof(recvBuffer-1));
-                                /*
-            			if (n < 0)
-            			{   
-					FatalError(argv[0], "reading from data socket failed");
-            			}
-				*/
-                                //strncpy(sendBuffer, "Server received the message",sizeof(sendBuffer) - 1);
-				//m  = write(clientSocket,sendBuffer, sizeof(sendBuffer-1));
-				/*
-            			if (n < 0)
-            			{   
-					FatalError(argv[0], "writing to data socket failed");
-            			}
-				*/
+
+                                printf("Server received a message\n");
+                                strcpy(sendBuffer, "message recieved");
+                                write(i,sendBuffer,strlen(sendBuffer));
                                 break;
 
                             case 'l': //login request
                                 printf("Server received a login request\n");
 
                                 //checks the username against the two test accounts, will need to implement a working account system
-                                char* input = strtok(recvBuffer," "); //removes the -l
+                                //compiler whines about this??
+                                //char* input = 
+                                strtok(recvBuffer," "); //removes the -l
                                 //grabs the username
                                 char* username = strtok(NULL," ");
-
-				m = strcmp(username,"test1");
 			
                                 if((strcmp(username,"test1") == 10) || (strcmp(username,"test2") == 10)) //checking against the testing usernames
                                 {
@@ -154,7 +143,16 @@ int main()
                                 }
                                 write(i,sendBuffer,strlen(sendBuffer)); //sends the sendBuffer back to the client that sent data
                                 break;
+                            case 'q': //quits the server
+                                printf("Quitting the server\n");
+                                strcpy(sendBuffer, "Quitting server");
+                                write(i,sendBuffer,strlen(sendBuffer));
+                                running = 0;
+                                break;
                             default:
+                                printf("unrecognized command\n");
+                                strcpy(sendBuffer, "unknown command");
+                                write(i,sendBuffer,strlen(sendBuffer));
                                 break;
                         }
                     }
@@ -164,14 +162,13 @@ int main()
             }
         }
     }
-
+    close(serverSocket);
 	return 0;
 }
 
 /* Menu */
 void PrintMenu()
 {
-
     printf("\n-------------------------\n");
     printf(" 1: Player vs player\n");
     printf(" 2: Player vs AI\n");
@@ -179,4 +176,5 @@ void PrintMenu()
     printf("\n-------------------------\n");
     printf("Please make your choice: ");
 }
+
 /* EOF */
