@@ -62,7 +62,7 @@ int main()
     //below is the new version of the client
 
     //Below is a modified version of the test client
-    int l;
+    int l, n;
     int SocketFD;	/* socket file descriptor */
     struct sockaddr_in ServerAddress;	/* server address we connect with */
     struct hostent *Server;	/* server host */
@@ -70,7 +70,7 @@ int main()
     char RecvBuf[256];	/* message buffer for receiving a response */
     SendBuf[0]=0;
     char username[20];
-    //char message[256];  
+     
     short port = 10300;
     int recvBufSize;
     
@@ -80,17 +80,18 @@ int main()
     ServerAddress.sin_port = htons(port);
     ServerAddress.sin_addr = *(struct in_addr *)Server->h_addr_list[0];
 
-   // int input = printMenu();//this take the input for user's option
-//if(input == 1)
-//{ 
+    int input = printMenu();//this take the input for user's option
+if(input == 1)
+{
     do
     {
         //initial login
         SocketFD = socket(AF_INET, SOCK_STREAM, 0); //setup socket
+	username[0] = 0;
         printf("Enter a username\n");
 
         fgets(username, sizeof(username), stdin); //takes input
-
+        SendBuf[0] = 0;
         //formats the username login as "-l <username>"
         strcat(SendBuf, "-l ");
         strcat(SendBuf,username);
@@ -124,44 +125,55 @@ int main()
           		            {"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};  
   
      
-  printBoard(gameBoard);
     //game loop for receiving and sending data
     
-    /*
+    
 
     //basic input and recieve loop
 
     while(1)
     {
         SocketFD = socket(AF_INET, SOCK_STREAM, 0);
-
+        //connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
+	printBoard(gameBoard);
         printf("Enter a command to send to the server:\n");
-        printf("-l for login, -m for message, -q to close server\n");
+        printf("-a for move input, -m for message, -q to close server\n");
 
         fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
 
-		l = strlen(SendBuf); //length of the sendbuffer
+        printf("%s",SendBuf);
+  
+        /*check for the valid move*/
+	if (SendBuf[1] == 'a')
+	{
+		//check for valid move
+                printf("Sending valid move to the server\n");
+	} 
+
+	l = strlen(SendBuf); //length of the sendbuffer
 
         connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
-        
        
         write(SocketFD, SendBuf, l); //write to the socket
 
         n = read(SocketFD, RecvBuf, sizeof(RecvBuf) - 1); //server respnse data
 
-
         RecvBuf[n] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
-
 
 	printf("Received response: %s\n",  RecvBuf); 
         
         if(SendBuf[0]=='-'&&SendBuf[1]=='q')
         {
-            printf("quitting client\n");
-            close(SocketFD);
-            return 0;
+        	printf("Quitting client\n");
+            	close(SocketFD);
+            	return 0;
         }
+	
+	if (SendBuf[0] != '-') 
+	{
+		printf("Please input a valid command");
 
+	}
     }
     
     // //game loop for receiving and sending data, just for reference, commented out for whoever implements the game loop
@@ -179,18 +191,18 @@ int main()
 
 
 	// 	printf("Received response: %s\n",  RecvBuf); 
->>>>>>> master:src/gameClient.c
         
     //     fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
 
-<<<<<<< HEAD:src/testclient.c
-    }*/
+    //l = strlen(SendBuf); //length of sendbuffer
+ // write(SocketFD, SendBuf, l);
 	
 //}
-       
-    
-    close(SocketFD);
-//}
+}
+    SocketFD = socket(AF_INET, SOCK_STREAM, 0);          
+    connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress));
+    close(SocketFD); 
+    return 0;
 }
 
 void printBoard(char gameBoard[8][8][2]) {
@@ -218,16 +230,18 @@ void printBoard(char gameBoard[8][8][2]) {
 
 int printMenu()
 {
+  char m;
   int n;
   do
   {
 	printf("1.Login\n");
-	printf("2.Send a message to the server\n");
+	printf("2.Exit\n");
 	printf("Please select the option: ");
-	scanf("%i",&n);
+	scanf(" %i",&n);
   } while(n < 1 || n > 2);
-  return n;
+ m = getchar();//get rid of the \n buffer
+ return n;
 }
 
 
-}
+

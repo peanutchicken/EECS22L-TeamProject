@@ -143,6 +143,9 @@ int main()
                                 }
                                 write(i,sendBuffer,strlen(sendBuffer)); //sends the sendBuffer back to the client that sent data
                                 break;
+			    case 'a':
+				printf("Received valid move from client.\n");
+				break;
                             case 'q': //quits the server
                                 printf("Quitting the server\n");
                                 strcpy(sendBuffer, "Quitting server");
