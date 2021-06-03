@@ -104,7 +104,7 @@ int main()
                 {
                     char recvBuffer[256];
                     char sendBuffer[256];
-
+                    sendBuffer[0] = 0;
                     
                     readRet = read(i,recvBuffer,sizeof(recvBuffer)-1); //readRet now contains the length of the data sent by the client
 
@@ -119,7 +119,7 @@ int main()
                             case 'm': //message
 
                                 printf("Server received a message\n");
-                                strcpy(sendBuffer, "message recieved");
+                                strcpy(sendBuffer, "message recieved\n");
                                 write(i,sendBuffer,strlen(sendBuffer));
                                 break;
 
@@ -143,15 +143,42 @@ int main()
                                 }
                                 write(i,sendBuffer,strlen(sendBuffer)); //sends the sendBuffer back to the client that sent data
                                 break;
-			    case 'a':
-				printf("Received valid move from client.\n");
-				break;
+                            case 'y': //test case for client testing
+                                fflush(stdout);
+                                printf("Testing client printing\n");
+                                strcpy(sendBuffer, "Testing1");
+                                write(i,"Testing1",strlen(sendBuffer));
+                                sleep(1);
+                                
+                                strcpy(sendBuffer, "Testing2");
+                                write(i,"Testing2",strlen(sendBuffer));
+                                sleep(1);    
+
+                                strcpy(sendBuffer, "Asking for input");
+                                printf("Asking for input\n");
+                                write(i,"Asking for input",strlen(sendBuffer));
+                                sleep(1);
+
+                                strcpy(sendBuffer, "-i");
+                                write(i,"-i",strlen(sendBuffer));
+                                sleep(1);
+
+                                printf("Waiting for input\n");
+                                readRet = read(i,recvBuffer,sizeof(recvBuffer)-1); //readRet now contains the length of the data sent by the client
+                                recvBuffer[readRet]=0; //setting the last n'th value of recvBuffer to NULL so that we can use string functions on it and print it as a string
+
+                                printf("Recieved input: %s \n",recvBuffer);
+                                break;
                             case 'q': //quits the server
                                 printf("Quitting the server\n");
                                 strcpy(sendBuffer, "Quitting server");
                                 write(i,sendBuffer,strlen(sendBuffer));
                                 running = 0;
                                 break;
+                            case 'a':
+                                printf("Received valid move from client.\n");
+                                break;
+                            
                             default:
                                 printf("unrecognized command\n");
                                 strcpy(sendBuffer, "unknown command");
