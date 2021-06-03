@@ -42,6 +42,7 @@ main.o: main.c board.c board.h movelist.c movelist.h ai.c ai.h legalityCheck.c l
 server.o: server.c server.h account.h
 	$(CC) $(CFLAGS) server.c -o server.o
 
+
 gameClient.o: gameClient.c
 	$(CC) $(CFLAGS) gameClient.c -o gameClient.o
 

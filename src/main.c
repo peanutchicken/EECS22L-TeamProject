@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "constants.h"
 #include "board.h"
@@ -72,6 +73,7 @@ int main()
 
 
     int readRet;
+
     int running = 1;
 
     int serverSocket = serverInit(SERVERPORT, 5);
@@ -104,7 +106,7 @@ int main()
                     char sendBuffer[256];
 
                     
-                    readRet = read(i,recvBuffer,sizeof(recvBuffer-1)); //readRet now contains the length of the data sent by the client
+                    readRet = read(i,recvBuffer,sizeof(recvBuffer)-1); //readRet now contains the length of the data sent by the client
 
                     recvBuffer[readRet]=0; //setting the last n'th value of recvBuffer to NULL so that we can use string functions on it and print it as a string
 
@@ -115,7 +117,7 @@ int main()
                         switch(recvBuffer[1]) //switch case for all the commands
                         {
                             case 'm': //message
-                                
+
                                 printf("Server received a message\n");
                                 strcpy(sendBuffer, "message recieved");
                                 write(i,sendBuffer,strlen(sendBuffer));
@@ -130,8 +132,8 @@ int main()
                                 strtok(recvBuffer," "); //removes the -l
                                 //grabs the username
                                 char* username = strtok(NULL," ");
-
-                                if(strcmp(username,"test1")||strcmp(username,"test2")) //checking against the testing usernames
+			
+                                if((strcmp(username,"test1") == 10) || (strcmp(username,"test2") == 10)) //checking against the testing usernames
                                 {
                                     strcpy(sendBuffer,"1");
                                 }
@@ -141,6 +143,9 @@ int main()
                                 }
                                 write(i,sendBuffer,strlen(sendBuffer)); //sends the sendBuffer back to the client that sent data
                                 break;
+			    case 'a':
+				printf("Received valid move from client.\n");
+				break;
                             case 'q': //quits the server
                                 printf("Quitting the server\n");
                                 strcpy(sendBuffer, "Quitting server");
