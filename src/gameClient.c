@@ -135,7 +135,7 @@ if(input == 1)
     {
         SocketFD = socket(AF_INET, SOCK_STREAM, 0);
         //connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
-	printBoard(gameBoard);
+	
         printf("Enter a command to send to the server:\n");
         printf("-a for move input, -m for message, -q to close server\n");
 
@@ -171,7 +171,7 @@ if(input == 1)
 	
 	if (SendBuf[0] != '-') 
 	{
-		printf("Please input a valid command");
+		printf("Please input a valid command\n");
 
 	}
     }
@@ -205,27 +205,6 @@ if(input == 1)
     return 0;
 }
 
-void printBoard(char gameBoard[8][8][2]) {
-
-	for (int i = 0; i< 8; i++) 
-        {
-		if (i == 0) 
-        	{
-			printf("\n    +----+----+----+----+----+----+----+----+\n");
-		}
-		printf("%d   |", 8 - i);
-		for (int j = 0; j < 8; j++)
-        	{
-			printf(" %c%c |", gameBoard[i][j][0], gameBoard[i][j][1]);
-		}
-		printf("\n    +----+----+----+----+----+----+----+----+\n");
-		if (i == 7) 
-        	{
-				printf("      A    B    C    D    E    F    G    H");
-		}
-	}
-	printf("\n");
-}
 
 
 int printMenu()
