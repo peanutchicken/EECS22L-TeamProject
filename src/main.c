@@ -168,7 +168,7 @@ int main()
                                 strtok(recvBuffer," "); //removes the -l
                                 //grabs the username
                                 username = strtok(NULL,"\n");
-				printf("%s", username);
+
                                 if((strcmp(username, "test1") == 0 || strcmp(username,"test2") == 0) && i == getAccountSocket(p1)) //checking against the testing usernames
                                 {
 				    setUpAccount(p1, 0, username, username); // setUpAccount is (account, ID, username, password)
