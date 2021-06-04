@@ -162,7 +162,7 @@ int main()
 
             // printf("Enter a command to send to the server:\n");
             // printf("-a for move input, -m for message, -q to close server\n");
-            printf("Input (-a <username> <move> or -m <message> or -q to close server): ");
+            printf("Input (-a <username> <move>, -m <message>, -q to close server): ");
 	    SendBuf[0] = 0;
             fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
 
@@ -185,7 +185,7 @@ int main()
 
             RecvBuf[n] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
 
-            printf("Received response: %s\n", RecvBuf);
+            printf("%s\n", RecvBuf);
 
              if (SendBuf[0] == '-' && SendBuf[1] == 'q')
              {

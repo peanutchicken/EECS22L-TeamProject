@@ -135,10 +135,30 @@ int main()
                         switch(recvBuffer[1]) //switch case for all the commands
                         {
                             case 'm': //message
-
-                                printf("Server received a message\n");
-                                strcpy(sendBuffer, "message recieved\n");
-                                write(i,sendBuffer,strlen(sendBuffer));
+				if (i == getAccountSocket(p1))
+				{
+	                                printf("Server received a message\n");
+					strcpy(sendBuffer, recvBuffer);
+					write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
+					sleep(1);
+	                                strcpy(sendBuffer, "Message sent successfully\n");
+	                                write(getAccountSocket(p1),sendBuffer,strlen(sendBuffer));
+					strcpy(sendBuffer, "-i");
+					sleep(1);
+					write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
+				}
+				else if (i == getAccountSocket(p2))
+				{
+	                                printf("Server received a message\n");
+					strcpy(sendBuffer, recvBuffer);
+					write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
+					sleep(1);
+	                                strcpy(sendBuffer, "Message sent successfully\n");
+	                                write(getAccountSocket(p2),sendBuffer,strlen(sendBuffer));
+					strcpy(sendBuffer, "-i");
+					sleep(1);
+					write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
+				}
                                 break;
 
                             case 'l': //login request
@@ -166,7 +186,7 @@ int main()
 					writeBoard(i, gameBoard);
 					strcpy(sendBuffer, "-i");
 					sleep(1);
-					write(getAccountSocket(p1), sendBuffer, 2);
+					write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
 				}
                                 break;
                             case 'y': //test case for client testing
@@ -198,7 +218,8 @@ int main()
                             case 'q': //quits the server
                                 printf("Quitting the server\n");
                                 strcpy(sendBuffer, "Quitting server");
-                                write(i,sendBuffer,strlen(sendBuffer));
+                                write(getAccountSocket(p1),sendBuffer,strlen(sendBuffer));
+				write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
                                 running = 0;
                                 break;
                             case 'a':
@@ -208,12 +229,13 @@ int main()
 				move = strtok(NULL, " "); // get client move
 				printf("Username: %s Move: %s\n", username, move);
 				// if username matches with this connection
-				if (strcmp(username, getAccountUser(p1)) == 0) // player 1
+				if (strcmp(username, getAccountUser(p1)) == 0 && i == getAccountSocket(p1)) // player 1
 				{
 					if (clientInput(getAccountSocket(p1), move, gameBoard, 'w') == 0)
 					{
 						strcpy(sendBuffer, "Move Received\n");
 						write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
+						sleep(1);
 						writeBoard(getAccountSocket(p1), gameBoard);
 						writeBoard(getAccountSocket(p2), gameBoard);
 						strcpy(sendBuffer, "-i");
@@ -227,12 +249,13 @@ int main()
 						write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer)); // request a new input from same client because of invalid input
 					}
 				}
-				else if (strcmp(username, getAccountUser(p2)) == 0) // player 2
+				else if (strcmp(username, getAccountUser(p2)) == 0 && i == getAccountSocket(p2)) // player 2
 				{
 					if (clientInput(getAccountSocket(p2), move, gameBoard, 'b') == 0)
 					{
 						strcpy(sendBuffer, "Move Received\n");
 						write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
+						sleep(1);
 						writeBoard(getAccountSocket(p2), gameBoard);
 						writeBoard(getAccountSocket(p1), gameBoard);
 						strcpy(sendBuffer, "-i");
@@ -248,12 +271,13 @@ int main()
 				}
 				else
 				{
+					strcpy(sendBuffer, "Invalid\n");
+					write(i, sendBuffer, strlen(sendBuffer));
 					strcpy(sendBuffer, "-i");
 					sleep(1);
 					write(i, sendBuffer, strlen(sendBuffer)); // request a new input from same client because of invalid input
 				}
                                 break;
-                            
                             default:
                                 printf("unrecognized command\n");
                                 strcpy(sendBuffer, "unknown command");
