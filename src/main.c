@@ -108,13 +108,11 @@ int main()
 		    if(getAccountListLength(list) == 0)
 		    {
 			setSocket(p1, i);
-			setUpAccount(p1, 0, "test1", "test1"); // setUpAccount is (list, ID, username, password)
 			appendAccount(list, p1);
 		    }
 		    else if (getAccountListLength(list) == 1)
 		    {
 			setSocket(p2, i);
-			setUpAccount(p2, 1, "test2", "test1"); // setUpAccount is (list, ID, username, password)
 			appendAccount(list, p2);
 		    }
 
@@ -169,16 +167,22 @@ int main()
                                 //char* input = 
                                 strtok(recvBuffer," "); //removes the -l
                                 //grabs the username
-                                username = strtok(NULL," ");
-			
-                                if((strcmp(username,"test1") == 10) || (strcmp(username,"test2") == 10)) //checking against the testing usernames
+                                username = strtok(NULL,"\n");
+				printf("%s", username);
+                                if((strcmp(username, "test1") == 0 || strcmp(username,"test2") == 0) && i == getAccountSocket(p1)) //checking against the testing usernames
                                 {
+				    setUpAccount(p1, 0, username, username); // setUpAccount is (account, ID, username, password)
                                     strcpy(sendBuffer,"1");
                                 }
-                                else
+                                else if ((strcmp(username, "test1") == 0 || strcmp(username, "test2") == 0) && i == getAccountSocket(p2))
                                 {
-                                    strcpy(sendBuffer,"0");
+				    setUpAccount(p2, 1, username, username);
+                                    strcpy(sendBuffer,"1");
                                 }
+				else
+				{
+					strcpy(sendBuffer, "0");
+				}
                                 write(i,sendBuffer,strlen(sendBuffer)); //sends the sendBuffer back to the client that sent data
 				if (strcmp(sendBuffer, "1") == 0)
 				{
