@@ -13,6 +13,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "board.h"
 
@@ -122,6 +124,7 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 	list = NULL;
 }
 
+// old print board
 // print current state of the chess board and its pieces
 void printBoard(char gameBoard[8][8][2]) {
 
@@ -143,6 +146,38 @@ void printBoard(char gameBoard[8][8][2]) {
 		}
 	}
 	printf("\n");
+}
+
+// new print board for server to write to client
+// print current state of the chess board and its pieces
+void writeBoard(int sock, char gameBoard[8][8][2]) {
+	char tempPiece[2];
+	char num[1];
+
+	for (int i = 0; i< 8; i++) 
+        {
+		if (i == 0) 
+        	{
+			write(sock, "\n    +----+----+----+----+----+----+----+----+\n", 47);
+		}
+		num[0] = (char) (56 - i);
+		write(sock, num, 1);
+		write(sock, "   |", 4);
+		for (int j = 0; j < 8; j++)
+        	{
+			tempPiece[0] = gameBoard[i][j][0];
+			tempPiece[1] = gameBoard[i][j][1];
+			write(sock, " ", 1);
+			write(sock, tempPiece, 2);
+			write(sock, " |", 2);
+		}
+		write(sock, "\n    +----+----+----+----+----+----+----+----+\n", 47);
+		if (i == 7) 
+        	{
+				write(sock, "      A    B    C    D    E    F    G    H", 42);
+		}
+	}
+	write(sock, "\n", 1);
 }
 
 // update the chess board accordingly from player user input and returns if the user has exited the game or not
