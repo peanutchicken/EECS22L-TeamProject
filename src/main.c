@@ -39,15 +39,15 @@ int main()
 	// PrintMenu();
 	// scanf("%d", &n);
 	// while(n != 3) {
-	// 	char gameBoard[8][8][2] = {
-	// 			{"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
-	// 			{"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
-	// 			{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-	// 			{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-	// 			{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-	// 			{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-	// 			{"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
-	// 			{"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};
+	 	char gameBoard[8][8][2] = {
+	 			{"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
+	 			{"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
+	 			{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+	 			{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+				{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+	 			{"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+	 			{"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
+	 			{"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};
 	// 	switch (n) {
     //         case 1:
     //             printf("player Vs Player is loading...\n");
@@ -70,7 +70,9 @@ int main()
     //currently the two testing usernames are test1 and test2
 
 
-
+    accountList *list = createAccountList();
+    account *p1 = createAccount(); // player 1
+    account *p2 = createAccount(); // player 2
 
     int readRet;
 
@@ -102,8 +104,24 @@ int main()
                 }
                 else //client is ready to send data
                 {
+		    // create the two player accounts with their unique socket numbers
+		    if(getAccountListLength(list) == 0)
+		    {
+			setSocket(p1, i);
+			setUpAccount(p1, 0, "test1", "test1"); // setUpAccount is (list, ID, username, password)
+			appendAccount(list, p1);
+		    }
+		    else if (getAccountListLength(list) == 1)
+		    {
+			setSocket(p2, i);
+			setUpAccount(p2, 1, "test2", "test1"); // setUpAccount is (list, ID, username, password)
+			appendAccount(list, p2);
+		    }
+
+		    char *username, *move;
+
                     char recvBuffer[256];
-                    char sendBuffer[256];
+                    char sendBuffer[1024];
                     sendBuffer[0] = 0;
                     
                     readRet = read(i,recvBuffer,sizeof(recvBuffer)-1); //readRet now contains the length of the data sent by the client
@@ -131,7 +149,7 @@ int main()
                                 //char* input = 
                                 strtok(recvBuffer," "); //removes the -l
                                 //grabs the username
-                                char* username = strtok(NULL," ");
+                                username = strtok(NULL," ");
 			
                                 if((strcmp(username,"test1") == 10) || (strcmp(username,"test2") == 10)) //checking against the testing usernames
                                 {
@@ -142,6 +160,14 @@ int main()
                                     strcpy(sendBuffer,"0");
                                 }
                                 write(i,sendBuffer,strlen(sendBuffer)); //sends the sendBuffer back to the client that sent data
+				if (strcmp(sendBuffer, "1") == 0)
+				{
+					sleep(1);
+					writeBoard(i, gameBoard);
+					strcpy(sendBuffer, "-i");
+					sleep(1);
+					write(getAccountSocket(p1), sendBuffer, 2);
+				}
                                 break;
                             case 'y': //test case for client testing
                                 fflush(stdout);
@@ -176,7 +202,56 @@ int main()
                                 running = 0;
                                 break;
                             case 'a':
-                                printf("Received valid move from client.\n");
+                                printf("Received a move from client.\n");
+				strtok(recvBuffer, " "); // remove -a
+				username = strtok(NULL, " "); // get client username
+				move = strtok(NULL, " "); // get client move
+				printf("Username: %s Move: %s\n", username, move);
+				// if username matches with this connection
+				if (strcmp(username, getAccountUser(p1)) == 0) // player 1
+				{
+					if (clientInput(getAccountSocket(p1), move, gameBoard, 'w') == 0)
+					{
+						strcpy(sendBuffer, "Move Received\n");
+						write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
+						writeBoard(getAccountSocket(p1), gameBoard);
+						writeBoard(getAccountSocket(p2), gameBoard);
+						strcpy(sendBuffer, "-i");
+						sleep(1);
+						write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer)); // request a new input from player 2
+					}
+					else
+					{
+						strcpy(sendBuffer, "-i");
+						sleep(1);
+						write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer)); // request a new input from same client because of invalid input
+					}
+				}
+				else if (strcmp(username, getAccountUser(p2)) == 0) // player 2
+				{
+					if (clientInput(getAccountSocket(p2), move, gameBoard, 'b') == 0)
+					{
+						strcpy(sendBuffer, "Move Received\n");
+						write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
+						writeBoard(getAccountSocket(p2), gameBoard);
+						writeBoard(getAccountSocket(p1), gameBoard);
+						strcpy(sendBuffer, "-i");
+						sleep(1);
+						write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer)); // request a new input from player 1
+					}
+					else
+					{
+						strcpy(sendBuffer, "-i");
+						sleep(1);
+						write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer)); // request a new input from same client because of invalid input
+					}
+				}
+				else
+				{
+					strcpy(sendBuffer, "-i");
+					sleep(1);
+					write(i, sendBuffer, strlen(sendBuffer)); // request a new input from same client because of invalid input
+				}
                                 break;
                             
                             default:
@@ -187,11 +262,17 @@ int main()
                         }
                     }
 
-                    FD_CLR(i,&availableSockets);
+                    //FD_CLR(i,&availableSockets);
                 }
             }
         }
     }
+    for (int i = 0; i < FD_SETSIZE; i++)
+    {
+	FD_CLR(i, &availableSockets);
+    }
+    deleteAccountList(list);
+    list = NULL;
     close(serverSocket);
 	return 0;
 }

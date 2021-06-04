@@ -267,6 +267,53 @@ bool playerInput(moveList *m, char gameBoard[8][8][2], char player) {
 	return playerExit;
 }
 
+// for new multiplayer... 0 for VALID input. 1 for INVALID input.
+// update the chess board accordingly from player user input and returns if the user has exited the game or not
+int clientInput(int sock, char move[4], char gameBoard[8][8][2], char player) {
+	char from[2];       // start coordinate to pass into legalMove
+	char to[2];         // end coordinate to pass into legalMove
+	int lastMove[4] = {0,0,0,0};    //last move made in int arr format
+
+
+	// choosing white piece
+	if (player == 'w') {
+
+	        lastMoveConvert(move, from, to, lastMove);
+
+		// invalid move
+		while((!legalMove(from, to, gameBoard) || \
+        	        gameBoard[lastMove[0]][lastMove[1]][0] == 'b' || \
+	                gameBoard[lastMove[0]][lastMove[1]][0] == ' ')) 
+	       	{
+			write(sock, "Invalid move\n", 13);
+			return 1;
+		}
+	}				
+	// choosing black piece
+	else if (player == 'b') 
+	{
+        	//convert char input values to ascii
+	        lastMoveConvert(move, from, to, lastMove);
+
+		while((!legalMove(from, to, gameBoard) || \
+                gameBoard[lastMove[0]][lastMove[1]][0] == 'w' || \
+                gameBoard[lastMove[0]][lastMove[1]][0] == ' ')) 
+        	{
+			write(sock, "Invalid move\n", 13);
+			return 1;
+		}
+
+	}
+
+	
+	gameBoard[lastMove[2]][lastMove[3]][0] = gameBoard[lastMove[0]][lastMove[1]][0];
+	gameBoard[lastMove[2]][lastMove[3]][1] = gameBoard[lastMove[0]][lastMove[1]][1];
+	gameBoard[lastMove[0]][lastMove[1]][0] = ' ';
+	gameBoard[lastMove[0]][lastMove[1]][1] = ' ';
+
+	return 0;
+}
+
 //converts ascii input of last move made into int values for chessboard
 int lastMoveConvert(char move[4], char from[2], char to[2], int lastMove[4])
 {

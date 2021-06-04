@@ -25,6 +25,10 @@ void writeBoard(int sock, char gameBoard[8][8][2]);
 // update the chess board accordingly from player user input and returns if the user has exited the game or not
 bool playerInput(moveList *m, char gameBoard[8][8][2], char player);
 
+// update the chess board accordingly from player user input and returns if the user has exited the game or not
+// 0 for VALID. 1 for INVALID.
+int clientInput(int sock, char move[4], char gameBoard[8][8][2], char player);
+
 //ascii conversion from char input to int values
 int lastMoveConvert(char move[4], char from[2], char to[2], int lastMove[4]);
 
