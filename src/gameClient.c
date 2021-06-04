@@ -64,7 +64,7 @@ int main()
     struct sockaddr_in ServerAddress; /* server address we connect with */
     struct hostent *Server;           /* server host */
     char SendBuf[256];                /* message buffer for sending a message */
-    char RecvBuf[256];                /* message buffer for receiving a response */
+    char RecvBuf[1024];                /* message buffer for receiving a response */
     SendBuf[0] = 0;
     char username[20];
 
@@ -109,15 +109,6 @@ int main()
 
 
         printf("\nPlayer vs. Player Game Start\n");
-        // char gameBoard[8][8][2] = {
-        //     {"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
-        //     {"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
-        //     {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-        //     {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-        //     {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-        //     {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-        //     {"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
-        //     {"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"}};
 
         //game loop for receiving and sending data
 
@@ -166,12 +157,13 @@ int main()
                 }
             } while (printing != 0); //if this loop breaks, we proceed to input from the client
             
-            
+            // SocketFD = socket(AF_INET, SOCK_STREAM, 0);
             //connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
 
             // printf("Enter a command to send to the server:\n");
             // printf("-a for move input, -m for message, -q to close server\n");
-            printf("Input: ");
+            printf("Input (-a <username> <move>, -m <message>, -q to close server): ");
+	    SendBuf[0] = 0;
             fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
 
             // printf("%s", SendBuf);
@@ -182,52 +174,51 @@ int main()
             //     //check for valid move
             //     printf("Sending valid move to the server\n");
             // }
-
             l = strlen(SendBuf); //length of the sendbuffer
 
             connect(SocketFD, (struct sockaddr *)&ServerAddress, sizeof(ServerAddress)); //connect to the server
 
             write(SocketFD, SendBuf, l); //write to the socket
 
-            printf("\n");
-            // n = read(SocketFD, RecvBuf, sizeof(RecvBuf) - 1); //server respnse data
+            //printf("\n");
+            n = read(SocketFD, RecvBuf, sizeof(RecvBuf) - 1); //server respnse data
 
-            // RecvBuf[n] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
+            RecvBuf[n] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
 
-            // printf("%s\n", RecvBuf);
+            printf("%s\n", RecvBuf);
 
-            // if (SendBuf[0] == '-' && SendBuf[1] == 'q')
-            // {
-            //     printf("Quitting client\n");
-            //     close(SocketFD);
-            //     return 0;
-            // }
+             if (SendBuf[0] == '-' && SendBuf[1] == 'q')
+             {
+                 printf("Quitting client\n");
+                 close(SocketFD);
+                 return 0;
+             }
 
-            // if (SendBuf[0] != '-')
-            // {
-            //     printf("Please input a valid command\n");
-            // }
+            if (SendBuf[0] != '-')
+            {
+                printf("Please input a valid command\n");
+            }
         }
 
-        // //game loop for receiving and sending data, just for reference, commented out for whoever implements the game loop
+        //game loop for receiving and sending data, just for reference, commented out for whoever implements the game loop
         // while(1)
-        // {
-        //     SocketFD = socket(AF_INET, SOCK_STREAM, 0); //setup socket
+  /*      // {
+	        SocketFD = socket(AF_INET, SOCK_STREAM, 0); //setup socket
 
-        //     connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
+	        connect(SocketFD, (struct sockaddr *)&ServerAddress,sizeof(ServerAddress)); //connect to the server
 
-        //     n = read(SocketFD, RecvBuf, sizeof(RecvBuf) - 1); //server respnse data
+            	n = read(SocketFD, RecvBuf, sizeof(RecvBuf) - 1); //server respnse data
 
-        //     RecvBuf[n] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
+            	RecvBuf[n] = 0; //sets the last last char of the recieve buffer to null to allow us to use it as a string
 
-        // 	printf("Received response: %s\n",  RecvBuf);
+        	printf("Received response: %s\n",  RecvBuf);
 
-        //     fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
+            	fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
 
-        //l = strlen(SendBuf); //length of sendbuffer
-        // write(SocketFD, SendBuf, l);
-
-        //}
+        	l = strlen(SendBuf); //length of sendbuffer
+        	write(SocketFD, SendBuf, l);
+*/
+         // }
     }
     SocketFD = socket(AF_INET, SOCK_STREAM, 0);
     connect(SocketFD, (struct sockaddr *)&ServerAddress, sizeof(ServerAddress));

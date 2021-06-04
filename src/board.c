@@ -13,6 +13,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "board.h"
 
@@ -122,6 +124,7 @@ void playerVsAI(char gameBoard[8][8][2], FILE *file) {
 	list = NULL;
 }
 
+// old print board
 // print current state of the chess board and its pieces
 void printBoard(char gameBoard[8][8][2]) {
 
@@ -143,6 +146,38 @@ void printBoard(char gameBoard[8][8][2]) {
 		}
 	}
 	printf("\n");
+}
+
+// new print board for server to write to client
+// print current state of the chess board and its pieces
+void writeBoard(int sock, char gameBoard[8][8][2]) {
+	char tempPiece[2];
+	char num[1];
+
+	for (int i = 0; i< 8; i++) 
+        {
+		if (i == 0) 
+        	{
+			write(sock, "\n    +----+----+----+----+----+----+----+----+\n", 47);
+		}
+		num[0] = (char) (56 - i);
+		write(sock, num, 1);
+		write(sock, "   |", 4);
+		for (int j = 0; j < 8; j++)
+        	{
+			tempPiece[0] = gameBoard[i][j][0];
+			tempPiece[1] = gameBoard[i][j][1];
+			write(sock, " ", 1);
+			write(sock, tempPiece, 2);
+			write(sock, " |", 2);
+		}
+		write(sock, "\n    +----+----+----+----+----+----+----+----+\n", 47);
+		if (i == 7) 
+        	{
+				write(sock, "      A    B    C    D    E    F    G    H", 42);
+		}
+	}
+	write(sock, "\n", 1);
 }
 
 // update the chess board accordingly from player user input and returns if the user has exited the game or not
@@ -230,6 +265,53 @@ bool playerInput(moveList *m, char gameBoard[8][8][2], char player) {
 	}
 
 	return playerExit;
+}
+
+// for new multiplayer... 0 for VALID input. 1 for INVALID input.
+// update the chess board accordingly from player user input and returns if the user has exited the game or not
+int clientInput(int sock, char move[4], char gameBoard[8][8][2], char player) {
+	char from[2];       // start coordinate to pass into legalMove
+	char to[2];         // end coordinate to pass into legalMove
+	int lastMove[4] = {0,0,0,0};    //last move made in int arr format
+
+
+	// choosing white piece
+	if (player == 'w') {
+
+	        lastMoveConvert(move, from, to, lastMove);
+
+		// invalid move
+		while((!legalMove(from, to, gameBoard) || \
+        	        gameBoard[lastMove[0]][lastMove[1]][0] == 'b' || \
+	                gameBoard[lastMove[0]][lastMove[1]][0] == ' ')) 
+	       	{
+			write(sock, "Invalid move\n", 13);
+			return 1;
+		}
+	}				
+	// choosing black piece
+	else if (player == 'b') 
+	{
+        	//convert char input values to ascii
+	        lastMoveConvert(move, from, to, lastMove);
+
+		while((!legalMove(from, to, gameBoard) || \
+                gameBoard[lastMove[0]][lastMove[1]][0] == 'w' || \
+                gameBoard[lastMove[0]][lastMove[1]][0] == ' ')) 
+        	{
+			write(sock, "Invalid move\n", 13);
+			return 1;
+		}
+
+	}
+
+	
+	gameBoard[lastMove[2]][lastMove[3]][0] = gameBoard[lastMove[0]][lastMove[1]][0];
+	gameBoard[lastMove[2]][lastMove[3]][1] = gameBoard[lastMove[0]][lastMove[1]][1];
+	gameBoard[lastMove[0]][lastMove[1]][0] = ' ';
+	gameBoard[lastMove[0]][lastMove[1]][1] = ' ';
+
+	return 0;
 }
 
 //converts ascii input of last move made into int values for chessboard
