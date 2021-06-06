@@ -133,30 +133,30 @@ int main()
                         switch(recvBuffer[1]) //switch case for all the commands
                         {
                             case 'm': //message
-				if (i == getAccountSocket(p1))
-				{
-	                                printf("Server received a message\n");
-					strcpy(sendBuffer, recvBuffer);
-					write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
-					sleep(1);
-	                                strcpy(sendBuffer, "Message sent successfully\n");
-	                                write(getAccountSocket(p1),sendBuffer,strlen(sendBuffer));
-					strcpy(sendBuffer, "-i");
-					sleep(1);
-					write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
-				}
-				else if (i == getAccountSocket(p2))
-				{
-	                                printf("Server received a message\n");
-					strcpy(sendBuffer, recvBuffer);
-					write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
-					sleep(1);
-	                                strcpy(sendBuffer, "Message sent successfully\n");
-	                                write(getAccountSocket(p2),sendBuffer,strlen(sendBuffer));
-					strcpy(sendBuffer, "-i");
-					sleep(1);
-					write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
-				}
+                                if (i == getAccountSocket(p1))
+                                {
+                                                    printf("Server received a message\n");
+                                    strcpy(sendBuffer, recvBuffer);
+                                    write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
+                                    sleep(1);
+                                                    strcpy(sendBuffer, "Message sent successfully\n");
+                                                    write(getAccountSocket(p1),sendBuffer,strlen(sendBuffer));
+                                    strcpy(sendBuffer, "-i");
+                                    sleep(1);
+                                    write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
+                                }
+                                else if (i == getAccountSocket(p2))
+                                {
+                                                    printf("Server received a message\n");
+                                    strcpy(sendBuffer, recvBuffer);
+                                    write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
+                                    sleep(1);
+                                                    strcpy(sendBuffer, "Message sent successfully\n");
+                                                    write(getAccountSocket(p2),sendBuffer,strlen(sendBuffer));
+                                    strcpy(sendBuffer, "-i");
+                                    sleep(1);
+                                    write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
+                                }
                                 break;
 
                             case 'l': //login request
@@ -171,28 +171,29 @@ int main()
 
                                 if((strcmp(username, "test1") == 0 || strcmp(username,"test2") == 0) && i == getAccountSocket(p1)) //checking against the testing usernames
                                 {
-				    setUpAccount(p1, 0, username, username); // setUpAccount is (account, ID, username, password)
+                                    setUpAccount(p1, 0, username, username); // setUpAccount is (account, ID, username, password)
                                     strcpy(sendBuffer,"1");
                                 }
                                 else if ((strcmp(username, "test1") == 0 || strcmp(username, "test2") == 0) && i == getAccountSocket(p2))
                                 {
-				    setUpAccount(p2, 1, username, username);
+                                    setUpAccount(p2, 1, username, username);
                                     strcpy(sendBuffer,"1");
                                 }
-				else
-				{
-					strcpy(sendBuffer, "0");
-				}
+                                else
+                                {
+                                    strcpy(sendBuffer, "0");
+                                }
                                 write(i,sendBuffer,strlen(sendBuffer)); //sends the sendBuffer back to the client that sent data
-				if (strcmp(sendBuffer, "1") == 0)
-				{
-					sleep(1);
-					writeBoard(i, gameBoard);
-					strcpy(sendBuffer, "-i");
-					sleep(1);
-					write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
-				}
+                                if (strcmp(sendBuffer, "1") == 0)
+                                {
+                                    sleep(1);
+                                    writeBoard(i, gameBoard);
+                                    strcpy(sendBuffer, "-i");
+                                    sleep(1);
+                                    write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
+                                }
                                 break;
+
                             case 'y': //test case for client testing
                                 fflush(stdout);
                                 printf("Testing client printing\n");
@@ -219,68 +220,69 @@ int main()
 
                                 printf("Recieved input: %s \n",recvBuffer);
                                 break;
+
                             case 'q': //quits the server
                                 printf("Quitting the server\n");
                                 strcpy(sendBuffer, "Quitting server");
                                 write(getAccountSocket(p1),sendBuffer,strlen(sendBuffer));
-				write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
+                                write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
                                 running = 0;
                                 break;
                             case 'a':
                                 printf("Received a move from client.\n");
-				strtok(recvBuffer, " "); // remove -a
-				username = strtok(NULL, " "); // get client username
-				move = strtok(NULL, " "); // get client move
-				printf("Username: %s Move: %s\n", username, move);
-				// if username matches with this connection
-				if (strcmp(username, getAccountUser(p1)) == 0 && i == getAccountSocket(p1)) // player 1
-				{
-					if (clientInput(getAccountSocket(p1), move, gameBoard, 'w') == 0)
-					{
-						strcpy(sendBuffer, "Move Received\n");
-						write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
-						sleep(1);
-						writeBoard(getAccountSocket(p1), gameBoard);
-						writeBoard(getAccountSocket(p2), gameBoard);
-						strcpy(sendBuffer, "-i");
-						sleep(1);
-						write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer)); // request a new input from player 2
-					}
-					else
-					{
-						strcpy(sendBuffer, "-i");
-						sleep(1);
-						write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer)); // request a new input from same client because of invalid input
-					}
-				}
-				else if (strcmp(username, getAccountUser(p2)) == 0 && i == getAccountSocket(p2)) // player 2
-				{
-					if (clientInput(getAccountSocket(p2), move, gameBoard, 'b') == 0)
-					{
-						strcpy(sendBuffer, "Move Received\n");
-						write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
-						sleep(1);
-						writeBoard(getAccountSocket(p2), gameBoard);
-						writeBoard(getAccountSocket(p1), gameBoard);
-						strcpy(sendBuffer, "-i");
-						sleep(1);
-						write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer)); // request a new input from player 1
-					}
-					else
-					{
-						strcpy(sendBuffer, "-i");
-						sleep(1);
-						write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer)); // request a new input from same client because of invalid input
-					}
-				}
-				else
-				{
-					strcpy(sendBuffer, "Invalid\n");
-					write(i, sendBuffer, strlen(sendBuffer));
-					strcpy(sendBuffer, "-i");
-					sleep(1);
-					write(i, sendBuffer, strlen(sendBuffer)); // request a new input from same client because of invalid input
-				}
+                                strtok(recvBuffer, " "); // remove -a
+                                username = strtok(NULL, " "); // get client username
+                                move = strtok(NULL, " "); // get client move
+                                printf("Username: %s Move: %s\n", username, move);
+                                // if username matches with this connection
+                                if (strcmp(username, getAccountUser(p1)) == 0 && i == getAccountSocket(p1)) // player 1
+                                {
+                                    if (clientInput(getAccountSocket(p1), move, gameBoard, 'w') == 0)
+                                    {
+                                        strcpy(sendBuffer, "Move Received\n");
+                                        write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
+                                        sleep(1);
+                                        writeBoard(getAccountSocket(p1), gameBoard);
+                                        writeBoard(getAccountSocket(p2), gameBoard);
+                                        strcpy(sendBuffer, "-i");
+                                        sleep(1);
+                                        write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer)); // request a new input from player 2
+                                    }
+                                    else
+                                    {
+                                        strcpy(sendBuffer, "-i");
+                                        sleep(1);
+                                        write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer)); // request a new input from same client because of invalid input
+                                    }
+                                }
+                                else if (strcmp(username, getAccountUser(p2)) == 0 && i == getAccountSocket(p2)) // player 2
+                                {
+                                    if (clientInput(getAccountSocket(p2), move, gameBoard, 'b') == 0)
+                                    {
+                                        strcpy(sendBuffer, "Move Received\n");
+                                        write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
+                                        sleep(1);
+                                        writeBoard(getAccountSocket(p2), gameBoard);
+                                        writeBoard(getAccountSocket(p1), gameBoard);
+                                        strcpy(sendBuffer, "-i");
+                                        sleep(1);
+                                        write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer)); // request a new input from player 1
+                                    }
+                                    else
+                                    {
+                                        strcpy(sendBuffer, "-i");
+                                        sleep(1);
+                                        write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer)); // request a new input from same client because of invalid input
+                                    }
+                                }
+                                else
+                                {
+                                    strcpy(sendBuffer, "Invalid\n");
+                                    write(i, sendBuffer, strlen(sendBuffer));
+                                    strcpy(sendBuffer, "-i");
+                                    sleep(1);
+                                    write(i, sendBuffer, strlen(sendBuffer)); // request a new input from same client because of invalid input
+                                }
                                 break;
                             default:
                                 printf("unrecognized command\n");
