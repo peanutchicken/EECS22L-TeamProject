@@ -1,60 +1,5 @@
 #include "server.h"
 
-// int main(int argc, char *argv[])
-// {
-//     //creating the test accounts
-//     // account test1, test2;
-
-//     // test1.username = "test1";
-//     // test1.password = "test1";
-//     // test1.socket = 0;
-//     // test1.opponentSocket = 0;
-//     // test1.next = &test2;
-//     // test1.prev = NULL;
-
-
-//     // test2.username = "test2";
-//     // test2.password = "test2";
-//     // test2.socket = 0;
-//     // test2.opponentSocket = 0;
-//     // test2.next = NULL;
-//     // test2.prev = &test1;
-
-//     accountList list;
-//     // list.first = test1;
-//     // list.last = test2;
-
-
-//     int serverSocket = serverInit(SERVERPORT, 5);
-//     fd_set availableSockets;
-//     fd_set readySockets;
-
-//     FD_ZERO(&availableSockets);
-//     FD_SET(serverSocket, &availableSockets);
-
-//     while (1)
-//     {
-//         readySockets = availableSockets;
-//         select(FD_SETSIZE, &readySockets, NULL, NULL, NULL);
-//         for (int i = 0; i < FD_SETSIZE; i++)
-//         {
-//             if (FD_ISSET(i, &readySockets))
-//             {
-//                 if(i == serverSocket) //new connection
-//                 {
-//                     int tempSocket = acceptConnection(serverSocket);
-//                     FD_SET(tempSocket, &availableSockets);
-//                 }
-//                 else //client is ready to send data
-//                 {
-//                     doStuff(i, list);
-//                     FD_CLR(i,&availableSockets);
-//                 }
-//             }
-//         }
-//     }
-// }
-
 int serverInit(short port, int backlog)
 {
     int serverSocket;
@@ -85,6 +30,7 @@ int acceptConnection(int serverSocket)
     return accept(serverSocket, (sockaddr *)&clientAddress, (socklen_t *)&addressSize);
 }
 
+/*
 int doStuff(int clientSocket,accountList *list)
 {
     int echo=1; //if echo is 0, send the sendBuffer to the opponent socket of the account attached to the client socket
@@ -108,11 +54,13 @@ int doStuff(int clientSocket,accountList *list)
                 strcpy(sendBuffer,"Server received a message");
                 printf("Server received a message\n");
                 break;
+
             case 'l':
                 //sendBuffer = usernameCheck(clientSocket,recvBuffer, list);
                 strcpy(sendBuffer,"Server received a login request");
                 printf("Server received a login request\n");
                 break;
+
             default:
                 strcpy(sendBuffer,"Server received an invalid command");
                 printf("Server received an invalid command\n");
@@ -135,6 +83,7 @@ int doStuff(int clientSocket,accountList *list)
 
     return 0;
 }
+*/
 
 // int usernameCheck(int socket, char* data, accountList list)
 // {

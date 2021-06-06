@@ -90,7 +90,10 @@ int main()
     {
         readySockets = availableSockets;
         printf("waiting for select\n");
+
+        //select, allows multiple client connections at once
         select(FD_SETSIZE, &readySockets, NULL, NULL, NULL);
+
         printf("Select returned\n");
         for (int i = 0; i < FD_SETSIZE; i++)
         {
@@ -104,24 +107,24 @@ int main()
                 }
                 else //client is ready to send data
                 {
-		    // create the two player accounts with their unique socket numbers
-		    if(getAccountListLength(list) == 0)
-		    {
-			setSocket(p1, i);
-			appendAccount(list, p1);
-		    }
-		    else if (getAccountListLength(list) == 1)
-		    {
-			setSocket(p2, i);
-			appendAccount(list, p2);
-		    }
+                    // create the two player accounts with their unique socket numbers
+                    if(getAccountListLength(list) == 0)
+                    {
+                        setSocket(p1, i);
+                        appendAccount(list, p1);
+                    }
+                    else if (getAccountListLength(list) == 1)
+                    {
+                        setSocket(p2, i);
+                        appendAccount(list, p2);
+                    }
 
-		    char *username, *move;
+                    char *username, *move;
 
                     char recvBuffer[256];
                     char sendBuffer[1024];
                     sendBuffer[0] = 0;
-                    
+
                     readRet = read(i,recvBuffer,sizeof(recvBuffer)-1); //readRet now contains the length of the data sent by the client
 
                     recvBuffer[readRet]=0; //setting the last n'th value of recvBuffer to NULL so that we can use string functions on it and print it as a string
@@ -135,26 +138,30 @@ int main()
                             case 'm': //message
                                 if (i == getAccountSocket(p1))
                                 {
-                                                    printf("Server received a message\n");
+                                    printf("Server received a message\n");
                                     strcpy(sendBuffer, recvBuffer);
                                     write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
                                     sleep(1);
-                                                    strcpy(sendBuffer, "Message sent successfully\n");
-                                                    write(getAccountSocket(p1),sendBuffer,strlen(sendBuffer));
+
+                                    strcpy(sendBuffer, "Message sent successfully\n");
+                                    write(getAccountSocket(p1),sendBuffer,strlen(sendBuffer));
                                     strcpy(sendBuffer, "-i");
                                     sleep(1);
+
                                     write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
                                 }
                                 else if (i == getAccountSocket(p2))
                                 {
-                                                    printf("Server received a message\n");
+                                    printf("Server received a message\n");
                                     strcpy(sendBuffer, recvBuffer);
                                     write(getAccountSocket(p1), sendBuffer, strlen(sendBuffer));
                                     sleep(1);
-                                                    strcpy(sendBuffer, "Message sent successfully\n");
-                                                    write(getAccountSocket(p2),sendBuffer,strlen(sendBuffer));
+
+                                    strcpy(sendBuffer, "Message sent successfully\n");
+                                    write(getAccountSocket(p2),sendBuffer,strlen(sendBuffer));
                                     strcpy(sendBuffer, "-i");
                                     sleep(1);
+
                                     write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
                                 }
                                 break;
@@ -165,7 +172,9 @@ int main()
                                 //checks the username against the two test accounts, will need to implement a working account system
                                 //compiler whines about this??
                                 //char* input = 
+                                
                                 strtok(recvBuffer," "); //removes the -l
+
                                 //grabs the username
                                 username = strtok(NULL,"\n");
 
@@ -228,12 +237,14 @@ int main()
                                 write(getAccountSocket(p2), sendBuffer, strlen(sendBuffer));
                                 running = 0;
                                 break;
+
                             case 'a':
                                 printf("Received a move from client.\n");
                                 strtok(recvBuffer, " "); // remove -a
                                 username = strtok(NULL, " "); // get client username
                                 move = strtok(NULL, " "); // get client move
                                 printf("Username: %s Move: %s\n", username, move);
+
                                 // if username matches with this connection
                                 if (strcmp(username, getAccountUser(p1)) == 0 && i == getAccountSocket(p1)) // player 1
                                 {
@@ -299,7 +310,7 @@ int main()
     }
     for (int i = 0; i < FD_SETSIZE; i++)
     {
-	FD_CLR(i, &availableSockets);
+        FD_CLR(i, &availableSockets);
     }
     deleteAccountList(list);
     list = NULL;
