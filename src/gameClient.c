@@ -163,7 +163,7 @@ int main()
             // printf("Enter a command to send to the server:\n");
             // printf("-a for move input, -m for message, -q to close server\n");
             printf("Input (-a <username> <move>, -m <message>, -q to close server): ");
-	    SendBuf[0] = 0;
+            SendBuf[0] = 0;
             fgets(SendBuf, sizeof(SendBuf), stdin); //takes input
 
             // printf("%s", SendBuf);
@@ -238,5 +238,6 @@ int printMenu()
         scanf(" %i", &n);
     } while (n < 1 || n > 2);
     m = getchar(); //get rid of the \n buffer
+    m = m + 1;
     return n;
 }

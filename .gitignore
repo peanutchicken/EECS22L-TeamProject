@@ -16,7 +16,7 @@ ProjectSpecFromClient.pdf
 chessGameReplay.txt
 
 #server address
-addr_server.h
+src/addr_server.h
 
 # Object files
 *.o
