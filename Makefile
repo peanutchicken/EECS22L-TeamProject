@@ -7,7 +7,7 @@ CC = gcc
 CFLAGS = -c -ansi -std=c99 -Wall
 LFLAGS = -ansi -std=c99 -Wall
 #SUBDIRS = src
-OBJECTS = $(addprefix bin/, ai.o board.o fileio.o  legalityCheck.o main.o server.o movelist.o)
+OBJECTS = $(addprefix bin/, ai.o board.o fileio.o legalityCheck.o main.o server.o movelist.o account.o)
 CLIENT_OBJECTS = $(addprefix bin/, gameClient.o)
 
 all: bin/chessGame bin/gameClient
