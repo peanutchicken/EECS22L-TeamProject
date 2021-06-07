@@ -238,5 +238,6 @@ int printMenu()
         scanf(" %i", &n);
     } while (n < 1 || n > 2);
     m = getchar(); //get rid of the \n buffer
+    m = m + 1;
     return n;
 }
