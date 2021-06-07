@@ -5,7 +5,7 @@ This game has been written for compatibility with the UCI EECS Linux servers (ru
 
 Authors: Jacob Bokor, Rayi Lam, Nghi Nguyen, Ryan Shum, Lichen Wang
 
-Date: 5/31/2021
+Date: 6/6/2021
 
 * For copyright and license information, please refer to COPYRIGHT.
 * For installation instructions, please refer to INSTALL.
@@ -17,3 +17,4 @@ Defaults:
 
 Server: crystalcove.eecs.uci.edu (use this server to host the server)
 Port: 10300 (client and server use this port)
+Default Accounts: test1, test2 (no passwords, just usernames)
